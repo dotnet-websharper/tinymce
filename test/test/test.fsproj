@@ -61,11 +61,6 @@
     <Compile Include="Main.fs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\if-ws-tinymce-formlet\IntelliFactory.WebSharper.TinyMce.Formlet.fsproj">
-      <Name>IntelliFactory.WebSharper.TinyMce.Formlet</Name>
-      <Project>{501ca443-9b83-45db-9693-f2f3677a44c4}</Project>
-      <Private>True</Private>
-    </ProjectReference>
     <ProjectReference Include="..\..\if-ws-tinymce\IntelliFactory.WebSharper.TinyMce.fsproj">
       <Name>IntelliFactory.WebSharper.TinyMce</Name>
       <Project>{730ae40a-001c-4137-972d-898dc7c2bf0a}</Project>

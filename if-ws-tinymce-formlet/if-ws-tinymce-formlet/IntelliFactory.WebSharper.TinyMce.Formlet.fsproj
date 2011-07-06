@@ -35,25 +35,32 @@
   <ItemGroup>
     <Reference Include="FSharp.Core" />
     <Reference Include="FSharp.PowerPack" />
-    <Reference Include="System" />
     <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
     <Reference Include="IntelliFactory.Json" />
     <Reference Include="IntelliFactory.WebSharper" />
-    <Reference Include="IntelliFactory.WebSharper.Html" />
     <Reference Include="IntelliFactory.WebSharper.Dom" />
-    <Reference Include="IntelliFactory.WebSharper.Ecma" />
-    <Reference Include="IntelliFactory.WebSharper.Json" />
+    <Reference Include="IntelliFactory.WebSharper.JQuery" />
+    <Reference Include="IntelliFactory.WebSharper.Html" />
+    <Reference Include="IntelliFactory.Formlet.Base" />
+    <Reference Include="IntelliFactory.Reactive" />
     <Reference Include="IntelliFactory.WebSharper.Core" />
-    <Reference Include="System.Web" />
+    <Reference Include="IntelliFactory.WebSharper.Control" />
+    <Reference Include="IntelliFactory.WebSharper.Collections" />
+    <Reference Include="IntelliFactory.SourceResolver" />
+    <Reference Include="IntelliFactory.WebSharper.Formlet" />
+    <Reference Include="IntelliFactory.WebSharper.Ecma" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\if-ws-tinymce\IntelliFactory.WebSharper.TinyMce.fsproj">
+    <Compile Include="Controls.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\if-ws-tinymce\IntelliFactory.WebSharper.TinyMce.fsproj">
       <Name>IntelliFactory.WebSharper.TinyMce</Name>
       <Project>{730ae40a-001c-4137-972d-898dc7c2bf0a}</Project>
       <Private>True</Private>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Controls.fs" />
   </ItemGroup>
 </Project>

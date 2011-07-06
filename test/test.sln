@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test-web", "test-web\test-w
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "IntelliFactory.WebSharper.TinyMce", "..\if-ws-tinymce\IntelliFactory.WebSharper.TinyMce.fsproj", "{730AE40A-001C-4137-972D-898DC7C2BF0A}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "IntelliFactory.WebSharper.TinyMce.Formlet", "..\if-ws-tinymce-formlet\IntelliFactory.WebSharper.TinyMce.Formlet.fsproj", "{501CA443-9B83-45DB-9693-F2F3677A44C4}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "IntelliFactory.WebSharper.TinyMce.Formlet", "..\if-ws-tinymce-formlet\if-ws-tinymce-formlet\IntelliFactory.WebSharper.TinyMce.Formlet.fsproj", "{501CA443-9B83-45DB-9693-F2F3677A44C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

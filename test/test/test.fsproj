@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{35514715-41df-4c17-a9ec-d80abcd9e353}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <Name>IntelliFactory.WebSharper.Formlet.JQueryUI.Test</Name>
+    <RootNamespace>$(Name)</RootNamespace>
+    <AssemblyName>IntelliFactory.WebSharper.TinyMce.Test</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <Tailcalls>false</Tailcalls>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <WarningLevel>3</WarningLevel>
+    <DocumentationFile>bin\Debug\$(Name).XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <Tailcalls>true</Tailcalls>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <WarningLevel>3</WarningLevel>
+    <DocumentationFile>bin\Release\$(Name).XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Configuration" />
+    <Reference Include="mscorlib" />
+    <Reference Include="FSharp.Core">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="IntelliFactory.Html" />
+    <Reference Include="IntelliFactory.Json" />
+    <Reference Include="IntelliFactory.WebSharper" />
+    <Reference Include="IntelliFactory.WebSharper.Dom" />
+    <Reference Include="IntelliFactory.WebSharper.JQuery" />
+    <Reference Include="IntelliFactory.WebSharper.Html" />
+    <Reference Include="IntelliFactory.Formlet.Base" />
+    <Reference Include="IntelliFactory.WebSharper.Web" />
+    <Reference Include="IntelliFactory.Reactive" />
+    <Reference Include="IntelliFactory.WebSharper.Core" />
+    <Reference Include="IntelliFactory.WebSharper.Control" />
+    <Reference Include="IntelliFactory.WebSharper.Collections" />
+    <Reference Include="IntelliFactory.SourceResolver" />
+    <Reference Include="IntelliFactory.WebSharper.Formlet" />
+    <Reference Include="IntelliFactory.WebSharper.Ecma" />
+  </ItemGroup>
+  <Import Project="$(INTELLIFACTORY)/build/IntelliFactory.WebSharper-2.3.targets" />
+  <ItemGroup>
+    <Compile Include="Main.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\if-ws-tinymce-formlet\IntelliFactory.WebSharper.TinyMce.Formlet.fsproj">
+      <Name>IntelliFactory.WebSharper.TinyMce.Formlet</Name>
+      <Project>{501ca443-9b83-45db-9693-f2f3677a44c4}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\if-ws-tinymce\IntelliFactory.WebSharper.TinyMce.fsproj">
+      <Name>IntelliFactory.WebSharper.TinyMce</Name>
+      <Project>{730ae40a-001c-4137-972d-898dc7c2bf0a}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

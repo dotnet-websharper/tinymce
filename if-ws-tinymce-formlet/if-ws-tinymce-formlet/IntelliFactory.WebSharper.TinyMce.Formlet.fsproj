@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{501ca443-9b83-45db-9693-f2f3677a44c4}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <Name>IntelliFactory.WebSharper.Bing.Rest</Name>
+    <Name>IntelliFactory.WebSharper.Formlet.TinyMce</Name>
     <RootNamespace>$(Name)</RootNamespace>
     <AssemblyName>$(Name)</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>

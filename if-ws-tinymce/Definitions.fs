@@ -18,7 +18,8 @@ module TinyMce =
                 ]
         }
         |=> TinyMCEConfiguration
-    
+
+
     let TinyMCEClass =
         Class "tinyMCE"
         |=> TinyMCE

@@ -2,32 +2,33 @@
 
 open IntelliFactory.WebSharper
 open IntelliFactory.WebSharper.Html
+open IntelliFactory.WebSharper.Formlet
 open IntelliFactory.WebSharper.Web
 open IntelliFactory.WebSharper
 open IntelliFactory.WebSharper.Formlet.TinyMce
 
-module Sample =
-    
-    [<JavaScript>]
-    let Init () =
-        JavaScript.Alert "he"
+module U =
+    [<Inline "console.log($x)">]
+    let Log x = ()
 
-//        TinyMCE.Init (
-//            new TinyMCEConfiguration(
-//                Theme = "simple",
-//                Mode = "textareas"
-//            )
-//        )
 type SampleControl () =
     inherit Web.Control()
 
     [<JavaScript>]
     override this.Body = 
-        Controls.TinyMCE ()
-//        TextArea [Text "Default  text"]
-//        |>! OnAfterRender (fun _ ->
-//            Sample.Init ()
-//        )
+        let conf =
+            {EditorConfiguration.Default with
+                Theme = "advanced"
+                Width = Some 400
+                Height = Some 400
+            }
+        Controls.CustomEditor conf "default"
+        |> Enhance.WithSubmitAndResetButtons
+        |> Formlet.Map (fun v ->
+            U.Log ("Output", v)
+            ()
+        )
+        |> Enhance.WithFormContainer
         :> _
 
 

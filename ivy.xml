@@ -7,9 +7,9 @@
   </configurations>
   <publications>
     <artifact name="IntelliFactory.WebSharper.TinyMce" ext="dll" type="bin" conf="default" />
-    <artifact name="IntelliFactory.WebSharper.TinyMce" ext="dll.dep" type="bin" conf="default" />
     <artifact name="IntelliFactory.WebSharper.TinyMce" ext="xml" type="doc" conf="default" />
     <artifact name="IntelliFactory.WebSharper.TinyMce" ext="pdb" type="debug" conf="default" />
+    <artifact name="if-ws-tinymce-docs" ext="zip" type="doc" conf="default" />
   </publications>
   <dependencies>
     <dependency name="if-ws" rev="latest.integration" conf="build->compiler" />

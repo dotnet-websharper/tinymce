@@ -43,6 +43,7 @@ module TinyMce =
 
     let TinyMCE = Type.New ()
     let TinyMCEConfiguration = Type.New ()
+    let Editor = Type.New ()
 
     let TinyMCEConfigurationClass =
         Pattern.Config "TinyMCEConfiguration" {
@@ -80,13 +81,13 @@ module TinyMce =
                     "file_browser_callback", T<string * string * string * obj -> unit>
                     "handle_event_callback", T<Event -> bool>
                     "handle_node_change_callback", T<string * Node * int * int * bool * bool -> unit>
-                    "init_instance_callback", TinyMCE ^-> T<unit>
-                    "onchange_callback", TinyMCE ^-> T<unit>
+                    "init_instance_callback", Editor ^-> T<unit>
+                    "onchange_callback", Editor ^-> T<unit>
                     "oninit", T<unit -> unit> 
                     "onpageload", T<unit -> unit> 
-                    "remove_instance_callback", TinyMCE ^-> T<unit>
+                    "remove_instance_callback", Editor ^-> T<unit>
                     "save_callback", T<string * string * string -> string>
-                    "setup", TinyMCE ^-> T<unit>
+                    "setup", Editor ^-> T<unit>
                     "setupcontent_callback", T<string * Node * string -> unit>
                     "urlconverter_callback", T<string * string * bool -> string>
 
@@ -250,8 +251,34 @@ module TinyMce =
 
             ]
 
+
+    let Dispatcher = Type.New ()
+        
+    let DispatcherClass = 
+        Class "tinymce.util.Dispatcher"
+        |=> Dispatcher
+        |+> Protocol
+            [
+                "add" => (Editor ^-> T<unit>) ^-> (Editor ^-> T<unit>)
+                |> WithComment "Adds an observer function."
+
+                "add" => (Editor * T<Event> ^-> T<unit>) ^-> (Editor * T<Event> ^-> T<unit>)
+                |> WithComment "Adds an observer function."
+
+                "addToTop" => (Editor ^-> T<unit>) ^-> (Editor ^-> T<unit>)
+                |> WithComment "Adds an observer function to the top of the list of observers."
+
+                "addToTop" => (Editor * T<Event> ^-> T<unit>) ^-> (Editor * T<Event> ^-> T<unit>)
+                |> WithComment "Adds an observer function to the top of the list of observers."
+
+                "remove" => (Editor ^-> T<unit>) ^-> (Editor ^-> T<unit>)
+                |> WithComment "Removes an observer function."
+
+                "remove" => (Editor * T<Event> ^-> T<unit>) ^-> (Editor * T<Event> ^-> T<unit>)
+                |> WithComment "Removes an observer function."
+            ]
     
-    let Editor = Type.New ()
+
         
     let EditorClass = 
         Class "tinymce.Editor"
@@ -308,6 +335,8 @@ module TinyMce =
                 |> WithComment "Removes the editor from DOM and the editor collection."
 
 
+                "onInit" =? Dispatcher 
+                |> WithComment "Fires after the editor is initialized."
                 
             ]
 
@@ -358,6 +387,7 @@ module TinyMce =
                 EntityEncodingClass
                 EditorClass
                 UndoManagerClass
+                DispatcherClass
             ]
         ]
 

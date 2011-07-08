@@ -17,12 +17,18 @@ type SampleControl () =
     [<JavaScript>]
     override this.Body = 
         let conf =
-            {EditorConfiguration.Default with
+            {HtmlEditorConfiguration.Default with
                 Theme = "advanced"
-                Width = Some 400
+                Width = Some 600
                 Height = Some 400
+                ThemeAdvancedToolbarLocation = Some "top" 
+                ThemeAdvancedToolbarAlign = Some "left"
+                ThemeAdvancedButtons1 = Some "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,formatselect,|,bullist,numlist"
+                ThemeAdvancedButtons2 = Some "" 
+                ThemeAdvancedButtons3 = Some ""
+                ThemeAdvancedButtons4 = Some ""
             }
-        Controls.CustomEditor conf "default"
+        Controls.HtmlEditor conf "default"
         |> Enhance.WithSubmitAndResetButtons
         |> Formlet.Map (fun v ->
             U.Log ("Output", v)

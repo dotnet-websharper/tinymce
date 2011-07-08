@@ -8,13 +8,20 @@ open IntelliFactory.WebSharper
 open IntelliFactory.WebSharper.TinyMce
 open IntelliFactory.WebSharper.Html
 
-type EditorConfiguration=
+type HtmlEditorConfiguration=
     {
         Theme : string
         Width : option<int>
         Height : option<int>
         CustomElements : option<string>
         Plugins : option<string>
+        ThemeAdvancedToolbarLocation : option<string>
+        ThemeAdvancedToolbarAlign : option<string>
+        ThemeAdvancedStatusbarLocation : option<string>
+        ThemeAdvancedButtons1 : option<string>
+        ThemeAdvancedButtons2 : option<string>
+        ThemeAdvancedButtons3 : option<string>
+        ThemeAdvancedButtons4 : option<string>
     }
     with
         [<JavaScript>]
@@ -25,7 +32,13 @@ type EditorConfiguration=
                 Height = None
                 CustomElements = None
                 Plugins = None
-
+                ThemeAdvancedToolbarLocation = None 
+                ThemeAdvancedToolbarAlign = None 
+                ThemeAdvancedStatusbarLocation = None 
+                ThemeAdvancedButtons1 = None 
+                ThemeAdvancedButtons2 = None 
+                ThemeAdvancedButtons3 = None 
+                ThemeAdvancedButtons4 = None 
             }
 
 module Controls =
@@ -33,7 +46,7 @@ module Controls =
 
 
     [<JavaScript>]
-    let CustomEditor conf (def: string) : Formlet<string> =
+    let HtmlEditor conf (default_content: string) : Formlet<string> =
         Formlet.BuildFormlet <| fun _ ->
             
             let state = new Event<_>()
@@ -70,21 +83,49 @@ module Controls =
                 match conf.Plugins with
                 | Some s -> tConf.Plugins <- s
                 | None   -> ()
+
+                match conf.ThemeAdvancedToolbarLocation with
+                | Some s -> tConf.Theme_advanced_toolbar_location <- s
+                | None   -> ()
+
+                match conf.ThemeAdvancedToolbarAlign with
+                | Some s -> tConf.Theme_advanced_toolbar_align <- s
+                | None   -> ()
+
+                match conf.ThemeAdvancedStatusbarLocation with
+                | Some s -> tConf.Theme_advanced_statusbar_location <- s
+                | None   -> ()
+
+                match conf.ThemeAdvancedButtons1 with
+                | Some s -> tConf.Theme_advanced_buttons1 <- s 
+                | None   -> ()
+
+                match conf.ThemeAdvancedButtons2 with
+                | Some s -> tConf.Theme_advanced_buttons2 <- s
+                | None   -> ()
+
+                match conf.ThemeAdvancedButtons3 with
+                | Some s -> tConf.Theme_advanced_buttons3 <- s
+                | None   -> ()
+
+                match conf.ThemeAdvancedButtons4 with
+                | Some s -> tConf.Theme_advanced_buttons4 <- s
+                | None   -> ()
                 tConf
 
             let body =
-                TextArea [Attr.Id tId; Text def]
+                TextArea [Attr.Id tId; Text default_content]
                 |>! OnAfterRender (fun el ->
                     TinyMCE.Init tConf
-                    trigger def
+                    trigger default_content
                 )
             let reset () = 
                 let tinyMce = TinyMCE.Get(tId)
-                tinyMce.Value <- def
-                tinyMce.SetContent(def)
-                trigger def
+                tinyMce.Value <- default_content
+                tinyMce.SetContent(default_content)
+                trigger default_content
 
             body, reset, state.Publish
 
     [<JavaScript>]
-    let Editor def = CustomEditor EditorConfiguration.Default def
+    let Editor default_content = HtmlEditor HtmlEditorConfiguration.Default default_content

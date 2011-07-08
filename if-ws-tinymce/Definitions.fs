@@ -3,9 +3,11 @@
 module TinyMce =
     open IntelliFactory.WebSharper.InterfaceGenerator
     open IntelliFactory.WebSharper.Dom;
+    open IntelliFactory.WebSharper.EcmaScript;
         
     let private ConstantStrings ty l =
         List.map (fun s -> (s =? ty |> WithGetterInline ("'" + s + "'")) :> CodeModel.IClassMember) l
+
 
     let DialogType = Type.New ()
 
@@ -37,7 +39,6 @@ module TinyMce =
         Class "EntityEncoding"
         |=> EntityEncoding
         |+> ConstantStrings EntityEncoding ["named"; "numeric"; "raw"]
-
 
 
     let TinyMCE = Type.New ()
@@ -211,25 +212,73 @@ module TinyMce =
         }
         |=> TinyMCEConfiguration
 
-    
 
-    let TinyMCEClass =
-        Class "tinyMCE"
-        |=> TinyMCE
-        |+> [
-                "init" => TinyMCEConfiguration ^-> T<unit>
-                |> WithComment ""
-
-                "get" => T<string> ^-> TinyMCE
-                |> WithComment ""
-            ]
+    let UndoManager = Type.New ()
+        
+    let UndoManagerClass = 
+        Class "tinymce.UndoManager"
+        |=> UndoManager
         |+> Protocol
             [
-                "getContent" => T<unit> ^-> T<string> 
-                |> WithComment ""
+                "add" => T<obj> ^-> T<obj>
+                |> WithComment "Adds a new undo level to the undo list."
 
-                "setContent" => T<string> ^-> T<unit> 
-                |> WithComment ""
+                "undo" => T<unit> ^-> T<obj>
+                |> WithComment "Undoes the last changes."
+
+                "redo" => T<unit> ^-> T<obj>
+                |> WithComment "Redoes the last changes."
+
+                "clear" => T<unit> ^-> T<unit>
+                |> WithComment "Clears undo list."
+
+                "hasUndo" => T<unit> ^-> T<bool>
+                |> WithComment "Return true/false if tere are undo levels or not."
+
+                "hasRedo" => T<unit> ^-> T<bool>
+                |> WithComment "Return true/false if tere are redo levels or not."
+
+
+                "onAdd" => (UndoManager * T<obj> ^-> T<unit>) ^-> T<unit>
+                |> WithComment "Fires when new undo level is added to the undo manager."
+
+                "onUndo" => (UndoManager * T<obj> ^-> T<unit>) ^-> T<unit>
+                |> WithComment "Fires when the user makes an undo."
+
+                "onRedo" => (UndoManager * T<obj> ^-> T<unit>) ^-> T<unit>
+                |> WithComment "Fires when the user makes an redo."
+
+            ]
+
+    
+    let Editor = Type.New ()
+        
+    let EditorClass = 
+        Class "tinymce.Editor"
+        |=> Editor
+        |+> Protocol
+            [
+                "id" =? T<string>
+                |> WithComment "An editor id."
+
+                "isNotDirty" =? T<bool>
+                |> WithComment "Changes the editor state to no dirty."
+
+                "dom" =? T<Node>
+                |> WithComment "The editor's DOM instance."
+
+                "undoManager" =? UndoManager 
+                |> WithComment "The UndoManager instance for the editor."
+
+
+                "focus" => T<bool> ^-> T<unit> 
+                |> WithComment "Focuses and activates the editor."
+
+                "execCommand" => T<string> ^-> T<unit> 
+                |> WithComment "Executes the specified command."
+
+                "execCommand" => T<string> * T<bool> * T<string> ^-> T<unit> 
+                |> WithComment "Executes the specified command."
 
                 "show" => T<unit> ^-> T<unit> 
                 |> WithComment ""
@@ -237,14 +286,65 @@ module TinyMce =
                 "hide" => T<unit> ^-> T<unit> 
                 |> WithComment ""
 
-                "execCommand" => T<string> ^-> T<unit> 
-                |> WithComment ""
+                "isHidden" => T<unit> ^-> T<bool> 
+                |> WithComment "Returns true if the editor is hidden, false if it is not."
 
-                "execCommand" => T<string> * T<bool> * T<string> ^-> T<unit> 
-                |> WithComment ""
+                "load" => T<unit> ^-> T<string> 
+                |> WithComment "Loads the content from the editor's textarea or div into the editor instance."
 
-                "value" =@ T<string>
-                |> WithComment "Text content of the editor"
+                "save" => T<unit> ^-> T<string> 
+                |> WithComment "Saves the content from the editor into the editor's textarea or div."
+
+                "setContent" => T<string> ^-> T<string> 
+                |> WithComment "Sets the specified content to the editor instance."
+
+                "getContent" => T<unit> ^-> T<string> 
+                |> WithComment "Gets the content from the editor instance."
+
+                "isDirty" => T<unit> ^-> T<bool> 
+                |> WithComment "Returns true/false if the user made modifications to the content or not."
+
+                "remove" => T<unit> ^-> T<unit> 
+                |> WithComment "Removes the editor from DOM and the editor collection."
+
+
+                
+            ]
+
+
+    let TinyMCEClass =
+        Class "tinyMCE"
+        |=> TinyMCE
+        |+> [
+                "editors" =? T<Array>
+                |> WithComment "The editor collection."
+
+
+                "init" => TinyMCEConfiguration ^-> T<unit>
+                |> WithComment "Initializes an editor."
+
+                "get" => T<string> ^-> Editor
+                |> WithComment "Returns a editor instance with given id."
+
+                "get" => T<int> ^-> Editor
+                |> WithComment "Returns a editor instance with given id."
+
+                "add" => Editor ^-> Editor
+                |> WithComment "Adds an editor instance to the editor collection and sets it as the active editor."
+                
+                "remove" => Editor ^-> Editor
+                |> WithComment "Removes an editor instance from the editor collection."
+                
+                "execCommand" => T<string> * T<bool> * T<string> ^-> T<bool> 
+                |> WithComment "Executes povided command on the active editor."
+                
+
+                "onAddEditor" => (TinyMCE * Editor ^-> T<unit>) ^-> T<unit>
+                |> WithComment "Executes when an new editor instance is added to the editor collection."
+                
+                "onRemoveEditor" => (TinyMCE * Editor ^-> T<unit>) ^-> T<unit>
+                |> WithComment "Executes when an editor instance is removed from the editor collection."
+                
             ]
 
     let Assembly =
@@ -256,5 +356,8 @@ module TinyMce =
                 ModeClass
                 ThemeAdvancedLayoutManagerClass
                 EntityEncodingClass
+                EditorClass
+                UndoManagerClass
             ]
         ]
+

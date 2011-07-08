@@ -47,6 +47,7 @@
     <Reference Include="IntelliFactory.WebSharper" />
     <Reference Include="IntelliFactory.WebSharper.InterfaceGenerator" />
     <Reference Include="IntelliFactory.WebSharper.Dom" />
+    <Reference Include="IntelliFactory.WebSharper.Ecma" />
     <Reference Include="System.Web" />
   </ItemGroup>
 </Project>

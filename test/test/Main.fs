@@ -2,7 +2,7 @@
 
 open IntelliFactory.WebSharper
 open IntelliFactory.WebSharper.Html
-open IntelliFactory.WebSharper.Formlet
+//open IntelliFactory.WebSharper.Formlet
 open IntelliFactory.WebSharper.Web
 open IntelliFactory.WebSharper
 open IntelliFactory.WebSharper.TinyMce
@@ -49,10 +49,14 @@ type SampleControl () =
             new TinyMCEConfiguration(
                 Theme = "simple",
                 Mode = Mode.Textareas,
-                Onchange_callback = fun (ed) -> JavaScript.Alert("fa")
-                //Oninit = fun () -> JavaScript.Alert(TinyMCE.Get("test_area").Id)
+                //Onchange_callback = fun (ed) -> JavaScript.Alert("fa")
+                Oninit = fun () -> 
+                                //let v = TinyMCE.Get("test_area")
+                                JavaScript.Alert("ga")
             )
         )
+        let v = TinyMCE.Get("test_area")
+        ()
 
     [<JavaScript>]
     override this.Body = 

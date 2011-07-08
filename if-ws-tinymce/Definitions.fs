@@ -335,8 +335,65 @@ module TinyMce =
                 |> WithComment "Removes the editor from DOM and the editor collection."
 
 
+                "onPreInit" =? Dispatcher 
+                |> WithComment "Fires before the editor is initialized."
+
                 "onInit" =? Dispatcher 
                 |> WithComment "Fires after the editor is initialized."
+                
+                "onActivate" =? Dispatcher 
+                |> WithComment "Fires when editor is activated."
+                
+                "onDeactivate" =? Dispatcher 
+                |> WithComment "Fires when the editor is deactivated."
+                
+                "onClick" =? Dispatcher 
+                |> WithComment "Fires when the editor's body is clicked."
+                
+                "onMouseUp" =? Dispatcher 
+                |> WithComment "Fires when a mouseUp event occurs inside editor."
+                
+                "onMouseDown" =? Dispatcher 
+                |> WithComment "Fires when a mouseDown event occurs inside editor."
+                
+                "onDblClick" =? Dispatcher 
+                |> WithComment "Fires when the editor's body is double clicked."
+                
+                "onKeyDown" =? Dispatcher 
+                |> WithComment "Fires when a keyDown event occurs inside editor."
+                
+                "onKeyUp" =? Dispatcher 
+                |> WithComment "Fires when a keyUp event occurs inside editor."
+                
+                "onKeyPress" =? Dispatcher 
+                |> WithComment "Fires when a keyPress event occurs inside editor."
+                
+                "onContextMenu" =? Dispatcher 
+                |> WithComment "Fires when a contextMenu event occurs inside editor."
+                
+                "onSubmit" =? Dispatcher 
+                |> WithComment "Fires when a form submit event occurs."
+                
+                "onReset" =? Dispatcher 
+                |> WithComment "Fires when a form reset event occurs."
+                
+                "onPaste" =? Dispatcher 
+                |> WithComment "Fires when a paste event occurs inside editor."
+                
+                "onLoadContent" =? Dispatcher 
+                |> WithComment "Fires when the editor gets loaded with content."
+                
+                "onSaveContent" =? Dispatcher 
+                |> WithComment "Fires when the editor content gets saved."
+                
+                "onChange" =? Dispatcher 
+                |> WithComment "Fires when the editor content was modified."
+                
+                "onUndo" =? Dispatcher 
+                |> WithComment "Fires when the editor content is undoed."
+                
+                "onRedo" =? Dispatcher 
+                |> WithComment "Fires when the editor content is redoed."
                 
             ]
 

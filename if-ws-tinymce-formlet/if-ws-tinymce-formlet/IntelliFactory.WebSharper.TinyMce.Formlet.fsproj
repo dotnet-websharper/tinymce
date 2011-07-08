@@ -52,6 +52,7 @@
     <Reference Include="IntelliFactory.SourceResolver" />
     <Reference Include="IntelliFactory.WebSharper.Formlet" />
     <Reference Include="IntelliFactory.WebSharper.Ecma" />
+    <Reference Include="IntelliFactory.WebSharper.TinyMce" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls.fs" />

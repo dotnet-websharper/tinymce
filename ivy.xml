@@ -9,6 +9,9 @@
     <artifact name="IntelliFactory.WebSharper.TinyMce" ext="dll" type="bin" conf="default" />
     <artifact name="IntelliFactory.WebSharper.TinyMce" ext="xml" type="doc" conf="default" />
     <artifact name="IntelliFactory.WebSharper.TinyMce" ext="pdb" type="debug" conf="default" />
+    <artifact name="IntelliFactory.WebSharper.Formlet.TinyMce" ext="dll" type="bin" conf="default" />
+    <artifact name="IntelliFactory.WebSharper.Formlet.TinyMce" ext="pdb" type="debug" conf="default" />
+
     <artifact name="if-ws-tinymce-docs" ext="zip" type="doc" conf="default" />
   </publications>
   <dependencies>
@@ -18,5 +21,12 @@
     <dependency name="if-ws-ig" rev="latest.integration" conf="build->default" />
     <dependency name="if-ws-html" rev="latest.integration" />
     <dependency name="if-ws-json" rev="latest.integration" />
+
+    <dependency name="if-formlet" rev="latest.integration" conf="default" />
+    <dependency name="if-ws-formlets" rev="latest.integration" conf="default" />
+
+    <dependency name="if-ws-control" rev="latest.integration" conf="default" />
+    <dependency name="if-ws-collections" rev="latest.integration" conf="default" />
+    
   </dependencies>
 </ivy-module>

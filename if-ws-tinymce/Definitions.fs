@@ -277,9 +277,7 @@ module TinyMce =
                 "remove" => (Editor * T<Event> ^-> T<unit>) ^-> (Editor * T<Event> ^-> T<unit>)
                 |> WithComment "Removes an observer function."
             ]
-    
 
-        
     let EditorClass = 
         Class "tinymce.Editor"
         |=> Editor

@@ -5,7 +5,6 @@
     <title>WebSharper Playground</title>
     <script type="text/javascript" src="jscripts/tiny_mce/tiny_mce.js"></script>
     <WebSharper:ScriptManager runat="server" />
-    
 </head>
 <body>
     <Sample:SampleControl runat="server" />

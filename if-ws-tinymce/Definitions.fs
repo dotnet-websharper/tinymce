@@ -40,6 +40,30 @@ module TinyMce =
         |=> EntityEncoding
         |+> ConstantStrings EntityEncoding ["named"; "numeric"; "raw"]
 
+        
+    let ToolbarLocation = Type.New ()
+        
+    let ToolbarLocationClass = 
+        Class "ToolbarLocation"
+        |=> ToolbarLocation
+        |+> ConstantStrings ToolbarLocation ["top"; "bottom"; "external"]
+
+
+    let ToolbarAlign = Type.New ()
+        
+    let ToolbarAlignClass = 
+        Class "ToolbarAlign"
+        |=> ToolbarAlign
+        |+> ConstantStrings ToolbarAlign ["left"; "center"; "right"]
+
+
+    let StatusbarLocation = Type.New ()
+        
+    let StatusbarLocationClass = 
+        Class "StatusbarLocation"
+        |=> StatusbarLocation
+        |+> ConstantStrings StatusbarLocation ["top"; "bottom"; "none"]
+
 
     let TinyMCE = Type.New ()
     let TinyMCEConfiguration = Type.New ()
@@ -167,9 +191,9 @@ module TinyMce =
                     "theme_advanced_source_editor_width" , T<int>
                     "theme_advanced_source_editor_height" , T<int>
                     "theme_advanced_source_editor_wrap" , T<bool>
-                    "theme_advanced_toolbar_location" , T<string>
-                    "theme_advanced_toolbar_align" , T<string>
-                    "theme_advanced_statusbar_location" , T<string>
+                    "theme_advanced_toolbar_location" , ToolbarLocation 
+                    "theme_advanced_toolbar_align" , ToolbarAlign
+                    "theme_advanced_statusbar_location" , StatusbarLocation
                     "theme_advanced_buttons1" , T<string>
                     "theme_advanced_buttons2" , T<string>
                     "theme_advanced_buttons3" , T<string>
@@ -215,7 +239,7 @@ module TinyMce =
 
 
     let UndoManager = Type.New ()
-
+        
     let UndoManagerClass = 
         Class "tinymce.UndoManager"
         |=> UndoManager
@@ -475,6 +499,9 @@ module TinyMce =
                 UndoManagerClass
                 DispatcherClass
                 SelectionClass
+                ToolbarLocationClass
+                ToolbarAlignClass
+                StatusbarLocationClass
             ]
         ]
 

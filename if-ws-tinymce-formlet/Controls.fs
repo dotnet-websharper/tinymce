@@ -107,17 +107,17 @@ module Controls =
                 | Some s -> tConf.Plugins <- s
                 | None   -> ()
 
-                match conf.ThemeAdvancedToolbarLocation with
-                | Some s -> tConf.Theme_advanced_toolbar_location <- s
-                | None   -> ()
+//                match conf.ThemeAdvancedToolbarLocation with
+//                | Some s -> tConf.Theme_advanced_toolbar_location <- s
+//                | None   -> ()
 
-                match conf.ThemeAdvancedToolbarAlign with
-                | Some s -> tConf.Theme_advanced_toolbar_align <- s
-                | None   -> ()
-
-                match conf.ThemeAdvancedStatusbarLocation with
-                | Some s -> tConf.Theme_advanced_statusbar_location <- s
-                | None   -> ()
+//                match conf.ThemeAdvancedToolbarAlign with
+//                | Some s -> tConf.Theme_advanced_toolbar_align <- s
+//                | None   -> ()
+//
+//                match conf.ThemeAdvancedStatusbarLocation with
+//                | Some s -> tConf.Theme_advanced_statusbar_location <- s
+//                | None   -> ()
 
                 match conf.ThemeAdvancedButtons1 with
                 | Some bs -> 

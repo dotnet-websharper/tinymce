@@ -10,5 +10,8 @@
   <ItemGroup>
     <Content Include="IntelliFactory.WebSharper.TinyMce.xml" />
     <Content Include="Overview.txt" />
+    <None Include="FormletDefault.PNG" />
+    <Content Include="Formlet.txt" />
+    <Content Include="Direct.txt" />
   </ItemGroup>
 </Project>

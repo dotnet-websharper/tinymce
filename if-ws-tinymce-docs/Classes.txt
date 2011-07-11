@@ -1,0 +1,22 @@
+﻿% Classes 
+
+
+`Web#` extension for `TinyMCE` provides following bindings:
+
+* `tinyMCE` - namespace which contains many useful funtions 
+* `tinymce.Editor` - editor class
+* `tinymce.UndoManager` - class providing support for undo/redo operations
+* `tinymce.dom.Selection` - class representing current selection 
+* `TinyMCEConfiguration` - class not defined in `TinyMCE`, represens configuration options
+
+
+= namespace `tinyMCE`
+
+Following functions of `tinyMCE` namespace are important:
+* `init(config:TinyMCEConfiguration)` - creates new `TinyMCE` editors based on configuration options `config`.
+* `get(id:strign)` - returns instance of `TinyMCE` with given `id`.
+
+
+Following example creates new `TinyMCE` instance, then using callback `oninit`( 
+which executes after editor is initialized) we get instance of `TinyMCE` and 
+alert its content.

@@ -13,5 +13,6 @@
     <None Include="FormletDefault.PNG" />
     <Content Include="Formlet.txt" />
     <Content Include="Direct.txt" />
+    <Content Include="Classes.txt" />
   </ItemGroup>
 </Project>

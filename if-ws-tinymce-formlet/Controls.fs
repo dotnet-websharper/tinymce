@@ -121,8 +121,8 @@ module Controls =
                 )
             let reset () = 
                 let tinyMce = TinyMCE.Get(tId)
-                tinyMce.Value <- default_content
                 tinyMce.SetContent(default_content)
+                |> ignore
                 trigger default_content
 
             body, reset, state.Publish

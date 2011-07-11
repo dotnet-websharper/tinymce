@@ -85,7 +85,7 @@
     <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\if-ws-tinymce-formlet\if-ws-tinymce-formlet\IntelliFactory.WebSharper.TinyMce.Formlet.fsproj">
+    <ProjectReference Include="..\..\if-ws-tinymce-formlet\IntelliFactory.WebSharper.TinyMce.Formlet.fsproj">
       <Project>{501CA443-9B83-45DB-9693-F2F3677A44C4}</Project>
       <Name>IntelliFactory.WebSharper.TinyMce.Formlet</Name>
     </ProjectReference>

@@ -2,13 +2,13 @@
 
 open IntelliFactory.WebSharper
 open IntelliFactory.WebSharper.Html
-//open IntelliFactory.WebSharper.Formlet
+open IntelliFactory.WebSharper.Formlet
 open IntelliFactory.WebSharper.Web
 open IntelliFactory.WebSharper
 open IntelliFactory.WebSharper.TinyMce
 open IntelliFactory.WebSharper.Formlet.TinyMce
 
-(*
+
 module U =
     [<Inline "console.log($x)">]
     let Log x = ()
@@ -38,30 +38,27 @@ type SampleControl () =
                 )
                 |> Enhance.WithFormContainer
                 :> _
-                *)
-
-type SampleControl () =
-    inherit Web.Control()
-
-    [<JavaScript>]
-    let Init () =
-        TinyMCE.Init (
-            new TinyMCEConfiguration(
-                Theme = "simple",
-                Mode = Mode.Textareas,
-                //Onchange_callback = fun (ed) -> JavaScript.Alert("fa")
-                Oninit = fun () -> 
-                                //let v = TinyMCE.Get("test_area")
-                                JavaScript.Alert("ga")
-            )
-        )
-        let v = TinyMCE.Get("test_area")
-        ()
-
-    [<JavaScript>]
-    override this.Body = 
-        TextArea [Id "test_area"] -< [Text "Default  text"]
-        |>! OnAfterRender (fun _ ->
-            Init()
-        )
-        :> _
+//
+//type SampleControl () =
+//    inherit Web.Control()
+//
+//    [<JavaScript>]
+//    let Init () =
+//
+//        TinyMCE.Init (
+//            new TinyMCEConfiguration(
+//                Theme = "simple",
+//                Mode = Mode.Textareas,
+//                Oninit = fun () ->
+//                    let e = TinyMCE.Get("test_area")
+//                    ()
+//            )
+//        )
+//
+//    [<JavaScript>]
+//    override this.Body = 
+//        TextArea [Id "test_area"] -< [Text "Default  text"]
+//        |>! OnAfterRender (fun _ ->
+//            Init()
+//        )
+//        :> _

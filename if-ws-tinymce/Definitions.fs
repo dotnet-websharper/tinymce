@@ -50,7 +50,7 @@ module TinyMce =
             Required = []
             Optional = 
                 [
-                    // General
+                    // general
                     "accessibility_warnings" , T<bool>
                     "auto_focus" , T<string>
                     "browsers" , T<string>
@@ -75,7 +75,7 @@ module TinyMce =
                     "theme" , T<string>
                     "imagemanager_contextmenu" , T<bool>
 
-                    // Callbacks
+                    // callbacks
                     "cleanup_callback", T<string> * T<string> ^-> T<string>
                     "execcommand_callback", T<string * string * string * string * string -> bool>
                     "file_browser_callback", T<string * string * string * obj -> unit>
@@ -91,7 +91,7 @@ module TinyMce =
                     "setupcontent_callback", T<string * Node * string -> unit>
                     "urlconverter_callback", T<string * string * bool -> string>
 
-                    // Cleanup/Output
+                    // cleanup/output
                     "apply_source_formatting" , T<bool>
                     "convert_fonts_to_spans" , T<bool>
                     "convert_newlines_to_brs" , T<bool>
@@ -122,13 +122,13 @@ module TinyMce =
                     "verify_html" , T<bool>
                     "removeformat_selector" , T<string>
 
-                    // URL
+                    // url
                     "convert_urls" , T<bool>
                     "relative_urls" , T<bool>
                     "remove_script_host" , T<bool>
                     "document_base_url" , T<string>
 
-                    // Layout
+                    // layout
                     "body_id" , T<string>
                     "body_class" , T<string>
                     "constrain_menus" , T<bool>
@@ -139,28 +139,28 @@ module TinyMce =
                     "width" , T<string>
                     "height" , T<string>
 
-                    // Visual aids
+                    // visual aids
                     "visual" , T<bool>
                     "visual_table_class" , T<string>
                     
-                    // Undo/Redo
+                    // undo/Redo
                     "custom_undo_redo" , T<bool>
                     "custom_undo_redo_levels" , T<int>
                     "custom_undo_redo_keyboard_shortcuts" , T<int>
                     "custom_undo_redo_restore_selection" , T<bool>
 
-                    // File lists
+                    // file lists
                     "external_link_list_url" , T<string>
                     "external_image_list_url" , T<string>
                     "external_media_list_url" , T<string>
                     "external_template_list_url" , T<string>
 
-                    // Triggers/Patches
+                    // triggers/patches
                     "add_form_submit_trigger" , T<bool>
                     "add_unload_trigger" , T<bool>
                     "submit_patch" , T<bool>
 
-                    // Advanced theme
+                    // advanced theme
                     "theme_advanced_layout_manager" , ThemeAdvancedLayoutManager 
                     "theme_advanced_blockformats" , T<string>
                     "theme_advanced_styles" , T<string>
@@ -221,6 +221,7 @@ module TinyMce =
         |=> UndoManager
         |+> Protocol
             [
+                // methods
                 "add" => T<obj> ^-> T<obj>
                 |> WithComment "Adds a new undo level to the undo list."
 
@@ -239,7 +240,7 @@ module TinyMce =
                 "hasRedo" => T<unit> ^-> T<bool>
                 |> WithComment "Return true/false if tere are redo levels or not."
 
-
+                // events
                 "onAdd" => (UndoManager * T<obj> ^-> T<unit>) ^-> T<unit>
                 |> WithComment "Fires when new undo level is added to the undo manager."
 
@@ -259,6 +260,7 @@ module TinyMce =
         |=> Dispatcher
         |+> Protocol
             [
+                // methods
                 "add" => (Editor ^-> T<unit>) ^-> (Editor ^-> T<unit>)
                 |> WithComment "Adds an observer function."
 
@@ -278,11 +280,29 @@ module TinyMce =
                 |> WithComment "Removes an observer function."
             ]
 
+    
+    let Selection = Type.New ()
+        
+    let SelectionClass = 
+        Class "tinymce.dom.Selection"
+        |=> Selection
+        |+> Protocol
+            [
+                // methods
+                "getContent" => T<unit> ^-> T<string> 
+                |> WithComment "Returns the selected content."
+
+                "setContent" => T<string> ^-> T<unit> 
+                |> WithComment "Replaces the selection with specified content."
+            ]
+
+        
     let EditorClass = 
         Class "tinymce.Editor"
         |=> Editor
         |+> Protocol
             [
+                // properties
                 "id" =? T<string>
                 |> WithComment "An editor id."
 
@@ -292,10 +312,14 @@ module TinyMce =
                 "dom" =? T<Node>
                 |> WithComment "The editor's DOM instance."
 
+                "selection" =? Selection 
+                |> WithComment "The Selection instance for the editor."
+
                 "undoManager" =? UndoManager 
                 |> WithComment "The UndoManager instance for the editor."
 
 
+                // methods
                 "focus" => T<bool> ^-> T<unit> 
                 |> WithComment "Focuses and activates the editor."
 
@@ -333,6 +357,7 @@ module TinyMce =
                 |> WithComment "Removes the editor from DOM and the editor collection."
 
 
+                // events
                 "onPreInit" =? Dispatcher 
                 |> WithComment "Fires before the editor is initialized."
 
@@ -400,10 +425,15 @@ module TinyMce =
         Class "tinyMCE"
         |=> TinyMCE
         |+> [
+                // properties
                 "editors" =? T<Array>
                 |> WithComment "The editor collection."
 
+                "activeEditor" =? T<Array>
+                |> WithComment "Currently active editor."
 
+
+                // methods
                 "init" => TinyMCEConfiguration ^-> T<unit>
                 |> WithComment "Initializes an editor."
 
@@ -423,6 +453,7 @@ module TinyMce =
                 |> WithComment "Executes povided command on the active editor."
                 
 
+                // events
                 "onAddEditor" => (TinyMCE * Editor ^-> T<unit>) ^-> T<unit>
                 |> WithComment "Executes when an new editor instance is added to the editor collection."
                 
@@ -443,6 +474,7 @@ module TinyMce =
                 EditorClass
                 UndoManagerClass
                 DispatcherClass
+                SelectionClass
             ]
         ]
 

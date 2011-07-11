@@ -7478,6 +7478,8 @@ tinymce.html.Writer = function(settings) {
 			undefined;
 
 		function loadScript(url, callback) {
+        
+            console.log("url", url);
 			var t = this, dom = tinymce.DOM, elm, uri, loc, id;
 
 			// Execute callback when script is loaded

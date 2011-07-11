@@ -53,7 +53,6 @@
     <Reference Include="IntelliFactory.WebSharper.Core" />
     <Reference Include="IntelliFactory.WebSharper.Collections" />
     <Reference Include="IntelliFactory.WebSharper.Control" />
-    <Reference Include="IntelliFactory.Html" />
     <Reference Include="IntelliFactory.Json" />
     <Reference Include="IntelliFactory.WebSharper" />
     <Reference Include="IntelliFactory.WebSharper.Formlet" />
@@ -85,11 +84,11 @@
     <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\if-ws-tinymce-formlet\IntelliFactory.WebSharper.TinyMce.Formlet.fsproj">
+    <ProjectReference Include="..\if-ws-tinymce-formlet\IntelliFactory.WebSharper.TinyMce.Formlet.fsproj">
       <Project>{501CA443-9B83-45DB-9693-F2F3677A44C4}</Project>
       <Name>IntelliFactory.WebSharper.TinyMce.Formlet</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\if-ws-tinymce\IntelliFactory.WebSharper.TinyMce.fsproj">
+    <ProjectReference Include="..\if-ws-tinymce\IntelliFactory.WebSharper.TinyMce.fsproj">
       <Project>{730AE40A-001C-4137-972D-898DC7C2BF0A}</Project>
       <Name>IntelliFactory.WebSharper.TinyMce</Name>
     </ProjectReference>

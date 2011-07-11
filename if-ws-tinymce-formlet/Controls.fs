@@ -8,6 +8,13 @@ open IntelliFactory.WebSharper
 open IntelliFactory.WebSharper.TinyMce
 open IntelliFactory.WebSharper.Html
 
+type ButtonType =
+    | [<Name "foo">] Foo
+    | [<Name "bar">] BarBar
+
+type ButtonRow = list<ButtonType>
+
+
 type HtmlEditorConfiguration=
     {
         Theme : string
@@ -18,10 +25,11 @@ type HtmlEditorConfiguration=
         ThemeAdvancedToolbarLocation : option<string>
         ThemeAdvancedToolbarAlign : option<string>
         ThemeAdvancedStatusbarLocation : option<string>
-        ThemeAdvancedButtons1 : option<string>
-        ThemeAdvancedButtons2 : option<string>
-        ThemeAdvancedButtons3 : option<string>
-        ThemeAdvancedButtons4 : option<string>
+        ThemeAdvancedButtons1 : option<list<ButtonRow>>
+
+//        ThemeAdvancedButtons2 : option<string>
+//        ThemeAdvancedButtons3 : option<string>
+//        ThemeAdvancedButtons4 : option<string>
     }
     with
         [<JavaScript>]
@@ -36,25 +44,32 @@ type HtmlEditorConfiguration=
                 ThemeAdvancedToolbarAlign = None 
                 ThemeAdvancedStatusbarLocation = None 
                 ThemeAdvancedButtons1 = None 
-                ThemeAdvancedButtons2 = None 
-                ThemeAdvancedButtons3 = None 
-                ThemeAdvancedButtons4 = None 
             }
 
 module Controls =
-
-
+    [<Inline "console.log($x)">]
+    let Log x = ()
 
     [<JavaScript>]
-    let HtmlEditor conf (default_content: string) : Formlet<string> =
+    let HtmlEditor conf (defContent: string) : Formlet<string> =
         Formlet.BuildFormlet <| fun _ ->
             
             let state = new Event<_>()
+            let oldValue = ref None
             let trigger v =
-                Result.Success v
-                |> state.Trigger
+                let t () =
+                    oldValue := Some v
+                    Result.Success v
+                    |> state.Trigger
+                match oldValue.Value with
+                | Some ov ->
+                    if v <> ov then t ()
+                | None ->
+                    t ()
+                    
 
             let tId = NewId ()
+            
 
             // Set up configuration
             let tConf =
@@ -65,9 +80,17 @@ module Controls =
                         Elements = tId,
                         Onchange_callback = (fun tMce ->
                             trigger <| tMce.GetContent ()
+                        ),
+                        
+                        Oninit = (fun () ->
+                            let e = TinyMCE.Get(tId)
+                            e.OnKeyUp.Add (fun (e: Editor) ->
+                                e.GetContent() |> trigger
+                            )
+                            |> ignore
                         )
+                )
 
-                    )
                 match conf.Height with
                 | Some h -> tConf.Height <- (string h) + "px"
                 | None   -> ()
@@ -97,35 +120,52 @@ module Controls =
                 | None   -> ()
 
                 match conf.ThemeAdvancedButtons1 with
-                | Some s -> tConf.Theme_advanced_buttons1 <- s 
+                | Some bs -> 
+                    bs
+                    |> List.iteri (fun ix row ->
+                        let prop = "theme_advanced_buttons" + (string ix)
+                        match row with
+                        | [] ->
+                            ()
+                        | _  ->
+                            row
+                            |> Seq.map string
+                            |> Seq.reduce (fun x y -> x + "," + y)
+                            |> fun x ->
+                                Log ("string" , x)
+                                JavaScript.Set tConf prop x
+                    )
                 | None   -> ()
 
-                match conf.ThemeAdvancedButtons2 with
-                | Some s -> tConf.Theme_advanced_buttons2 <- s
-                | None   -> ()
+//                match conf.ThemeAdvancedButtons2 with
+//                | Some s -> tConf.Theme_advanced_buttons2 <- s
+//                | None   -> ()
+//
+//                match conf.ThemeAdvancedButtons3 with
+//                | Some s -> tConf.Theme_advanced_buttons3 <- s
+//                | None   -> ()
+//
+//                match conf.ThemeAdvancedButtons4 with
+//                | Some s -> tConf.Theme_advanced_buttons4 <- s
+//                | None   -> ()
 
-                match conf.ThemeAdvancedButtons3 with
-                | Some s -> tConf.Theme_advanced_buttons3 <- s
-                | None   -> ()
-
-                match conf.ThemeAdvancedButtons4 with
-                | Some s -> tConf.Theme_advanced_buttons4 <- s
-                | None   -> ()
                 tConf
 
             let body =
-                TextArea [Attr.Id tId; Text default_content]
+                TextArea [Attr.Id tId; Text defContent]
                 |>! OnAfterRender (fun el ->
                     TinyMCE.Init tConf
-                    trigger default_content
+
+
+                    trigger defContent
                 )
             let reset () = 
                 let tinyMce = TinyMCE.Get(tId)
-                tinyMce.SetContent(default_content)
+                tinyMce.SetContent(defContent)
                 |> ignore
-                trigger default_content
+                trigger defContent
 
             body, reset, state.Publish
 
     [<JavaScript>]
-    let Editor default_content = HtmlEditor HtmlEditorConfiguration.Default default_content
+    let Editor defContent = HtmlEditor HtmlEditorConfiguration.Default defContent

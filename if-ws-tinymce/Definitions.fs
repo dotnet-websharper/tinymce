@@ -215,7 +215,7 @@ module TinyMce =
 
 
     let UndoManager = Type.New ()
-        
+
     let UndoManagerClass = 
         Class "tinymce.UndoManager"
         |=> UndoManager

@@ -25,6 +25,7 @@
     <dependency name="if-formlet" rev="latest.integration" conf="default" />
     <dependency name="if-ws-formlets" rev="latest.integration" conf="default" />
 
+    <dependency name="if-ws-web" rev="latest.integration" conf="default" />
     <dependency name="if-ws-control" rev="latest.integration" conf="default" />
     <dependency name="if-ws-collections" rev="latest.integration" conf="default" />
     

@@ -12,9 +12,9 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "IntelliFactory.WebSharper.T
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "IntelliFactory.WebSharper.TinyMce.Formlet", "if-ws-tinymce-formlet\IntelliFactory.WebSharper.TinyMce.Formlet.fsproj", "{501CA443-9B83-45DB-9693-F2F3677A44C4}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "test", "test\test\test.fsproj", "{35514715-41DF-4C17-A9EC-D80ABCD9E353}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "test", "test\test.fsproj", "{35514715-41DF-4C17-A9EC-D80ABCD9E353}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test-web", "test\test-web\test-web.csproj", "{C96C4489-BE06-496A-8FC1-4251947EFBA3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test-web", "test-web\test-web.csproj", "{C96C4489-BE06-496A-8FC1-4251947EFBA3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

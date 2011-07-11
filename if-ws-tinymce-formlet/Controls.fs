@@ -9,8 +9,96 @@ open IntelliFactory.WebSharper.TinyMce
 open IntelliFactory.WebSharper.Html
 
 type ButtonType =
-    | [<Name "foo">] Foo
-    | [<Name "bar">] BarBar
+    | Bold
+    | Italic
+    | Underline
+    | Strikethrough
+    | Justifyleft
+    | Justifycenter
+    | Justifyright
+    | Justifyfull
+    | Bullist
+    | Numlist
+    | Outdent
+    | Indent
+    | Cut
+    | Copy
+    | Paste
+    | Undo
+    | Redo
+    | Link
+    | Unlink
+    | Image
+    | Cleanup
+    | Help
+    | Code
+    | Hr
+    | Removeformat
+    | Formatselect
+    | Fontselect
+    | Fontsizeselect
+    | Styleselect
+    | Sub
+    | Sup
+    | Forecolor
+    | Backcolor
+    | Forecolorpicker
+    | Backcolorpicker
+    | Charmap
+    | Visualaid
+    | Anchor
+    | Newdocument
+    | Blockquote
+    | Separator
+    | Custom of string
+
+    with 
+        [<JavaScript>]
+        member this.Show () =
+            match this with
+            | Bold -> "bold"
+            | Italic -> "italic"
+            | Underline -> "underline"
+            | Strikethrough -> "strikethrough"
+            | Justifyleft -> "justifyleft"
+            | Justifycenter -> "justifycenter"
+            | Justifyright -> "justifyright"
+            | Justifyfull -> "justifyfull"
+            | Bullist -> "bullist"
+            | Numlist -> "numlist"
+            | Outdent -> "outdent"
+            | Indent -> "indent"
+            | Cut -> "cut"
+            | Copy -> "copy"
+            | Paste -> "paste"
+            | Undo -> "undo"
+            | Redo -> "redo"
+            | Link -> "link"
+            | Unlink -> "unlink"
+            | Image -> "image"
+            | Cleanup -> "cleanup"
+            | Help -> "help"
+            | Code -> "code"
+            | Hr -> "hr"
+            | Removeformat -> "removeformat"
+            | Formatselect-> "formatselect"
+            | Fontselect -> "fontselect"
+            | Fontsizeselect -> "fontselect"
+            | Styleselect -> "styleselect"
+            | Sub -> "sub"
+            | Sup -> "sup"
+            | Forecolor -> "forecolor"
+            | Backcolor -> "backcolor"
+            | Forecolorpicker -> "forecolorpicker"
+            | Backcolorpicker -> "backcolorpicker"
+            | Charmap -> "charmap"
+            | Visualaid -> "visualaid"
+            | Anchor -> "anchor"
+            | Newdocument -> "newdocument"
+            | Blockquote -> "blackquote"
+            | Separator -> "separator"
+            | Custom  s -> s
+
 
 type ButtonRow = list<ButtonType>
 
@@ -22,14 +110,10 @@ type HtmlEditorConfiguration=
         Height : option<int>
         CustomElements : option<string>
         Plugins : option<string>
-        ThemeAdvancedToolbarLocation : option<string>
-        ThemeAdvancedToolbarAlign : option<string>
-        ThemeAdvancedStatusbarLocation : option<string>
+        ThemeAdvancedToolbarLocation : option<TinyMce.ToolbarLocation>
+        ThemeAdvancedToolbarAlign : option<ToolbarAlign>
+        ThemeAdvancedStatusbarLocation : option<StatusbarLocation>
         ThemeAdvancedButtons1 : option<list<ButtonRow>>
-
-//        ThemeAdvancedButtons2 : option<string>
-//        ThemeAdvancedButtons3 : option<string>
-//        ThemeAdvancedButtons4 : option<string>
     }
     with
         [<JavaScript>]
@@ -66,10 +150,8 @@ module Controls =
                     if v <> ov then t ()
                 | None ->
                     t ()
-                    
 
             let tId = NewId ()
-            
 
             // Set up configuration
             let tConf =
@@ -107,47 +189,44 @@ module Controls =
                 | Some s -> tConf.Plugins <- s
                 | None   -> ()
 
-//                match conf.ThemeAdvancedToolbarLocation with
-//                | Some s -> tConf.Theme_advanced_toolbar_location <- s
-//                | None   -> ()
+                match conf.ThemeAdvancedToolbarAlign with
+                | Some ta -> 
+                    tConf.Theme_advanced_toolbar_align <- ta
+                | None ->
+                    ()
 
-//                match conf.ThemeAdvancedToolbarAlign with
-//                | Some s -> tConf.Theme_advanced_toolbar_align <- s
-//                | None   -> ()
-//
-//                match conf.ThemeAdvancedStatusbarLocation with
-//                | Some s -> tConf.Theme_advanced_statusbar_location <- s
-//                | None   -> ()
+                match conf.ThemeAdvancedStatusbarLocation with
+                | Some l -> 
+                    tConf.Theme_advanced_statusbar_location <- l
+                | None ->
+                    ()
+
+                match conf.ThemeAdvancedToolbarLocation with
+                | Some l -> 
+                    tConf.Theme_advanced_toolbar_location <- l
+                | None ->
+                    ()
 
                 match conf.ThemeAdvancedButtons1 with
                 | Some bs -> 
                     bs
                     |> List.iteri (fun ix row ->
-                        let prop = "theme_advanced_buttons" + (string ix)
+                        let prop = "theme_advanced_buttons" + (string <| ix + 1)
+                        Log ("th:", prop)
                         match row with
                         | [] ->
-                            ()
+                            JavaScript.Set tConf prop ""
                         | _  ->
                             row
-                            |> Seq.map string
+                            |> Seq.map (fun x -> 
+                                x.Show()
+                            )
                             |> Seq.reduce (fun x y -> x + "," + y)
                             |> fun x ->
                                 Log ("string" , x)
                                 JavaScript.Set tConf prop x
                     )
                 | None   -> ()
-
-//                match conf.ThemeAdvancedButtons2 with
-//                | Some s -> tConf.Theme_advanced_buttons2 <- s
-//                | None   -> ()
-//
-//                match conf.ThemeAdvancedButtons3 with
-//                | Some s -> tConf.Theme_advanced_buttons3 <- s
-//                | None   -> ()
-//
-//                match conf.ThemeAdvancedButtons4 with
-//                | Some s -> tConf.Theme_advanced_buttons4 <- s
-//                | None   -> ()
 
                 tConf
 

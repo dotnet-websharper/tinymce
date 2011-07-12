@@ -4,19 +4,81 @@
 `Web#` extension for `TinyMCE` provides following bindings:
 
 * `tinyMCE` - namespace which contains many useful funtions 
-* `tinymce.Editor` - editor class
-* `tinymce.UndoManager` - class providing support for undo/redo operations
-* `tinymce.dom.Selection` - class representing current selection 
 * `TinyMCEConfiguration` - class not defined in `TinyMCE`, represens configuration options
+* `Editor` - editor class
+* `UndoManager` - class providing support for undo/redo operations
+* `Selection` - class representing current selection 
 
 
 = namespace `tinyMCE`
 
 Following functions of `tinyMCE` namespace are important:
-* `init(config:TinyMCEConfiguration)` - creates new `TinyMCE` editors based on configuration options `config`.
+* `init(config:TinyMCEConfiguration)` - creates new `TinyMCE` editors based on configuration options.
 * `get(id:strign)` - returns instance of `TinyMCE` with given `id`.
 
 
 Following example creates new `TinyMCE` instance, then using callback `oninit`( 
-which executes after editor is initialized) we get instance of `TinyMCE` and 
+which executes after the editor is initialized) we get instance of `TinyMCE` using `get` and 
 alert its content.
+
+
+= `Editor` class
+
+`Editor` class represents `TinyMCE` editor. Access to editor's content is provided by this class.
+
+Important members of this class:
+
+* `selection` - instance of `Selection` class of the editor
+* `undoManager` - instance of `UndoManager` class of the editor 
+* `execCommand(command:string)` - executes specified command, command can be for example `italic`, `bold`
+* `show` - makes editor visible
+* `hide` - hides editor
+* `setContent(content:string)` - sets editor content
+* `getContent()` - returns editor content
+* `onClick()` - this event fires when editor's body is clicked
+* `onChange()` - this event fires when editor's content is changed 
+
+
+Following example creates new editor, then content is set and when editor's body is clicked it's content is showed inside alert dialog.
+
+
+Result:
+
+
+
+= `UndoManager` class
+
+`UndoManager` manages undo operations.
+
+
+Important members of this class:
+
+* `undo()` - undoes the last changes.
+* `redo()` - redoes the last changes.
+* `onUndo(func)` - fires func when the user makes an undo.
+* `onRedo(func)` - fires func when the user makes an redo.
+
+Following example creates new editor, adds handlers for `onUndo` and `onRedo` events  and 
+adds to buttons to undo and redo changes:
+
+
+Result:
+
+
+
+= `Selection` class
+
+`Selection` class represents selection of the editor. 
+
+
+Important members of this class:
+
+* `getContent()` - returns the selected content.
+* `setContent(newContent)` - replaces the selection with given content.
+
+
+Following example creates new editor and two buttons for getting selection and changing selected text:
+
+
+
+Result:

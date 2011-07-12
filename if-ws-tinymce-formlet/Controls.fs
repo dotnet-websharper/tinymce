@@ -8,6 +8,7 @@ open IntelliFactory.WebSharper
 open IntelliFactory.WebSharper.TinyMce
 open IntelliFactory.WebSharper.Html
 
+/// Represents available buttons.
 type ButtonType =
     | Bold
     | Italic
@@ -52,92 +53,151 @@ type ButtonType =
     | Separator
     | Custom of string
 
-    with 
-        [<JavaScript>]
-        member this.Show () =
-            match this with
-            | Bold -> "bold"
-            | Italic -> "italic"
-            | Underline -> "underline"
-            | Strikethrough -> "strikethrough"
-            | Justifyleft -> "justifyleft"
-            | Justifycenter -> "justifycenter"
-            | Justifyright -> "justifyright"
-            | Justifyfull -> "justifyfull"
-            | Bullist -> "bullist"
-            | Numlist -> "numlist"
-            | Outdent -> "outdent"
-            | Indent -> "indent"
-            | Cut -> "cut"
-            | Copy -> "copy"
-            | Paste -> "paste"
-            | Undo -> "undo"
-            | Redo -> "redo"
-            | Link -> "link"
-            | Unlink -> "unlink"
-            | Image -> "image"
-            | Cleanup -> "cleanup"
-            | Help -> "help"
-            | Code -> "code"
-            | Hr -> "hr"
-            | Removeformat -> "removeformat"
-            | Formatselect-> "formatselect"
-            | Fontselect -> "fontselect"
-            | Fontsizeselect -> "fontselect"
-            | Styleselect -> "styleselect"
-            | Sub -> "sub"
-            | Sup -> "sup"
-            | Forecolor -> "forecolor"
-            | Backcolor -> "backcolor"
-            | Forecolorpicker -> "forecolorpicker"
-            | Backcolorpicker -> "backcolorpicker"
-            | Charmap -> "charmap"
-            | Visualaid -> "visualaid"
-            | Anchor -> "anchor"
-            | Newdocument -> "newdocument"
-            | Blockquote -> "blackquote"
-            | Separator -> "separator"
-            | Custom  s -> s
 
 
+/// Button Row
 type ButtonRow = list<ButtonType>
 
+type Theme =
+    | Simple 
+    | Advanced
+    | Custom of string
 
-type HtmlEditorConfiguration=
+
+module internal Utils =
+
+    [<JavaScript>]
+    let ShowTheme theme =
+        match theme with
+        | Simple -> "simple"
+        | Advanced -> "advanced"
+        | Custom s -> s
+
+    [<JavaScript>]
+    let ShowButtonType btype =
+        match btype with
+        | Bold -> "bold"
+        | Italic -> "italic"
+        | Underline -> "underline"
+        | Strikethrough -> "strikethrough"
+        | Justifyleft -> "justifyleft"
+        | Justifycenter -> "justifycenter"
+        | Justifyright -> "justifyright"
+        | Justifyfull -> "justifyfull"
+        | Bullist -> "bullist"
+        | Numlist -> "numlist"
+        | Outdent -> "outdent"
+        | Indent -> "indent"
+        | Cut -> "cut"
+        | Copy -> "copy"
+        | Paste -> "paste"
+        | Undo -> "undo"
+        | Redo -> "redo"
+        | Link -> "link"
+        | Unlink -> "unlink"
+        | Image -> "image"
+        | Cleanup -> "cleanup"
+        | Help -> "help"
+        | Code -> "code"
+        | Hr -> "hr"
+        | Removeformat -> "removeformat"
+        | Formatselect-> "formatselect"
+        | Fontselect -> "fontselect"
+        | Fontsizeselect -> "fontselect"
+        | Styleselect -> "styleselect"
+        | Sub -> "sub"
+        | Sup -> "sup"
+        | Forecolor -> "forecolor"
+        | Backcolor -> "backcolor"
+        | Forecolorpicker -> "forecolorpicker"
+        | Backcolorpicker -> "backcolorpicker"
+        | Charmap -> "charmap"
+        | Visualaid -> "visualaid"
+        | Anchor -> "anchor"
+        | Newdocument -> "newdocument"
+        | Blockquote -> "blackquote"
+        | Separator -> "separator"
+        | ButtonType.Custom  s -> s
+
+
+/// Editor Configuration
+type internal HtmlEditorConfiguration=
     {
-        Theme : string
+        Theme : Theme
         Width : option<int>
         Height : option<int>
         CustomElements : option<string>
         Plugins : option<string>
-        ThemeAdvancedToolbarLocation : option<TinyMce.ToolbarLocation>
-        ThemeAdvancedToolbarAlign : option<ToolbarAlign>
-        ThemeAdvancedStatusbarLocation : option<StatusbarLocation>
-        ThemeAdvancedButtons1 : option<list<ButtonRow>>
+        AdvancedToolbarLocation : option<TinyMce.ToolbarLocation>
+        AdvancedToolbarAlign : option<ToolbarAlign>
+        AdvancedStatusbarLocation : option<StatusbarLocation>
+        AdvancedButtons : option<list<ButtonRow>>
     }
     with
         [<JavaScript>]
         static member Default = 
             {
-                Theme = "simple"
+                Theme = Theme.Simple
                 Width = None
                 Height = None
                 CustomElements = None
                 Plugins = None
-                ThemeAdvancedToolbarLocation = None 
-                ThemeAdvancedToolbarAlign = None 
-                ThemeAdvancedStatusbarLocation = None 
-                ThemeAdvancedButtons1 = None 
+                AdvancedToolbarLocation = None 
+                AdvancedToolbarAlign = None 
+                AdvancedStatusbarLocation = None 
+                AdvancedButtons = None 
             }
 
+type SimpleHtmlEditorConfiguration =
+    {
+        Width : option<int>
+        Height : option<int>
+        CustomElements : option<string>
+        Plugins : option<string>
+    }
+    with 
+        [<JavaScript>]
+        static member Default =
+            {
+                Width = None
+                Height = None
+                CustomElements = None
+                Plugins = None
+            }
+
+type AdvancedHtmlEditorConfiguration =
+    {
+        Width : option<int>
+        Height : option<int>
+        CustomElements : option<string>
+        Plugins : option<string>
+        ToolbarLocation : option<TinyMce.ToolbarLocation>
+        ToolbarAlign : option<ToolbarAlign>
+        StatusbarLocation : option<StatusbarLocation>
+        Buttons : option<list<ButtonRow>>
+    }
+    with 
+        [<JavaScript>]
+        static member Default =
+            {
+                Width = None
+                Height  = None
+                CustomElements = None
+                Plugins = None
+                ToolbarLocation  = None
+                ToolbarAlign = None
+                StatusbarLocation  = None
+                Buttons = None
+            }
+    
+
+
 module Controls =
-    [<Inline "console.log($x)">]
-    let Log x = ()
 
     [<JavaScript>]
-    let HtmlEditor conf (defContent: string) : Formlet<string> =
+    let internal HtmlEditor conf (defContent: string) : Formlet<string> =
         Formlet.BuildFormlet <| fun _ ->
-            
+
             let state = new Event<_>()
             let oldValue = ref None
             let trigger v =
@@ -157,7 +217,7 @@ module Controls =
             let tConf =
                 let tConf =
                     new TinyMCEConfiguration (
-                        Theme = conf.Theme,
+                        Theme = Utils.ShowTheme conf.Theme,
                         Mode = Mode.Exact,
                         Elements = tId,
                         Onchange_callback = (fun tMce ->
@@ -189,41 +249,37 @@ module Controls =
                 | Some s -> tConf.Plugins <- s
                 | None   -> ()
 
-                match conf.ThemeAdvancedToolbarAlign with
+                match conf.AdvancedToolbarAlign with
                 | Some ta -> 
                     tConf.Theme_advanced_toolbar_align <- ta
                 | None ->
                     ()
 
-                match conf.ThemeAdvancedStatusbarLocation with
+                match conf.AdvancedStatusbarLocation with
                 | Some l -> 
                     tConf.Theme_advanced_statusbar_location <- l
                 | None ->
                     ()
 
-                match conf.ThemeAdvancedToolbarLocation with
+                match conf.AdvancedToolbarLocation with
                 | Some l -> 
                     tConf.Theme_advanced_toolbar_location <- l
                 | None ->
                     ()
 
-                match conf.ThemeAdvancedButtons1 with
+                match conf.AdvancedButtons with
                 | Some bs -> 
                     bs
                     |> List.iteri (fun ix row ->
                         let prop = "theme_advanced_buttons" + (string <| ix + 1)
-                        Log ("th:", prop)
                         match row with
                         | [] ->
                             JavaScript.Set tConf prop ""
                         | _  ->
                             row
-                            |> Seq.map (fun x -> 
-                                x.Show()
-                            )
+                            |> Seq.map Utils.ShowButtonType
                             |> Seq.reduce (fun x y -> x + "," + y)
                             |> fun x ->
-                                Log ("string" , x)
                                 JavaScript.Set tConf prop x
                     )
                 | None   -> ()
@@ -247,4 +303,27 @@ module Controls =
             body, reset, state.Publish
 
     [<JavaScript>]
-    let Editor defContent = HtmlEditor HtmlEditorConfiguration.Default defContent
+    let SimpleHtmlEditor (conf: SimpleHtmlEditorConfiguration)  = 
+        { HtmlEditorConfiguration.Default with
+            Theme = Theme.Simple
+            Width = conf.Width
+            Height = conf.Height
+            CustomElements = conf.CustomElements
+            Plugins = conf.CustomElements
+        }
+        |> HtmlEditor
+
+    [<JavaScript>]
+    let AdvancedHtmlEditor (conf: AdvancedHtmlEditorConfiguration)  = 
+        { HtmlEditorConfiguration.Default with
+            Theme = Theme.Advanced
+            Width = conf.Width
+            Height = conf.Height
+            CustomElements = conf.CustomElements
+            Plugins = conf.Plugins
+            AdvancedToolbarLocation = conf.ToolbarLocation
+            AdvancedToolbarAlign = conf.ToolbarAlign
+            AdvancedStatusbarLocation = conf.StatusbarLocation
+            AdvancedButtons = conf.Buttons
+        }
+        |> HtmlEditor

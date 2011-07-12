@@ -8,24 +8,38 @@ open IntelliFactory.WebSharper
 open IntelliFactory.WebSharper.TinyMce
 open IntelliFactory.WebSharper.Formlet.TinyMce
 
-
 module U =
+    
+
     [<Inline "console.log($x)">]
     let Log x = ()
+
+    [<Rpc>]
+    let List () = ["A"; "B"; "C"]
+
+type T [<JavaScript>] () =
+    [<JavaScript>]
+    [<Name "toString">]
+    override this.ToString () = "T"
 
 type SampleControl () =
     inherit Web.Control()
 
     [<JavaScript>]
     override this.Body = 
+        let xs = U.List ()
+        xs |> List.iter U.Log
+
+        let t = new T ()
+        U.Log( "t", t)
+        U.Log ("t.ToString()", t.ToString())
         let conf =
-            {HtmlEditorConfiguration.Default with
-                Theme = "advanced"
+            {AdvancedHtmlEditorConfiguration.Default with
                 Width = Some 600
                 Height = Some 400
-                ThemeAdvancedToolbarLocation = Some ToolbarLocation.Top
-                ThemeAdvancedToolbarAlign = Some ToolbarAlign.Left
-                ThemeAdvancedButtons1 = 
+                ToolbarLocation = Some ToolbarLocation.Top
+                ToolbarAlign = Some ToolbarAlign.Left
+                Buttons =
                     Some [
                         [ ButtonType.Bold; ButtonType.Anchor]
                         []
@@ -33,52 +47,10 @@ type SampleControl () =
                     ]
             }
         
-        Controls.HtmlEditor conf "default"
+        Controls.AdvancedHtmlEditor conf "default"
         |> Enhance.WithSubmitAndResetButtons
         |> Formlet.Map (fun x ->
             U.Log <| ("submitted" , x)
         )
         |> Enhance.WithFormContainer
         :> _
-
-//type SampleControl () =
-//    inherit Web.Control()
-//
-//    
-//    [<JavaScript>]
-//    let Init () =
-//
-//        let conf =
-//            new TinyMCEConfiguration(
-//                Theme = "advanced",
-//                Mode = Mode.Textareas,
-//                Theme_advanced_toolbar_location = ToolbarLocation.Top,
-//                Theme_advanced_toolbar_align =ToolbarAlign.Right,
-//                Theme_advanced_statusbar_location = StatusbarLocation.Top,
-//                
-//                Oninit = fun () ->
-//                    let e = TinyMCE.Get("test_area")
-//                    e.ExecCommand("foo")
-//                    ()
-//            )
-//        conf.Execcommand_callback <- fun (a,b,c,d,e) ->
-//            U.Log(a,b,c,d,e)
-//            U.Log <| JavaScript.Get "innerHtml" b
-//            true
-//
-//        TinyMCE.Init (conf)
-//
-//    [<JavaScript>]
-//    override this.Body = 
-//        Div [
-//            TextArea [Id "test_area"] -< [Text "Default  text"]
-//            |>! OnAfterRender (fun _ ->
-//                Init()
-//            )
-//            
-//            Button [Text "Foo"]
-//            |>! OnClick (fun _ _->
-//                let e = TinyMCE.Get("test_area")
-//                e.ExecCommand("foo")
-//            )
-//        ] :> _

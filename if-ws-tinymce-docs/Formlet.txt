@@ -1,0 +1,62 @@
+﻿% HtmlEditor formlet
+
+`HtmlEditor` formlet provides abstraction over `TinyMCE` control. To use `HtmlEditor`
+it is required to provide configuration options as the first parameter,
+the second parameter defines default content of the control.
+
+Following example creates control which uses `HtmlEditor` with default options,
+after clicking `Submit` button content of the control is saved to browser's log:
+
+	#fsharp
+	module U =
+		[<Inline "console.log($x)">]
+		let Log x = ()
+	
+	// creating default control
+	type SampleControl () =
+		inherit Web.Control()
+	
+		[<JavaScript>]
+		override this.Body = 
+					Controls.HtmlEditor HtmlEditorConfiguration.Default "default"
+					|> Enhance.WithSubmitAndResetButtons
+					|> Formlet.Map (fun v ->
+						U.Log ("Output", v)
+						()
+					)
+					|> Enhance.WithFormContainer
+					:> _
+
+Result:
+
+![FormletDefault](FormletDefault.png)\
+
+
+% Configuration options
+
+`HtmlEditor` accepts `HtmlEditorConfiguration.Default` record 
+which defines how the control should look like.
+
+List of options:
+
+* `Theme` - default "simple", can be set to `simple` or `advanced`, defines theme for `TinyMCE` editor
+* `Width` - width of the control
+* `Height` - height of the control
+* `CustomElements` - custom elements
+* `Plugins` - list of enabled plugins
+* `ThemeAdvancedToolbarLocation` - location of the toolbar, can be set to `top`, `bottom` or `external`
+* `ThemeAdvancedToolbarAlign` - alignment of the toolbar, can be set to `left`, `center` or `right`
+* `ThemeAdvancedStatusbarLocation` - location of the statusbar, can be set to `top`, `bottom` or `none`
+* `ThemeAdvancedButtons1` - defines which buttons are placed in the first row of the toolbar
+* `ThemeAdvancedButtons2` - defines which buttons are placed in the second row of the toolbar
+* `ThemeAdvancedButtons3` - defines which buttons are placed in the third row of the toolbar
+* `ThemeAdvancedButtons4` - defines which buttons are placed in the fourth row of the toolbar
+
+
+Following code creates `TinyMCE` editor with toolbar at the top with just one row of buttons.
+
+
+
+Result:
+
+![FormletAdvanced](FormletAdvanced.png)\

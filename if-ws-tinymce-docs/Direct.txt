@@ -1,0 +1,45 @@
+﻿% Direct 
+
+`HtmlEditor` formlet provides easy way to create `TinyMCE` editor inside webpage.
+By accessing directly bindings for `TinyMCE` the editor can be created 
+in similar way to that in `JavaScript`.
+
+Following example shows how to create `TinyMCE` using directly bindings:
+
+	#fsharp
+	type SampleControl () =
+		inherit Web.Control()
+	
+		[<JavaScript>]
+		let Init () =
+	
+			TinyMCE.Init (
+				new TinyMCEConfiguration(
+					Theme = "simple",
+					Mode = Mode.Textareas
+				)
+			)
+	
+		[<JavaScript>]
+		override this.Body = 
+			TextArea [Id "test_area"] -< [Text "Default  text"]
+			|>! OnAfterRender (fun _ ->
+				Init()
+			)
+			:> _
+
+Result:
+
+![FormletDefault](FormletDefault.png)\
+
+
+The biggest advantage of creating editor directly is access to more configuration options than
+when using `HtmlEditor` formlet.
+
+
+
+
+
+
+
+[TinyMCE-reference-configuration]: http://tinymce.moxiecode.com/wiki.php/Configuration

@@ -58,6 +58,7 @@
   </ItemGroup>
   <Import Project="$(INTELLIFACTORY)/build/IntelliFactory.WebSharper-2.3.targets" />
   <ItemGroup>
+    <Compile Include="Test.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   <ItemGroup>

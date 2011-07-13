@@ -126,7 +126,6 @@ type internal HtmlEditorConfiguration=
         Theme : Theme
         Width : option<int>
         Height : option<int>
-        CustomElements : option<string>
         Plugins : option<string>
         AdvancedToolbarLocation : option<TinyMce.ToolbarLocation>
         AdvancedToolbarAlign : option<ToolbarAlign>
@@ -140,7 +139,6 @@ type internal HtmlEditorConfiguration=
                 Theme = Theme.Simple
                 Width = None
                 Height = None
-                CustomElements = None
                 Plugins = None
                 AdvancedToolbarLocation = None 
                 AdvancedToolbarAlign = None 
@@ -152,8 +150,6 @@ type SimpleHtmlEditorConfiguration =
     {
         Width : option<int>
         Height : option<int>
-        CustomElements : option<string>
-        Plugins : option<string>
     }
     with 
         [<JavaScript>]
@@ -161,15 +157,12 @@ type SimpleHtmlEditorConfiguration =
             {
                 Width = None
                 Height = None
-                CustomElements = None
-                Plugins = None
             }
 
 type AdvancedHtmlEditorConfiguration =
     {
         Width : option<int>
         Height : option<int>
-        CustomElements : option<string>
         Plugins : option<string>
         ToolbarLocation : option<TinyMce.ToolbarLocation>
         ToolbarAlign : option<ToolbarAlign>
@@ -182,7 +175,6 @@ type AdvancedHtmlEditorConfiguration =
             {
                 Width = None
                 Height  = None
-                CustomElements = None
                 Plugins = None
                 ToolbarLocation  = None
                 ToolbarAlign = None
@@ -239,10 +231,6 @@ module Controls =
 
                 match conf.Width with
                 | Some w -> tConf.Width <- (string w) + "px"
-                | None   -> ()
-
-                match conf.CustomElements with
-                | Some s -> tConf.Custom_elements <- s
                 | None   -> ()
 
                 match conf.Plugins with
@@ -308,8 +296,6 @@ module Controls =
             Theme = Theme.Simple
             Width = conf.Width
             Height = conf.Height
-            CustomElements = conf.CustomElements
-            Plugins = conf.CustomElements
         }
         |> HtmlEditor
 
@@ -319,7 +305,6 @@ module Controls =
             Theme = Theme.Advanced
             Width = conf.Width
             Height = conf.Height
-            CustomElements = conf.CustomElements
             Plugins = conf.Plugins
             AdvancedToolbarLocation = conf.ToolbarLocation
             AdvancedToolbarAlign = conf.ToolbarAlign

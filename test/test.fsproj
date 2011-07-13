@@ -61,7 +61,6 @@
   <ItemGroup>
     <Compile Include="Test.fs" />
     <Compile Include="Main.fs" />
-    <Compile Include="Test.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\if-ws-tinymce-formlet\IntelliFactory.WebSharper.TinyMce.Formlet.fsproj">

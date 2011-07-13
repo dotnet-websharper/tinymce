@@ -453,7 +453,7 @@ module TinyMce =
                 "editors" =? T<Array>
                 |> WithComment "The editor collection."
 
-                "activeEditor" =? T<Array>
+                "activeEditor" =? Editor 
                 |> WithComment "Currently active editor."
 
 

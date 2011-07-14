@@ -35,8 +35,6 @@
   <ItemGroup>
     <Compile Include="Definitions.fs" />
     <Compile Include="Main.fs" />
-    <None Include="Resources.cs" />
-    <None Include="Marker.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core" />

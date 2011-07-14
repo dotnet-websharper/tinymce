@@ -277,6 +277,35 @@ module TinyMce =
             ]
 
 
+    let Dispatcher = Type.New()
+    let DispatcherClass = 
+        Generic / fun t1 t2 ->
+            Class "Dispatcher"
+            |=> Dispatcher
+            |+> Protocol
+                [
+                    // methods
+                    "add" => (t1 ^-> T<unit>) ^-> (t1 ^-> T<unit>)
+                    |> WithComment "Adds an observer function."
+    
+                    "add" => (t1 * t2 ^-> T<unit>) ^-> (t1 * t2 ^-> T<unit>)
+                    |> WithComment "Adds an observer function."
+    
+                    "addToTop" => (t1 ^-> T<unit>) ^-> (t1 ^-> T<unit>)
+                    |> WithComment "Adds an observer function to the top of the list of observers."
+    
+                    "addToTop" => (t1 * t2 ^-> T<unit>) ^-> (t1 * t2 ^-> T<unit>)
+                    |> WithComment "Adds an observer function to the top of the list of observers."
+    
+                    "remove" => (t1 ^-> T<unit>) ^-> (t1 ^-> T<unit>)
+                    |> WithComment "Removes an observer function."
+    
+                    "remove" => (t1 * t2 ^-> T<unit>) ^-> (t1 * t2 ^-> T<unit>)
+                    |> WithComment "Removes an observer function."
+                ]
+
+
+    (*
     let Dispatcher = Type.New ()
         
     let DispatcherClass = 
@@ -303,6 +332,7 @@ module TinyMce =
                 "remove" => (Editor * T<Event> ^-> T<unit>) ^-> (Editor * T<Event> ^-> T<unit>)
                 |> WithComment "Removes an observer function."
             ]
+            *)
 
     
     let Selection = Type.New ()
@@ -319,6 +349,714 @@ module TinyMce =
                 "setContent" => T<string> ^-> T<unit> 
                 |> WithComment "Replaces the selection with specified content."
             ]
+                        
+
+    let ControlConfiguration = Type.New ()
+
+    let ControlConfigurationClass =
+        Pattern.Config "ControlConfiguration" {
+            Required = []
+            Optional = 
+                [
+                    "title", T<string>
+                    "class", T<string>
+                    "image", T<string>
+                    "icons", T<bool>
+                    "onselect", T<string> ^-> T<unit>
+                    "onclick", T<unit> ^-> T<unit>
+                ]
+        }
+        |=> ControlConfiguration
+
+
+    let Control = Type.New ()
+        
+    let ControlClass = 
+        Class "tinymce.ui.Control"
+        |=> Control
+        |+> [
+                // constructors
+                Constructor (T<string>)
+                |> WithComment "Constructs a new control instance."
+
+                Constructor (T<string> * T<obj>)
+                |> WithComment "Constructs a new control instance."
+            ]
+        |+> Protocol
+            [
+                "setDisabled" => T<bool> ^-> T<unit> 
+                |> WithComment "Sets the disabled state for the control. This will add CSS classes to the element that contains the control. So that it can be disabled visually."
+
+                "isDisabled" => T<unit> ^-> T<bool> 
+                |> WithComment "Returns true/false if the control is disabled or not. This is a method since you can then choose to check some class or some internal bool state in subclasses."
+
+                "setActive" => T<bool> ^-> T<unit> 
+                |> WithComment "Sets the activated state for the control. This will add CSS classes to the element that contains the control. So that it can be activated visually."
+
+                "isActive" => T<unit> ^-> T<bool> 
+                |> WithComment "Returns true/false if the control is disabled or not. This is a method since you can then choose to check some class or some internal bool state in subclasses."
+
+                "setState" => T<string> * T<bool> ^-> T<unit> 
+                |> WithComment "Sets the specified class state for the control."
+
+                "isRendered" => T<unit> ^-> T<bool> 
+                |> WithComment "Returns true/false if the control has been rendered or not."
+
+                "renderHTML" => T<unit> ^-> T<string> 
+                |> WithComment "Renders the control as a HTML string. This method is much faster than using the DOM and when creating a whole toolbar with buttons it does make a lot of difference."
+
+                "renderTo" => T<Element> ^-> T<unit> 
+                |> WithComment "Renders the control to the specified container element."
+
+                "remove" => T<unit> ^-> T<unit> 
+                |> WithComment "Removes the control. This means it will be removed from the DOM and any events tied to it will also be removed."
+
+                "destroy" => T<unit> ^-> T<unit> 
+                |> WithComment "Destroys the control will free any memory by removing event listeners etc."
+
+                // events
+                "postRender" => Dispatcher.[T<obj>, Control]
+                |> WithComment "Post render event. This will be executed after the control has been rendered and can be used to set states, add events to the control etc. It's recommended for subclasses of the control to call this method by using this.parent()."
+            ]
+            
+
+    let Separator = Type.New ()
+        
+    let SeparatorClass = 
+        Class "tinymce.ui.Separator"
+        |=> Inherits ControlClass 
+        |+> [
+                // constructors
+                Constructor (T<string>)
+                |> WithComment "Separator constructor."
+
+                Constructor (T<string> * T<obj>)
+                |> WithComment "Separator constructor."
+            ]
+        |+> Protocol
+            [
+                "renderHTML" => T<unit> ^-> T<string> 
+                |> WithComment "Renders the separator as a HTML string. This method is much faster than using the DOM and when creating a whole toolbar with buttons it does make a lot of difference."
+            ]
+
+
+    let Button = Type.New ()
+        
+    let ButtonClass = 
+        Class "tinymce.ui.Button"
+        |=> Inherits ControlClass 
+        |+> [
+                // constructors
+                Constructor (T<string>)
+                |> WithComment "Constructs a new button control instance."
+
+                Constructor (T<string> * T<obj>)
+                |> WithComment "Constructs a new button control instance."
+
+                Constructor (T<string> * T<obj> * Editor)
+                |> WithComment "Constructs a new button control instance."
+            ]
+        |+> Protocol
+            [
+                "postRender" => T<unit> ^-> T<unit> 
+                |> WithComment "Post render handler. This function will be called after the UI has been rendered so that events can be added."
+
+                "renderHTML" => T<unit> ^-> T<string> 
+                |> WithComment "Renders the button as a HTML string. This method is much faster than using the DOM and when creating a whole toolbar with buttons it does make a lot of difference."
+            ]
+    
+
+    let SplitButton = Type.New ()
+        
+    let SplitButtonClass = 
+        Class "tinymce.ui.SplitButton"
+        |=> Inherits ButtonClass
+        |+> [
+                // constructors
+                Constructor (T<string>)
+                |> WithComment "Constructs a new split button control instance."
+
+                Constructor (T<string> * T<obj>)
+                |> WithComment "Constructs a new split button control instance."
+
+                Constructor (T<string> * T<obj> * Editor)
+                |> WithComment "Constructs a new split button control instance."
+            ]
+        |+> Protocol
+            [
+                // methods
+                "postRender" => T<unit> ^-> T<unit> 
+                |> WithComment "Post render handler. This function will be called after the UI has been rendered so that events can be added."
+
+                "renderHTML" => T<unit> ^-> T<string> 
+                |> WithComment "Renders the split button as a HTML string. This method is much faster than using the DOM and when creating a whole toolbar with buttons it does make a lot of difference."
+            ]
+
+
+    let ColorSplitButton = Type.New ()
+        
+    let ColorSplitButtonClass = 
+        Class "tinymce.ui.ColorSplitButton"
+        |=> Inherits SplitButton
+        |+> [
+                // constructors
+                Constructor (T<string>)
+                |> WithComment "Constructs a new button control instance."
+
+                Constructor (T<string> * Editor)
+                |> WithComment "Constructs a new button control instance."
+
+                Constructor (T<string> * T<obj> * Editor)
+                |> WithComment "Constructs a new button control instance."
+            ]
+        |+> Protocol
+            [
+                // properties
+                "settings" =? T<obj>
+                |> WithComment "Settings object."
+
+                "value" =? T<string>
+                |> WithComment "Current color value."
+
+                
+                // methods
+                "destroy" => T<unit> ^-> T<unit> 
+                |> WithComment "Destroys the control. This means it will be removed from the DOM and any events tied to it will also be removed."
+
+                "displayColor" => T<string> ^-> T<string> 
+                |> WithComment "Change the currently selected color for the control."
+
+                "hideMenu" => T<Event> ^-> T<unit> 
+                |> WithComment "Hides the color menu. The optional event parameter is used to check where the event occured so it doesn't close them menu if it was a event inside the menu."
+
+                "postRender" => T<unit> ^-> T<unit> 
+                |> WithComment "Post render event. This will be executed after the control has been rendered and can be used to set states, add events to the control etc. It's recommended for subclasses of the control to call this method by using this.parent()."
+
+                "renderMenu" => T<unit> ^-> T<unit> 
+                |> WithComment "Renders the menu to the DOM."
+
+                "setColor" => T<string> ^-> T<unit> 
+                |> WithComment "Sets the current color for the control and hides the menu if it should be visible."
+
+                "showMenu" => T<unit> ^-> T<unit> 
+                |> WithComment "Shows the color menu. The color menu is a layer places under the button and displays a table of colors for the user to pick from."
+
+
+                // events
+                "onHideMenu" => T<unit> ^-> T<unit> 
+                |> WithComment "Fires when the menu is hidden."
+
+                "onShowMenu" => T<unit> ^-> T<unit> 
+                |> WithComment "Fires when the menu is shown."
+
+            ]
+
+
+    let Container = Type.New ()
+        
+    let ContainerClass = 
+        Class "tinymce.ui.Container"
+        |=> Inherits ControlClass 
+        |+> [
+                // constructors
+                Constructor (T<string>)
+                |> WithComment "Base contrustor a new container control instance."
+
+                Constructor (T<string> * T<obj>)
+                |> WithComment "Base contrustor a new container control instance."
+
+            ]
+        |+> Protocol
+            [
+                // properties
+                "controls" =? Type.ArrayOf Control
+                |> WithComment "Settings object."
+
+
+                // methods
+                "add" => Control ^-> Control 
+                |> WithComment "Adds a control to the collection of controls for the container."
+
+                "get" => T<string> ^-> Control 
+                |> WithComment "Returns a control by id from the containers collection."
+            ]
+
+
+    let Toolbar = Type.New ()
+        
+    let ToolbarClass = 
+        Class "tinymce.ui.Toolbar"
+        |=> Inherits ContainerClass 
+        |+> [
+            ]
+        |+> Protocol
+            [
+                // properties
+                "controls" =? Type.ArrayOf Control
+                |> WithComment "Array of controls added to the container."
+
+
+                // methods
+                "renderHTML" => T<unit> ^-> T<string> 
+                |> WithComment "Renders the toolbar as a HTML string."
+            ]
+
+    let ToolbarGroup = Type.New ()
+        
+    let ToolbarGroupClass = 
+        Class "tinymce.ui.ToolbarGroup"
+        |=> Inherits ContainerClass 
+        |+> [
+            ]
+        |+> Protocol
+            [
+                // properties
+                "controls" =? Type.ArrayOf Control
+                |> WithComment "Settings object."
+
+
+                // methods
+                "renderHTML" => T<unit> ^-> T<string> 
+                |> WithComment "Renders the toolbar group as a HTML string."
+            ]
+            
+
+    let ListBox = Type.New ()
+        
+    let ListBoxClass = 
+        Class "tinymce.ui.ListBox"
+        |=> Inherits ControlClass 
+        |+> [
+                // constructors
+                Constructor (T<string>)
+                |> WithComment "Constructs a new listbox control instance."
+
+                Constructor (T<string> * T<obj>)
+                |> WithComment "Constructs a new listbox control instance."
+
+                Constructor (T<string> * T<obj> * Editor)
+                |> WithComment "Constructs a new listbox control instance."
+            ]
+        |+> Protocol
+            [
+                // properties
+                "items" =? Type.ArrayOf Control
+                |> WithComment "Array of ListBox items."
+
+
+                // methods
+                "add" => T<string> * T<string> ^-> T<unit> 
+                |> WithComment "Adds a option item to the list box."
+
+                "add" => T<string> * T<string> * T<obj> ^-> T<unit> 
+                |> WithComment "Adds a option item to the list box."
+
+                "destroy" => T<unit> ^-> T<unit> 
+                |> WithComment "Destroys the ListBox i.e. clear memory and events."
+
+                "getLength" => T<unit> ^-> T<Number> 
+                |> WithComment "Returns the number of items inside the list box."
+
+                "hideMenu" => T<unit> ^-> T<unit> 
+                |> WithComment "Hides the drop menu."
+
+                "postRender" => T<unit> ^-> T<unit> 
+                |> WithComment "Post render event. This will be executed after the control has been rendered and can be used to set states, add events to the control etc. It's recommended for subclasses of the control to call this method by using this.parent()."
+
+                "renderHTML" => T<unit> ^-> T<string> 
+                |> WithComment "Renders the list box as a HTML string. This method is much faster than using the DOM and when creating a whole toolbar with buttons it does make a lot of difference."
+
+                "renderMenu" => T<unit> ^-> T<unit> 
+                |> WithComment "Renders the menu to the DOM."
+                
+                "select" => T<string> ^-> T<unit> 
+                |> WithComment "Selects a item/option by value. This will both add a visual selection to the item and change the title of the control to the title of the option."
+                
+                "select" => T<obj -> bool> ^-> T<unit> 
+                |> WithComment "Selects a item/option by value. This will both add a visual selection to the item and change the title of the control to the title of the option."
+                
+                "selectByIndex" => T<string> ^-> T<unit> 
+                |> WithComment "Selects a item/option by index. This will both add a visual selection to the item and change the title of the control to the title of the option."
+                
+                "showMenu" => T<unit> ^-> T<unit> 
+                |> WithComment "Displays the drop menu with all items."
+
+                // events
+                "onAdd" =? Dispatcher.[T<obj>, T<obj>] 
+                |> WithComment "Fires when a new item is added."
+
+                "onChange" =? Dispatcher.[T<obj>, T<obj>] 
+                |> WithComment "Fires when the selection has been changed."
+
+                "onPostRender" =? Dispatcher.[T<obj>, T<obj>]
+                |> WithComment "Fires after the element has been rendered to DOM."
+
+                "onRenderMenu" =? Dispatcher.[T<obj>, T<obj>]
+                |> WithComment "Fires when the menu gets rendered."
+            ]
+            
+
+    let MenuButton = Type.New ()
+        
+    let MenuButtonClass = 
+        Class "tinymce.ui.MenuButton"
+        |=> Inherits ControlClass 
+        |+> [
+                // constructors
+                Constructor (T<string>)
+                |> WithComment "Constructs a new split button control instance."
+
+                Constructor (T<string> * T<obj>)
+                |> WithComment "Constructs a new split button control instance."
+
+                Constructor (T<string> * T<obj> * Editor)
+                |> WithComment "Constructs a new split button control instance."
+            ]
+        |+> Protocol
+            [
+
+                // methods
+                "hideMenu" => T<Event> ^-> T<unit> 
+                |> WithComment "Hides the menu. The optional event parameter is used to check where the event occured so it doesn't close them menu if it was a event inside the menu."
+
+                "postRender" => T<unit> ^-> T<unit> 
+                |> WithComment "Post render handler. This function will be called after the UI has been rendered so that events can be added."
+
+                "renderMenu" => T<unit> ^-> T<unit> 
+                |> WithComment "Renders the menu to the DOM."
+                
+                "showMenu" => T<unit> ^-> T<unit> 
+                |> WithComment "Shows the menu."
+
+                // events
+                "onRenderMenu" =? Dispatcher.[T<obj>, MenuButton]
+                |> WithComment "Fires when the menu is rendered."
+            ]
+            
+
+    let MenuItem = Type.New ()
+        
+    let MenuItemClass = 
+        Class "tinymce.ui.MenuItem"
+        |=> Inherits ControlClass 
+        |+> [
+                // constructors
+                Constructor (T<string>)
+                |> WithComment "Constructs a new button control instance."
+
+                Constructor (T<string> * T<obj>)
+                |> WithComment "Constructs a new button control instance."
+            ]
+        |+> Protocol
+            [
+
+                // methods
+                "isSelected" => T<unit> ^-> T<bool> 
+                |> WithComment "Returns true/false if the control is selected or not."
+
+                "postRender" => T<unit> ^-> T<unit> 
+                |> WithComment "Post render handler. This function will be called after the UI has been rendered so that events can be added."
+                
+                "setSelected" => T<bool> ^-> T<unit> 
+                |> WithComment "Sets the selected state for the control. This will add CSS classes to the element that contains the control. So that it can be selected visually."
+            ]
+            
+
+    let Menu = Type.New ()
+        
+    let MenuClass = 
+        Class "tinymce.ui.Menu"
+        |=> Inherits MenuItem 
+        |+> [
+                // constructors
+                Constructor (T<string>)
+                |> WithComment "Constructs a new button control instance."
+
+                Constructor (T<string> * T<obj>)
+                |> WithComment "Constructs a new button control instance."
+            ]
+        |+> Protocol
+            [
+
+                // methods
+                "add" => Control ^-> Control 
+                |> WithComment "Adds a new menu, menu item or sub classes of them to the drop menu."
+
+                "add" => ControlConfiguration ^-> Control 
+                |> WithComment "Adds a new menu, menu item or sub classes of them to the drop menu."
+
+                "addMenu" => T<obj> ^-> Menu 
+                |> WithComment "Adds a sub menu to the menu."
+
+                "addSeparator" => T<obj> ^-> MenuItem 
+                |> WithComment "Adds a menu separator between the menu items."
+
+                "collapse" => T<unit> ^-> T<unit> 
+                |> WithComment "Collapses the menu, this will hide the menu and all menu items."
+
+                "collapse" => T<bool> ^-> T<unit> 
+                |> WithComment "Collapses the menu, this will hide the menu and all menu items."
+
+                "createMenu" => T<obj> ^-> Menu 
+                |> WithComment "Created a new sub menu for the menu control."
+
+                "expand" => T<bool> ^-> T<unit> 
+                |> WithComment "Expands the menu, this will show them menu and all menu items."
+
+                "hasMenus" => T<unit> ^-> T<bool> 
+                |> WithComment "Returns true/false if the menu has sub menus or not."
+
+                "isCollapsed" => T<unit> ^-> T<bool> 
+                |> WithComment "Returns true/false if the menu has been collapsed or not."
+
+                "remove" => Control ^-> Control 
+                |> WithComment "Removes a specific sub menu or menu item from the menu."
+
+                "removeAll" => T<unit> ^-> T<unit> 
+                |> WithComment "Removes all menu items and sub menu items from the menu."
+            ]
+            
+
+    let DropMenu = Type.New ()
+        
+    let DropMenuClass = 
+        Class "tinymce.ui.DropMenu"
+        |=> Inherits Menu
+        |+> [
+                // constructors
+                Constructor (T<string>)
+                |> WithComment "Constructs a new drop menu control instance."
+
+                Constructor (T<string> * T<obj>)
+                |> WithComment "Constructs a new drop menu control instance."
+            ]
+        |+> Protocol
+            [
+
+                // methods
+                "add" => Control ^-> Control 
+                |> WithComment "Adds a new menu, menu item or sub classes of them to the drop menu."
+
+                "add" => ControlConfiguration ^-> Control 
+                |> WithComment "Adds a new menu, menu item or sub classes of them to the drop menu."
+
+                "collapse" => T<unit> ^-> T<unit> 
+                |> WithComment "Collapses the menu, this will hide the menu and all menu items."
+
+                "collapse" => T<bool> ^-> T<unit> 
+                |> WithComment "Collapses the menu, this will hide the menu and all menu items."
+
+                "createMenu" => T<obj> ^-> DropMenu 
+                |> WithComment "Created a new sub menu for the drop menu control."
+
+                "destroy" => T<unit> ^-> T<unit> 
+                |> WithComment "Destroys the menu. This will remove the menu from the DOM and any events added to it etc."
+
+                "hideMenu" => T<unit> ^-> T<unit> 
+                |> WithComment "Hides the displayed menu."
+
+                "remove" => Control ^-> Control 
+                |> WithComment "Removes a specific sub menu or menu item from the drop menu."
+
+                "renderNode" => T<unit> ^-> T<Element> 
+                |> WithComment "Renders the specified menu node to the dom."
+
+                "showMenu" => T<Number> * T<Number> ^-> T<unit> 
+                |> WithComment "Displays the menu at the specified cordinate."
+
+                "showMenu" => T<Number> * T<Number> * T<Number> ^-> T<unit> 
+                |> WithComment "Displays the menu at the specified cordinate."
+
+                "update" => T<unit> ^-> T<unit> 
+                |> WithComment "Repaints the menu after new items have been added dynamically."
+            ]
+            
+
+    let NativeListBox = Type.New ()
+        
+    let NativeListBoxClass = 
+        Class "tinymce.ui.NativeListBox"
+        |=> Inherits ListBoxClass 
+        |+> [
+                // constructors
+                Constructor (T<string>)
+                |> WithComment "Constructs a new button control instance."
+
+                Constructor (T<string> * T<obj>)
+                |> WithComment "Constructs a new button control instance."
+            ]
+        |+> Protocol
+            [
+                // methods
+                "add" => T<string> * T<string> ^-> T<unit> 
+                |> WithComment "Adds a option item to the list box."
+
+                "add" => T<string> * T<string> * T<obj> ^-> T<unit> 
+                |> WithComment "Adds a option item to the list box."
+
+                "getLength" => T<unit> ^-> T<Number> 
+                |> WithComment "Returns the number of items inside the list box."
+
+                "isDisabled" => T<unit> ^-> T<bool> 
+                |> WithComment "Returns true/false if the control is disabled or not. This is a method since you can then choose to check some class or some internal bool state in subclasses."
+
+                "postRender" => T<unit> ^-> T<unit> 
+                |> WithComment "Post render handler. This function will be called after the UI has been rendered so that events can be added."
+
+                "renderHTML" => T<unit> ^-> T<string> 
+                |> WithComment "Renders the list box as a HTML string. This method is much faster than using the DOM and when creating a whole toolbar with buttons it does make a lot of difference."
+
+                "select" => T<string> ^-> T<unit> 
+                |> WithComment "Selects a item/option by value. This will both add a visual selection to the item and change the title of the control to the title of the option."
+                
+                "select" => T<obj -> bool> ^-> T<unit> 
+                |> WithComment "Selects a item/option by value. This will both add a visual selection to the item and change the title of the control to the title of the option."
+                
+                "selectByIndex" => T<string> ^-> T<unit> 
+                |> WithComment "Selects a item/option by index. This will both add a visual selection to the item and change the title of the control to the title of the option."
+
+                "setDisabled" => T<bool> ^-> T<unit> 
+                |> WithComment "Sets the disabled state for the control. This will add CSS classes to the element that contains the control. So that it can be disabled visually."
+            ]
+
+
+    let PluginManager = Type.New ()
+        
+    let PluginManagerClass = 
+        Class "tinymce.PluginManager"
+        |=> PluginManager
+        |+> [
+                // methods
+                "add" => T<string> * T<obj> ^-> T<unit> 
+                |> WithComment "Register plugin with a short name."
+            ]
+        |+> Protocol
+            [
+            ]
+
+
+    let ControlManager = Type.New ()
+        
+    let ControlManagerClass = 
+        Class "tinymce.ControlManager"
+        |=> ControlManager
+        |+> [
+                // constructors
+                Constructor (Editor)
+                |> WithComment "Constructs a new control manager instance."
+
+                Constructor (Editor * T<obj>)
+                |> WithComment "Constructs a new control manager instance."
+
+            ]
+        |+> Protocol
+            [
+                // methods
+                "get" => T<string> ^-> Control 
+                |> WithComment "Returns a control by id or undefined it it wasn't found."
+
+                "setActive" => T<string> * T<bool> ^-> Control 
+                |> WithComment "Sets the active state of a control by id."
+
+                "setDisabled" => T<string> * T<bool> ^-> Control 
+                |> WithComment "Sets the dsiabled state of a control by id."
+
+                "add" => Control ^-> Control 
+                |> WithComment "Adds a control to the control collection inside the manager."
+
+                "createControl" => T<string> ^-> Control 
+                |> WithComment "Creates a control by name, when a control is created it will automatically add it to the control collection. It first ask all plugins for the specified control if the plugins didn't return a control then the default behavior will be used."
+
+                "createDropMenu" => T<string> ^-> Control 
+                |> WithComment "Creates a drop menu control instance by id."
+
+                "createDropMenu" => T<string> * ControlConfiguration ^-> Control 
+                |> WithComment "Creates a drop menu control instance by id."
+
+                "createDropMenu" => T<string> * ControlConfiguration * T<obj> ^-> Control 
+                |> WithComment "Creates a drop menu control instance by id."
+
+                "createListBox" => T<string> ^-> Control 
+                |> WithComment "Creates a list box control instance by id. A list box is either a native select element or a DOM/JS based list box control. This depends on the use_native_selects settings state."
+
+                "createListBox" => T<string> * ControlConfiguration ^-> Control 
+                |> WithComment "Creates a list box control instance by id. A list box is either a native select element or a DOM/JS based list box control. This depends on the use_native_selects settings state."
+
+                "createListBox" => T<string> * ControlConfiguration * T<obj> ^-> Control 
+                |> WithComment "Creates a list box control instance by id. A list box is either a native select element or a DOM/JS based list box control. This depends on the use_native_selects settings state."
+
+                "createButton" => T<string> ^-> Control 
+                |> WithComment "Creates a button control instance by id."
+
+                "createButton" => T<string> * ControlConfiguration^-> Control 
+                |> WithComment "Creates a button control instance by id."
+
+                "createButton" => T<string> * ControlConfiguration * T<obj> ^-> Control 
+                |> WithComment "Creates a button control instance by id."
+
+                "createMenuButton" => T<string> ^-> Control 
+                |> WithComment "Creates a menu button control instance by id."
+
+                "createMenuButton" => T<string> * ControlConfiguration ^-> Control 
+                |> WithComment "Creates a menu button control instance by id."
+
+                "createMenuButton" => T<string> * ControlConfiguration * T<obj> ^-> Control 
+                |> WithComment "Creates a menu button control instance by id."
+
+                "createSplitButton" => T<string> ^-> Control 
+                |> WithComment "Creates a split button control instance by id."
+
+                "createSplitButton" => T<string> * ControlConfiguration ^-> Control 
+                |> WithComment "Creates a split button control instance by id."
+
+                "createSplitButton" => T<string> * ControlConfiguration * T<obj> ^-> Control 
+                |> WithComment "Creates a split button control instance by id."
+
+                "createColorSplitButton" => T<string> ^-> Control 
+                |> WithComment "Creates a color split button control instance by id."
+
+                "createColorSplitButton" => T<string> * ControlConfiguration ^-> Control 
+                |> WithComment "Creates a color split button control instance by id."
+
+                "createColorSplitButton" => T<string> * ControlConfiguration * T<obj> ^-> Control 
+                |> WithComment "Creates a color split button control instance by id."
+
+                "createToolbar" => T<string> ^-> Control 
+                |> WithComment "Creates a toolbar container control instance by id."
+
+                "createToolbar" => T<string> * ControlConfiguration ^-> Control 
+                |> WithComment "Creates a toolbar container control instance by id."
+
+                "createToolbar" => T<string> * ControlConfiguration * T<obj> ^-> Control 
+                |> WithComment "Creates a toolbar container control instance by id."
+
+                "createSeparator" => T<unit> ^-> Control 
+                |> WithComment "Creates a separator control instance."
+
+                "createSeparator" => T<obj> ^-> Control 
+                |> WithComment "Creates a separator control instance."
+
+                "setControlType" => T<string> ^-> Control 
+                |> WithComment "Overrides a specific control type with a custom class."
+
+                "destroy" => T<string> ^-> Control 
+                |> WithComment "Destroy."
+            ]
+
+
+    let Plugin = Type.New ()
+
+    let PluginClass =
+        Pattern.Config "Plugin" {
+            Required = []
+            Optional = 
+                [
+                    "createControl", T<string> * ControlManager ^-> Control
+                    "getInfo", T<unit> ^-> T<obj>
+                    "init", Editor * T<string> ^-> T<unit> 
+                ]
+        }
+        |=> Plugin
 
         
     let EditorClass = 
@@ -382,64 +1120,64 @@ module TinyMce =
 
 
                 // events
-                "onPreInit" =? Dispatcher 
+                "onPreInit" =? Dispatcher.[Editor, T<Event>] 
                 |> WithComment "Fires before the editor is initialized."
 
-                "onInit" =? Dispatcher 
+                "onInit" =? Dispatcher.[Editor, T<Event>]
                 |> WithComment "Fires after the editor is initialized."
                 
-                "onActivate" =? Dispatcher 
+                "onActivate" =? Dispatcher.[Editor, T<Event>]
                 |> WithComment "Fires when editor is activated."
                 
-                "onDeactivate" =? Dispatcher 
+                "onDeactivate" =? Dispatcher.[Editor, T<Event>]
                 |> WithComment "Fires when the editor is deactivated."
                 
-                "onClick" =? Dispatcher 
+                "onClick" =? Dispatcher.[Editor, T<Event>]
                 |> WithComment "Fires when the editor's body is clicked."
                 
-                "onMouseUp" =? Dispatcher 
+                "onMouseUp" =? Dispatcher.[Editor, T<Event>]
                 |> WithComment "Fires when a mouseUp event occurs inside editor."
                 
-                "onMouseDown" =? Dispatcher 
+                "onMouseDown" =? Dispatcher.[Editor, T<Event>]
                 |> WithComment "Fires when a mouseDown event occurs inside editor."
                 
-                "onDblClick" =? Dispatcher 
+                "onDblClick" =? Dispatcher.[Editor, T<Event>]
                 |> WithComment "Fires when the editor's body is double clicked."
                 
-                "onKeyDown" =? Dispatcher 
+                "onKeyDown" =? Dispatcher.[Editor, T<Event>]
                 |> WithComment "Fires when a keyDown event occurs inside editor."
                 
-                "onKeyUp" =? Dispatcher 
+                "onKeyUp" =? Dispatcher.[Editor, T<Event>]
                 |> WithComment "Fires when a keyUp event occurs inside editor."
                 
-                "onKeyPress" =? Dispatcher 
+                "onKeyPress" =? Dispatcher.[Editor, T<Event>]
                 |> WithComment "Fires when a keyPress event occurs inside editor."
                 
-                "onContextMenu" =? Dispatcher 
+                "onContextMenu" =? Dispatcher.[Editor, T<Event>]
                 |> WithComment "Fires when a contextMenu event occurs inside editor."
                 
-                "onSubmit" =? Dispatcher 
+                "onSubmit" =? Dispatcher.[Editor, T<Event>]
                 |> WithComment "Fires when a form submit event occurs."
                 
-                "onReset" =? Dispatcher 
+                "onReset" =? Dispatcher.[Editor, T<Event>]
                 |> WithComment "Fires when a form reset event occurs."
                 
-                "onPaste" =? Dispatcher 
+                "onPaste" =? Dispatcher.[Editor, T<Event>]
                 |> WithComment "Fires when a paste event occurs inside editor."
                 
-                "onLoadContent" =? Dispatcher 
+                "onLoadContent" =? Dispatcher.[Editor, T<Event>]
                 |> WithComment "Fires when the editor gets loaded with content."
                 
-                "onSaveContent" =? Dispatcher 
+                "onSaveContent" =? Dispatcher.[Editor, T<Event>]
                 |> WithComment "Fires when the editor content gets saved."
                 
-                "onChange" =? Dispatcher 
+                "onChange" =? Dispatcher.[Editor, T<Event>]
                 |> WithComment "Fires when the editor content was modified."
                 
-                "onUndo" =? Dispatcher 
+                "onUndo" =? Dispatcher.[Editor, T<Event>]
                 |> WithComment "Fires when the editor content is undoed."
                 
-                "onRedo" =? Dispatcher 
+                "onRedo" =? Dispatcher.[Editor, T<Event>]
                 |> WithComment "Fires when the editor content is redoed."
                 
             ]
@@ -450,14 +1188,23 @@ module TinyMce =
         |=> TinyMCE
         |+> [
                 // properties
-                "editors" =? T<Array>
+                "editors" =? Type.ArrayOf Editor 
                 |> WithComment "The editor collection."
 
                 "activeEditor" =? Editor 
                 |> WithComment "Currently active editor."
 
+                "PluginManager" =? PluginManager 
+                |> WithComment "PluginManager instance."
+
 
                 // methods
+                "create" => T<string> * T<obj> ^-> T<unit>
+                |> WithComment "Creates a class, subclass or static singleton."
+
+                "create" => T<string> * T<obj> * T<obj> ^-> T<unit>
+                |> WithComment "Creates a class, subclass or static singleton."
+
                 "init" => TinyMCEConfiguration ^-> T<unit>
                 |> WithComment "Initializes an editor."
 
@@ -497,11 +1244,29 @@ module TinyMce =
                 EntityEncodingClass
                 EditorClass
                 UndoManagerClass
-                DispatcherClass
+                Generic - fun t u -> DispatcherClass t u
                 SelectionClass
                 ToolbarLocationClass
                 ToolbarAlignClass
                 StatusbarLocationClass
+                ControlConfigurationClass
+                ControlManagerClass
+                PluginManagerClass
+                ButtonClass
+                ColorSplitButtonClass
+                ContainerClass
+                ControlClass
+                DropMenuClass
+                ListBoxClass
+                MenuClass
+                MenuButtonClass
+                MenuItemClass
+                NativeListBoxClass
+                SeparatorClass
+                SplitButtonClass
+                ToolbarClass
+                ToolbarGroupClass
+                PluginClass
             ]
         ]
 

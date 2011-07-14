@@ -1,12 +1,12 @@
 ﻿namespace IntelliFactory.WebSharper.TinyMce.Test
 
+open IntelliFactory.WebSharper.TinyMce
+open IntelliFactory.WebSharper.Formlet.TinyMce
 open IntelliFactory.WebSharper
 open IntelliFactory.WebSharper.Html
 open IntelliFactory.WebSharper.Formlet
 open IntelliFactory.WebSharper.Web
 open IntelliFactory.WebSharper.JQuery
-open IntelliFactory.WebSharper.TinyMce
-open IntelliFactory.WebSharper.Formlet.TinyMce
 
 module Test =
 
@@ -14,6 +14,7 @@ module Test =
         [<Inline "console.log($x)">]
         let Log x = ()
         
+    
     module Formlet =
             
         [<JavaScript>]
@@ -248,6 +249,66 @@ module Test =
                 ]
 
 
+    module Plugin = 
+
+        [<Inline "eval($s)">]
+        let Raw s = ()
+
+        [<JavaScript>]
+        let CreateNewPlugin() =
+            let Init(tId) =
+                let plugin = new Plugin (
+                                    CreateControl = (fun (name, ctrlMgr) -> 
+                                            ctrlMgr.CreateMenuButton("mymenubuttonn", new ControlConfiguration(
+                                                                                            Title = "My menu button",
+                                                                                            Image = "img/example.gif",
+                                                                                            Icons = false
+                                                                                            )
+                                                    )
+                                    ),
+                                    Init = (fun (ed,n) -> ()),
+                                    GetInfo = (fun () -> new obj())
+                                )
+
+                TinyMCE.Create("tinymce.plugins.ExamplePlugin", plugin)
+
+                TinyMce.PluginManager.Add("example", Raw "tinymce.plugins.Example")
+
+                let editorConfig = 
+                    new TinyMCEConfiguration (
+                        Theme = "advanced",
+                        Mode = Mode.Exact,
+                        Elements = tId,
+                        Plugins = "-example",
+                        Theme_advanced_buttons1 = "mymenubuttonn,bold",
+                        Theme_advanced_buttons2 = "", 
+                        Theme_advanced_buttons3 = "",
+                        Theme_advanced_buttons4 = "" 
+                    )
+                
+
+                TinyMCE.Init(editorConfig)
+
+
+            let tId = NewId()
+            Div [
+                TextArea [Attr.Id tId; Text "default content"]
+                |>! OnAfterRender (fun el ->
+                        Init(tId)
+                    )
+                Button [Text "get selection"]
+                |>! OnClick (fun el e ->
+                        let selection = TinyMCE.Get(tId).Selection
+                        JavaScript.Alert(selection.GetContent())
+                    )
+                Button [Text "replace selection with foo"]
+                |>! OnClick (fun el e ->
+                        let selection = TinyMCE.Get(tId).Selection
+                        selection.SetContent("foo")
+                    )
+                ]
+
+
 
     // Test helpers
     
@@ -316,4 +377,6 @@ module Test =
 
             TestDirectBindings "The editor's selection" "Clicking buttons below gets selection and replaces selected content" <|
                 DirectBindings.EditorSelectionGetReplace()
+
+            Plugin.CreateNewPlugin()
         ]

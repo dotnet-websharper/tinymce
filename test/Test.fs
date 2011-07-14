@@ -51,7 +51,6 @@ module Test =
                     Height = Some 400
                     ToolbarLocation = Some ToolbarLocation.Top
                     ToolbarAlign = Some ToolbarAlign.Left
-                    Plugins = Some "table,contextmenu,paste" 
                     Buttons =
                         Some [
                             [ ButtonType.Bold; ButtonType.Anchor]

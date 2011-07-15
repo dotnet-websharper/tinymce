@@ -251,35 +251,83 @@ module Test =
     module Plugin = 
 
         [<Inline "eval($s)">]
-        let Raw s = ()
+        let Raw<'T> s : 'T = failwith "raw" 
 
         [<JavaScript>]
-        let CreateNewPlugin() =
+        let CustomListBoxSplitButton() =
             let Init(tId) =
-                let plugin = new Plugin (
-                                    CreateControl = (fun (name, ctrlMgr) -> 
-                                            ctrlMgr.CreateMenuButton("mymenubuttonn", new ControlConfiguration(
-                                                                                            Title = "My menu button",
-                                                                                            Image = "img/example.gif",
-                                                                                            Icons = false
-                                                                                            )
-                                                    )
-                                    ),
-                                    Init = (fun (ed,n) -> ()),
-                                    GetInfo = (fun () -> new obj())
-                                )
 
-                TinyMCE.Create("tinymce.plugins.ExamplePlugin", plugin)
+                let listBoxConf =  
+                    new ControlConfiguration(
+                        Title = "My list box",
+                        Onselect = (fun (v) ->
+                            TinyMCE.ActiveEditor.WindowManager.Alert("Value selected:" + v)
+                        )
+                    )
 
-                TinyMce.PluginManager.Add("example", Raw "tinymce.plugins.Example")
+                let splitButtonConf =  
+                    new ControlConfiguration(
+                        Title = "My split button",
+                        Image = "img/example.gif",
+                        Onclick = (fun () ->
+                            TinyMCE.ActiveEditor.WindowManager.Alert("Button was clicked.")
+                        )
+                    )
+
+
+                let createMenu (name:string, cm:ControlManager) = 
+                    match name with
+                    | "mylistbox" -> 
+                        let mlb = cm.CreateListBox("mylistbox",  listBoxConf)
+
+                        mlb.Add("Some item 1", "val1")
+                        mlb.Add("Some item 2", "val2")
+                        mlb.Add("Some item 3", "val3")
+    
+
+                        mlb :> TinyMce.Control
+
+                    | "mysplitbutton" -> 
+                        let c = cm.CreateSplitButton("mysplitbutton",  splitButtonConf )
+
+                        c.OnRenderMenu.Add (fun (c,m:DropMenu) ->
+                                m.Add(new ControlConfiguration(Title = "Some title", Class = "mceMenuItemTitle"))
+                                |> ignore
+
+                                m.Add(new ControlConfiguration(Title = "Some item 1", Onclick = (fun () ->
+                                            TinyMCE.ActiveEditor.WindowManager.Alert("Some  item 1 was clicked")
+                                        )
+                                    )
+                                ) |> ignore
+
+                                m.Add(new ControlConfiguration(Title = "Some item 2", Onclick = (fun () ->
+                                            TinyMCE.ActiveEditor.WindowManager.Alert("Some  item 2 was clicked")
+                                        )
+                                    )
+                                ) |> ignore
+
+                        ) |> ignore
+    
+
+                        c :> TinyMce.Control
+
+                    | _ -> null
+
+
+                let plugin = new Plugin ( CreateControl = createMenu )
+
+                TinyMCE.Create("tinymce.plugins.CustomListBoxSplitButtonPlugin", plugin)
+
+                TinyMce.PluginManager.Add("exampleCustomListBoxSplitButton", Raw "tinymce.plugins.CustomListBoxSplitButtonPlugin")
 
                 let editorConfig = 
                     new TinyMCEConfiguration (
                         Theme = "advanced",
                         Mode = Mode.Exact,
                         Elements = tId,
-                        Plugins = "-example",
-                        Theme_advanced_buttons1 = "mymenubuttonn,bold",
+                        Theme_advanced_toolbar_location = ToolbarLocation.Top,
+                        Plugins = "-exampleCustomListBoxSplitButton",
+                        Theme_advanced_buttons1 = "mylistbox,mysplitbutton,bold",
                         Theme_advanced_buttons2 = "", 
                         Theme_advanced_buttons3 = "",
                         Theme_advanced_buttons4 = "" 
@@ -294,19 +342,131 @@ module Test =
                 TextArea [Attr.Id tId; Text "default content"]
                 |>! OnAfterRender (fun el ->
                         Init(tId)
-                    )
-                Button [Text "get selection"]
-                |>! OnClick (fun el e ->
-                        let selection = TinyMCE.Get(tId).Selection
-                        JavaScript.Alert(selection.GetContent())
-                    )
-                Button [Text "replace selection with foo"]
-                |>! OnClick (fun el e ->
-                        let selection = TinyMCE.Get(tId).Selection
-                        selection.SetContent("foo")
-                    )
-                ]
+                )
+            ]
 
+
+        [<JavaScript>]
+        let MenuButton() =
+            let Init(tId) =
+
+                let menuConf =  
+                    new ControlConfiguration(
+                        Title = "My menu button",
+                        Image = "img/example.gif",
+                        Icons = false
+                    )
+
+                let createMenu (name:string, ctrlMgr:ControlManager) = 
+                    match name with
+                    | "mymenubutton" -> 
+                        let c = ctrlMgr.CreateMenuButton("mymenubutton",  menuConf )
+    
+                        c.OnRenderMenu.Add (fun (o,m:DropMenu) ->
+
+                                    m.Add(new ControlConfiguration(Title = "Some item 1", Onclick = (fun () ->
+                                            TinyMCE.ActiveEditor.ExecCommand("mceInsertContent", false, "Some item 1")
+                                            )
+                                        )
+                                    ) |> ignore
+
+                                    m.Add(new ControlConfiguration(Title = "Some item 2", Onclick = (fun () ->
+                                            TinyMCE.ActiveEditor.ExecCommand("mceInsertContent", false, "Some item 2")
+                                            )
+                                        )
+                                    ) |> ignore
+
+                                    let sub = m.AddMenu(new ControlConfiguration(Title = "Some item 3"))
+
+                                    sub.Add(new ControlConfiguration(Title = "Some item 3.1", Onclick = (fun () ->
+                                            TinyMCE.ActiveEditor.ExecCommand("mceInsertContent", false, "Some item 3.1")
+                                            )
+                                        )
+                                    ) |> ignore
+
+                                    sub.Add(new ControlConfiguration(Title = "Some item 3.2", Onclick = (fun () ->
+                                            TinyMCE.ActiveEditor.ExecCommand("mceInsertContent", false, "Some item 3.2")
+                                            )
+                                        )
+                                    ) |> ignore
+
+                        ) |> ignore 
+
+                        c :> TinyMce.Control
+
+                    | _ -> null
+
+
+                let plugin = new Plugin ( CreateControl = createMenu )
+
+                TinyMCE.Create("tinymce.plugins.MenuButtonPlugin", plugin)
+
+                TinyMce.PluginManager.Add("exampleMenuButton", Raw "tinymce.plugins.MenuButtonPlugin")
+
+                let editorConfig = 
+                    new TinyMCEConfiguration (
+                        Theme = "advanced",
+                        Mode = Mode.Exact,
+                        Elements = tId,
+                        Theme_advanced_toolbar_location = ToolbarLocation.Top,
+                        Plugins = "-exampleMenuButton",
+                        Theme_advanced_buttons1 = "mymenubutton,bold",
+                        Theme_advanced_buttons2 = "", 
+                        Theme_advanced_buttons3 = "",
+                        Theme_advanced_buttons4 = "" 
+                    )
+                
+
+                TinyMCE.Init(editorConfig)
+
+
+            let tId = NewId()
+            Div [
+                TextArea [Attr.Id tId; Text "default content"]
+                |>! OnAfterRender (fun el ->
+                        Init(tId)
+                )
+            ]
+
+        [<JavaScript>]
+        let CustomToolbarButton() =
+            let Init(tId) =
+
+                let editorConfig = 
+                    new TinyMCEConfiguration (
+                        Theme = "advanced",
+                        Mode = Mode.Exact,
+                        Elements = tId,
+                        Theme_advanced_toolbar_location = ToolbarLocation.Top,
+                        Theme_advanced_buttons1 = "mybutton,bold",
+                        Theme_advanced_buttons2 = "", 
+                        Theme_advanced_buttons3 = "",
+                        Theme_advanced_buttons4 = "" ,
+                        Setup = (fun (ed:Editor) ->
+                                   ed.AddButton("mybutton", new ControlConfiguration(
+                                                                Title = "My button",
+                                                                Image = "img/example.gif",
+                                                                Onclick = (fun () ->
+                                                                    ed.Focus(false)
+                                                                    ed.Selection.SetContent("Hello world!")
+                                                                )
+                                                            )
+                                   )
+                                )
+                                         
+                    )
+                
+
+                TinyMCE.Init(editorConfig)
+
+
+            let tId = NewId()
+            Div [
+                TextArea [Attr.Id tId; Text "default content"]
+                |>! OnAfterRender (fun el ->
+                        Init(tId)
+                )
+            ]
 
 
     // Test helpers
@@ -377,5 +537,14 @@ module Test =
             TestDirectBindings "The editor's selection" "Clicking buttons below gets selection and replaces selected content" <|
                 DirectBindings.EditorSelectionGetReplace()
 
-            Plugin.CreateNewPlugin()
+
+            // plugins
+            TestDirectBindings "Plugin: Custom ListBox and SplitButton" "Toolbar should have custom ListBox and SplitButton" <|
+                Plugin.CustomListBoxSplitButton()
+
+            TestDirectBindings "Plugin: MenuButton" "Toolbar should have custom MenuButton" <|
+                Plugin.MenuButton()
+
+            TestDirectBindings "Plugin: Custom toolbar button" "Toolbar should have custom Button" <|
+                Plugin.CustomToolbarButton()
         ]

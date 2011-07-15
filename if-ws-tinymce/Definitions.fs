@@ -278,6 +278,7 @@ module TinyMce =
 
 
     let Dispatcher = Type.New()
+
     let DispatcherClass = 
         Generic / fun t1 t2 ->
             Class "Dispatcher"
@@ -359,7 +360,7 @@ module TinyMce =
             Optional = 
                 [
                     "title", T<string>
-                    "class", T<string>
+                    //"class", T<string>
                     "image", T<string>
                     "icons", T<bool>
                     "onselect", T<string> ^-> T<unit>
@@ -367,6 +368,10 @@ module TinyMce =
                 ]
         }
         |=> ControlConfiguration
+        |+> Protocol [
+                "class" =% T<string>
+                |> WithSourceName "Class"
+            ]
 
 
     let Control = Type.New ()
@@ -425,6 +430,7 @@ module TinyMce =
     let SeparatorClass = 
         Class "tinymce.ui.Separator"
         |=> Inherits ControlClass 
+        |=> Separator
         |+> [
                 // constructors
                 Constructor (T<string>)
@@ -440,11 +446,200 @@ module TinyMce =
             ]
 
 
+
+    let MenuButton = Type.New ()
+    let DropMenu = Type.New ()
+        
+    let MenuButtonClass = 
+        Class "tinymce.ui.MenuButton"
+        |=> Inherits ControlClass 
+        |=> MenuButton
+        |+> [
+                // constructors
+                Constructor (T<string>)
+                |> WithComment "Constructs a new split button control instance."
+
+                Constructor (T<string> * T<obj>)
+                |> WithComment "Constructs a new split button control instance."
+
+                Constructor (T<string> * T<obj> * Editor)
+                |> WithComment "Constructs a new split button control instance."
+            ]
+        |+> Protocol
+            [
+
+                // methods
+                "hideMenu" => T<Event> ^-> T<unit> 
+                |> WithComment "Hides the menu. The optional event parameter is used to check where the event occured so it doesn't close them menu if it was a event inside the menu."
+
+                "postRender" => T<unit> ^-> T<unit> 
+                |> WithComment "Post render handler. This function will be called after the UI has been rendered so that events can be added."
+
+                "renderMenu" => T<unit> ^-> T<unit> 
+                |> WithComment "Renders the menu to the DOM."
+                
+                "showMenu" => T<unit> ^-> T<unit> 
+                |> WithComment "Shows the menu."
+
+                // events
+                "onRender" =? Dispatcher.[T<obj>, MenuButton]
+                |> WithComment ""
+
+                "onRenderMenu" =? Dispatcher.[T<obj>, DropMenu]
+                |> WithComment "Fires when the menu is rendered."
+            ]
+            
+
+    let MenuItem = Type.New ()
+        
+    let MenuItemClass = 
+        Class "tinymce.ui.MenuItem"
+        |=> Inherits ControlClass 
+        |=> MenuItem
+        |+> [
+                // constructors
+                Constructor (T<string>)
+                |> WithComment "Constructs a new button control instance."
+
+                Constructor (T<string> * T<obj>)
+                |> WithComment "Constructs a new button control instance."
+            ]
+        |+> Protocol
+            [
+
+                // methods
+                "isSelected" => T<unit> ^-> T<bool> 
+                |> WithComment "Returns true/false if the control is selected or not."
+
+                "postRender" => T<unit> ^-> T<unit> 
+                |> WithComment "Post render handler. This function will be called after the UI has been rendered so that events can be added."
+                
+                "setSelected" => T<bool> ^-> T<unit> 
+                |> WithComment "Sets the selected state for the control. This will add CSS classes to the element that contains the control. So that it can be selected visually."
+            ]
+            
+
+    let Menu = Type.New ()
+        
+    let MenuClass = 
+        Class "tinymce.ui.Menu"
+        |=> Inherits MenuItem 
+        |=> Menu
+        |+> [
+                // constructors
+                Constructor (T<string>)
+                |> WithComment "Constructs a new button control instance."
+
+                Constructor (T<string> * T<obj>)
+                |> WithComment "Constructs a new button control instance."
+            ]
+        |+> Protocol
+            [
+
+                // methods
+                "add" => Control ^-> Control 
+                |> WithComment "Adds a new menu, menu item or sub classes of them to the drop menu."
+
+                "add" => ControlConfiguration ^-> Control 
+                |> WithComment "Adds a new menu, menu item or sub classes of them to the drop menu."
+
+                "addMenu" => T<obj> ^-> Menu 
+                |> WithComment "Adds a sub menu to the menu."
+
+                "addSeparator" => T<obj> ^-> MenuItem 
+                |> WithComment "Adds a menu separator between the menu items."
+
+                "collapse" => T<unit> ^-> T<unit> 
+                |> WithComment "Collapses the menu, this will hide the menu and all menu items."
+
+                "collapse" => T<bool> ^-> T<unit> 
+                |> WithComment "Collapses the menu, this will hide the menu and all menu items."
+
+                "createMenu" => T<obj> ^-> Menu 
+                |> WithComment "Created a new sub menu for the menu control."
+
+                "expand" => T<bool> ^-> T<unit> 
+                |> WithComment "Expands the menu, this will show them menu and all menu items."
+
+                "hasMenus" => T<unit> ^-> T<bool> 
+                |> WithComment "Returns true/false if the menu has sub menus or not."
+
+                "isCollapsed" => T<unit> ^-> T<bool> 
+                |> WithComment "Returns true/false if the menu has been collapsed or not."
+
+                "remove" => Control ^-> Control 
+                |> WithComment "Removes a specific sub menu or menu item from the menu."
+
+                "removeAll" => T<unit> ^-> T<unit> 
+                |> WithComment "Removes all menu items and sub menu items from the menu."
+            ]
+            
+
+        
+    let DropMenuClass = 
+        Class "tinymce.ui.DropMenu"
+        |=> Inherits Menu
+        |=> DropMenu
+        |+> [
+                // constructors
+                Constructor (T<string>)
+                |> WithComment "Constructs a new drop menu control instance."
+
+                Constructor (T<string> * T<obj>)
+                |> WithComment "Constructs a new drop menu control instance."
+            ]
+        |+> Protocol
+            [
+
+                // methods
+                "add" => Control ^-> Control 
+                |> WithComment "Adds a new menu, menu item or sub classes of them to the drop menu."
+
+                "add" => ControlConfiguration ^-> Control 
+                |> WithComment "Adds a new menu, menu item or sub classes of them to the drop menu."
+
+                "collapse" => T<unit> ^-> T<unit> 
+                |> WithComment "Collapses the menu, this will hide the menu and all menu items."
+
+                "collapse" => T<bool> ^-> T<unit> 
+                |> WithComment "Collapses the menu, this will hide the menu and all menu items."
+
+                "createMenu" => T<obj> ^-> DropMenu 
+                |> WithComment "Created a new sub menu for the drop menu control."
+
+                "destroy" => T<unit> ^-> T<unit> 
+                |> WithComment "Destroys the menu. This will remove the menu from the DOM and any events added to it etc."
+
+                "hideMenu" => T<unit> ^-> T<unit> 
+                |> WithComment "Hides the displayed menu."
+
+                "remove" => Control ^-> Control 
+                |> WithComment "Removes a specific sub menu or menu item from the drop menu."
+
+                "renderNode" => T<unit> ^-> T<Element> 
+                |> WithComment "Renders the specified menu node to the dom."
+
+                "showMenu" => T<Number> * T<Number> ^-> T<unit> 
+                |> WithComment "Displays the menu at the specified cordinate."
+
+                "showMenu" => T<Number> * T<Number> * T<Number> ^-> T<unit> 
+                |> WithComment "Displays the menu at the specified cordinate."
+
+                "update" => T<unit> ^-> T<unit> 
+                |> WithComment "Repaints the menu after new items have been added dynamically."
+
+                // events
+                "onRender" =? Dispatcher.[T<obj>, DropMenu]
+                |> WithComment ""
+            ]
+
+
     let Button = Type.New ()
         
     let ButtonClass = 
         Class "tinymce.ui.Button"
         |=> Inherits ControlClass 
+        |=> Button
         |+> [
                 // constructors
                 Constructor (T<string>)
@@ -471,6 +666,7 @@ module TinyMce =
     let SplitButtonClass = 
         Class "tinymce.ui.SplitButton"
         |=> Inherits ButtonClass
+        |=> SplitButton
         |+> [
                 // constructors
                 Constructor (T<string>)
@@ -490,6 +686,9 @@ module TinyMce =
 
                 "renderHTML" => T<unit> ^-> T<string> 
                 |> WithComment "Renders the split button as a HTML string. This method is much faster than using the DOM and when creating a whole toolbar with buttons it does make a lot of difference."
+
+                "onRenderMenu" =? Dispatcher.[T<obj>, DropMenu]
+                |> WithComment "Fires when the menu is rendered."
             ]
 
 
@@ -498,6 +697,7 @@ module TinyMce =
     let ColorSplitButtonClass = 
         Class "tinymce.ui.ColorSplitButton"
         |=> Inherits SplitButton
+        |=> ColorSplitButton
         |+> [
                 // constructors
                 Constructor (T<string>)
@@ -549,6 +749,8 @@ module TinyMce =
                 "onShowMenu" => T<unit> ^-> T<unit> 
                 |> WithComment "Fires when the menu is shown."
 
+                "onRenderMenu" =? Dispatcher.[T<obj>, DropMenu]
+                |> WithComment "Fires when the menu is rendered."
             ]
 
 
@@ -557,6 +759,7 @@ module TinyMce =
     let ContainerClass = 
         Class "tinymce.ui.Container"
         |=> Inherits ControlClass 
+        |=> Container
         |+> [
                 // constructors
                 Constructor (T<string>)
@@ -587,6 +790,7 @@ module TinyMce =
     let ToolbarClass = 
         Class "tinymce.ui.Toolbar"
         |=> Inherits ContainerClass 
+        |=> Toolbar
         |+> [
             ]
         |+> Protocol
@@ -606,6 +810,7 @@ module TinyMce =
     let ToolbarGroupClass = 
         Class "tinymce.ui.ToolbarGroup"
         |=> Inherits ContainerClass 
+        |=> ToolbarGroup
         |+> [
             ]
         |+> Protocol
@@ -626,6 +831,7 @@ module TinyMce =
     let ListBoxClass = 
         Class "tinymce.ui.ListBox"
         |=> Inherits ControlClass 
+        |=> ListBox
         |+> [
                 // constructors
                 Constructor (T<string>)
@@ -691,185 +897,11 @@ module TinyMce =
                 "onPostRender" =? Dispatcher.[T<obj>, T<obj>]
                 |> WithComment "Fires after the element has been rendered to DOM."
 
-                "onRenderMenu" =? Dispatcher.[T<obj>, T<obj>]
+                "onRenderMenu" =? Dispatcher.[T<obj>, DropMenu]
                 |> WithComment "Fires when the menu gets rendered."
             ]
             
 
-    let MenuButton = Type.New ()
-        
-    let MenuButtonClass = 
-        Class "tinymce.ui.MenuButton"
-        |=> Inherits ControlClass 
-        |+> [
-                // constructors
-                Constructor (T<string>)
-                |> WithComment "Constructs a new split button control instance."
-
-                Constructor (T<string> * T<obj>)
-                |> WithComment "Constructs a new split button control instance."
-
-                Constructor (T<string> * T<obj> * Editor)
-                |> WithComment "Constructs a new split button control instance."
-            ]
-        |+> Protocol
-            [
-
-                // methods
-                "hideMenu" => T<Event> ^-> T<unit> 
-                |> WithComment "Hides the menu. The optional event parameter is used to check where the event occured so it doesn't close them menu if it was a event inside the menu."
-
-                "postRender" => T<unit> ^-> T<unit> 
-                |> WithComment "Post render handler. This function will be called after the UI has been rendered so that events can be added."
-
-                "renderMenu" => T<unit> ^-> T<unit> 
-                |> WithComment "Renders the menu to the DOM."
-                
-                "showMenu" => T<unit> ^-> T<unit> 
-                |> WithComment "Shows the menu."
-
-                // events
-                "onRenderMenu" =? Dispatcher.[T<obj>, MenuButton]
-                |> WithComment "Fires when the menu is rendered."
-            ]
-            
-
-    let MenuItem = Type.New ()
-        
-    let MenuItemClass = 
-        Class "tinymce.ui.MenuItem"
-        |=> Inherits ControlClass 
-        |+> [
-                // constructors
-                Constructor (T<string>)
-                |> WithComment "Constructs a new button control instance."
-
-                Constructor (T<string> * T<obj>)
-                |> WithComment "Constructs a new button control instance."
-            ]
-        |+> Protocol
-            [
-
-                // methods
-                "isSelected" => T<unit> ^-> T<bool> 
-                |> WithComment "Returns true/false if the control is selected or not."
-
-                "postRender" => T<unit> ^-> T<unit> 
-                |> WithComment "Post render handler. This function will be called after the UI has been rendered so that events can be added."
-                
-                "setSelected" => T<bool> ^-> T<unit> 
-                |> WithComment "Sets the selected state for the control. This will add CSS classes to the element that contains the control. So that it can be selected visually."
-            ]
-            
-
-    let Menu = Type.New ()
-        
-    let MenuClass = 
-        Class "tinymce.ui.Menu"
-        |=> Inherits MenuItem 
-        |+> [
-                // constructors
-                Constructor (T<string>)
-                |> WithComment "Constructs a new button control instance."
-
-                Constructor (T<string> * T<obj>)
-                |> WithComment "Constructs a new button control instance."
-            ]
-        |+> Protocol
-            [
-
-                // methods
-                "add" => Control ^-> Control 
-                |> WithComment "Adds a new menu, menu item or sub classes of them to the drop menu."
-
-                "add" => ControlConfiguration ^-> Control 
-                |> WithComment "Adds a new menu, menu item or sub classes of them to the drop menu."
-
-                "addMenu" => T<obj> ^-> Menu 
-                |> WithComment "Adds a sub menu to the menu."
-
-                "addSeparator" => T<obj> ^-> MenuItem 
-                |> WithComment "Adds a menu separator between the menu items."
-
-                "collapse" => T<unit> ^-> T<unit> 
-                |> WithComment "Collapses the menu, this will hide the menu and all menu items."
-
-                "collapse" => T<bool> ^-> T<unit> 
-                |> WithComment "Collapses the menu, this will hide the menu and all menu items."
-
-                "createMenu" => T<obj> ^-> Menu 
-                |> WithComment "Created a new sub menu for the menu control."
-
-                "expand" => T<bool> ^-> T<unit> 
-                |> WithComment "Expands the menu, this will show them menu and all menu items."
-
-                "hasMenus" => T<unit> ^-> T<bool> 
-                |> WithComment "Returns true/false if the menu has sub menus or not."
-
-                "isCollapsed" => T<unit> ^-> T<bool> 
-                |> WithComment "Returns true/false if the menu has been collapsed or not."
-
-                "remove" => Control ^-> Control 
-                |> WithComment "Removes a specific sub menu or menu item from the menu."
-
-                "removeAll" => T<unit> ^-> T<unit> 
-                |> WithComment "Removes all menu items and sub menu items from the menu."
-            ]
-            
-
-    let DropMenu = Type.New ()
-        
-    let DropMenuClass = 
-        Class "tinymce.ui.DropMenu"
-        |=> Inherits Menu
-        |+> [
-                // constructors
-                Constructor (T<string>)
-                |> WithComment "Constructs a new drop menu control instance."
-
-                Constructor (T<string> * T<obj>)
-                |> WithComment "Constructs a new drop menu control instance."
-            ]
-        |+> Protocol
-            [
-
-                // methods
-                "add" => Control ^-> Control 
-                |> WithComment "Adds a new menu, menu item or sub classes of them to the drop menu."
-
-                "add" => ControlConfiguration ^-> Control 
-                |> WithComment "Adds a new menu, menu item or sub classes of them to the drop menu."
-
-                "collapse" => T<unit> ^-> T<unit> 
-                |> WithComment "Collapses the menu, this will hide the menu and all menu items."
-
-                "collapse" => T<bool> ^-> T<unit> 
-                |> WithComment "Collapses the menu, this will hide the menu and all menu items."
-
-                "createMenu" => T<obj> ^-> DropMenu 
-                |> WithComment "Created a new sub menu for the drop menu control."
-
-                "destroy" => T<unit> ^-> T<unit> 
-                |> WithComment "Destroys the menu. This will remove the menu from the DOM and any events added to it etc."
-
-                "hideMenu" => T<unit> ^-> T<unit> 
-                |> WithComment "Hides the displayed menu."
-
-                "remove" => Control ^-> Control 
-                |> WithComment "Removes a specific sub menu or menu item from the drop menu."
-
-                "renderNode" => T<unit> ^-> T<Element> 
-                |> WithComment "Renders the specified menu node to the dom."
-
-                "showMenu" => T<Number> * T<Number> ^-> T<unit> 
-                |> WithComment "Displays the menu at the specified cordinate."
-
-                "showMenu" => T<Number> * T<Number> * T<Number> ^-> T<unit> 
-                |> WithComment "Displays the menu at the specified cordinate."
-
-                "update" => T<unit> ^-> T<unit> 
-                |> WithComment "Repaints the menu after new items have been added dynamically."
-            ]
             
 
     let NativeListBox = Type.New ()
@@ -877,6 +909,7 @@ module TinyMce =
     let NativeListBoxClass = 
         Class "tinymce.ui.NativeListBox"
         |=> Inherits ListBoxClass 
+        |=> NativeListBox
         |+> [
                 // constructors
                 Constructor (T<string>)
@@ -935,6 +968,31 @@ module TinyMce =
             ]
 
 
+    let WindowManager = Type.New ()
+        
+    let WindowManagerClass = 
+        Class "tinymce.WindowManager"
+        |=> WindowManager
+        |+> [
+                // constructors
+                Constructor (Editor)
+                |> WithComment "Constructs a new window manager instance."
+            ]
+        |+> Protocol
+            [
+                // methods
+                "alert" => T<string> ^-> T<unit> 
+                |> WithComment "Creates a alert dialog. Please don't use the blocking behavior of this native version use the callback method instead then it can be extended."
+
+                "alert" => T<string> * T<unit -> unit> ^-> T<unit> 
+                |> WithComment "Creates a alert dialog. Please don't use the blocking behavior of this native version use the callback method instead then it can be extended."
+
+                "alert" => T<string> * T<unit -> unit> * T<obj> ^-> T<unit> 
+                |> WithComment "Creates a alert dialog. Please don't use the blocking behavior of this native version use the callback method instead then it can be extended."
+
+            ]
+
+
     let ControlManager = Type.New ()
         
     let ControlManagerClass = 
@@ -967,76 +1025,76 @@ module TinyMce =
                 "createControl" => T<string> ^-> Control 
                 |> WithComment "Creates a control by name, when a control is created it will automatically add it to the control collection. It first ask all plugins for the specified control if the plugins didn't return a control then the default behavior will be used."
 
-                "createDropMenu" => T<string> ^-> Control 
+                "createDropMenu" => T<string> ^-> DropMenu 
                 |> WithComment "Creates a drop menu control instance by id."
 
-                "createDropMenu" => T<string> * ControlConfiguration ^-> Control 
+                "createDropMenu" => T<string> * ControlConfiguration ^-> DropMenu 
                 |> WithComment "Creates a drop menu control instance by id."
 
-                "createDropMenu" => T<string> * ControlConfiguration * T<obj> ^-> Control 
+                "createDropMenu" => T<string> * ControlConfiguration * T<obj> ^-> DropMenu 
                 |> WithComment "Creates a drop menu control instance by id."
 
-                "createListBox" => T<string> ^-> Control 
+                "createListBox" => T<string> ^-> ListBox 
                 |> WithComment "Creates a list box control instance by id. A list box is either a native select element or a DOM/JS based list box control. This depends on the use_native_selects settings state."
 
-                "createListBox" => T<string> * ControlConfiguration ^-> Control 
+                "createListBox" => T<string> * ControlConfiguration ^-> ListBox 
                 |> WithComment "Creates a list box control instance by id. A list box is either a native select element or a DOM/JS based list box control. This depends on the use_native_selects settings state."
 
-                "createListBox" => T<string> * ControlConfiguration * T<obj> ^-> Control 
+                "createListBox" => T<string> * ControlConfiguration * T<obj> ^-> ListBox 
                 |> WithComment "Creates a list box control instance by id. A list box is either a native select element or a DOM/JS based list box control. This depends on the use_native_selects settings state."
 
-                "createButton" => T<string> ^-> Control 
+                "createButton" => T<string> ^-> Button 
                 |> WithComment "Creates a button control instance by id."
 
-                "createButton" => T<string> * ControlConfiguration^-> Control 
+                "createButton" => T<string> * ControlConfiguration^-> Button 
                 |> WithComment "Creates a button control instance by id."
 
-                "createButton" => T<string> * ControlConfiguration * T<obj> ^-> Control 
+                "createButton" => T<string> * ControlConfiguration * T<obj> ^-> Button 
                 |> WithComment "Creates a button control instance by id."
 
-                "createMenuButton" => T<string> ^-> Control 
+                "createMenuButton" => T<string> ^-> MenuButton 
                 |> WithComment "Creates a menu button control instance by id."
 
-                "createMenuButton" => T<string> * ControlConfiguration ^-> Control 
+                "createMenuButton" => T<string> * ControlConfiguration ^-> MenuButton 
                 |> WithComment "Creates a menu button control instance by id."
 
-                "createMenuButton" => T<string> * ControlConfiguration * T<obj> ^-> Control 
+                "createMenuButton" => T<string> * ControlConfiguration * T<obj> ^-> MenuButton 
                 |> WithComment "Creates a menu button control instance by id."
 
-                "createSplitButton" => T<string> ^-> Control 
+                "createSplitButton" => T<string> ^-> SplitButton 
                 |> WithComment "Creates a split button control instance by id."
 
-                "createSplitButton" => T<string> * ControlConfiguration ^-> Control 
+                "createSplitButton" => T<string> * ControlConfiguration ^-> SplitButton 
                 |> WithComment "Creates a split button control instance by id."
 
-                "createSplitButton" => T<string> * ControlConfiguration * T<obj> ^-> Control 
+                "createSplitButton" => T<string> * ControlConfiguration * T<obj> ^-> SplitButton 
                 |> WithComment "Creates a split button control instance by id."
 
-                "createColorSplitButton" => T<string> ^-> Control 
+                "createColorSplitButton" => T<string> ^-> ColorSplitButton 
                 |> WithComment "Creates a color split button control instance by id."
 
-                "createColorSplitButton" => T<string> * ControlConfiguration ^-> Control 
+                "createColorSplitButton" => T<string> * ControlConfiguration ^-> ColorSplitButton 
                 |> WithComment "Creates a color split button control instance by id."
 
-                "createColorSplitButton" => T<string> * ControlConfiguration * T<obj> ^-> Control 
+                "createColorSplitButton" => T<string> * ControlConfiguration * T<obj> ^-> ColorSplitButton 
                 |> WithComment "Creates a color split button control instance by id."
 
-                "createToolbar" => T<string> ^-> Control 
+                "createToolbar" => T<string> ^-> Toolbar 
                 |> WithComment "Creates a toolbar container control instance by id."
 
-                "createToolbar" => T<string> * ControlConfiguration ^-> Control 
+                "createToolbar" => T<string> * ControlConfiguration ^-> Toolbar 
                 |> WithComment "Creates a toolbar container control instance by id."
 
-                "createToolbar" => T<string> * ControlConfiguration * T<obj> ^-> Control 
+                "createToolbar" => T<string> * ControlConfiguration * T<obj> ^-> Toolbar 
                 |> WithComment "Creates a toolbar container control instance by id."
 
-                "createSeparator" => T<unit> ^-> Control 
+                "createSeparator" => T<unit> ^-> Separator 
                 |> WithComment "Creates a separator control instance."
 
-                "createSeparator" => T<obj> ^-> Control 
+                "createSeparator" => T<obj> ^-> Separator 
                 |> WithComment "Creates a separator control instance."
 
-                "setControlType" => T<string> ^-> Control 
+                "setControlType" => T<string> ^-> Separator 
                 |> WithComment "Overrides a specific control type with a custom class."
 
                 "destroy" => T<string> ^-> Control 
@@ -1080,8 +1138,20 @@ module TinyMce =
                 "undoManager" =? UndoManager 
                 |> WithComment "The UndoManager instance for the editor."
 
+                "windowManager" =? WindowManager 
+                |> WithComment "Window manager reference, use this to open new windows and dialogs."
+
 
                 // methods
+                "addButton" => T<string> * T<obj> ^-> T<unit> 
+                |> WithComment "Adds a button that later gets created by the ControlManager. This is a shorter and easier method of adding buttons without the need to deal with the ControlManager directly. But it's also less powerfull if you need more control use the ControlManagers factory methods instead."
+
+                "addCommand" => T<string> * T<unit -> unit> ^-> T<unit> 
+                |> WithComment "Adds a custom command to the editor, you can also override existing commands with this method. The command that you add can be executed with execCommand."
+
+                "addCommand" => T<string> * T<unit -> unit> * T<obj> ^-> T<unit> 
+                |> WithComment "Adds a custom command to the editor, you can also override existing commands with this method. The command that you add can be executed with execCommand."
+
                 "focus" => T<bool> ^-> T<unit> 
                 |> WithComment "Focuses and activates the editor."
 
@@ -1252,6 +1322,7 @@ module TinyMce =
                 ControlConfigurationClass
                 ControlManagerClass
                 PluginManagerClass
+                WindowManagerClass
                 ButtonClass
                 ColorSplitButtonClass
                 ContainerClass

@@ -1,10 +1,9 @@
 ﻿% Direct 
 
-`HtmlEditor` formlet provides easy way to create `TinyMCE` editor inside webpage.
-By accessing directly bindings `TinyMCE` editor can be created 
-in similar way to that in `JavaScript`.
+`SimpleHtmlEditor` and `AdvancedHtmlEditor` formlets provide easy way to create `TinyMCE` editor.
+`TinyMCE` editor can be created in similar way to that in `JavaScript` by accessing direct bindings.
 
-Following example shows how to create `TinyMCE` using directly bindings:
+Following example shows how to create `TinyMCE` editor using direct bindings:
 
 	#fsharp
 	type SampleControl () =
@@ -30,11 +29,11 @@ Following example shows how to create `TinyMCE` using directly bindings:
 
 Result:
 
-![FormletDefault](FormletDefault.png)\
+![FormletDefault](DirectBindings.png)\
 
 
 The main advantage of creating editor directly is ability to specify 
-more configuration options and access to all bindings.
+more configuration options and access to direct bindings.
 
 
 

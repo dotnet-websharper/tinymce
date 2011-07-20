@@ -1,4 +1,4 @@
-﻿% HtmlEditor formlet
+% HtmlEditor formlet
 
 The formlet abstraction for `TinyMCE` enables embedding `TincyMCE` HTML editors
 as a formlet controls.
@@ -8,20 +8,20 @@ It contains the two functions `Controls.SimpleHtmlEditor` and `Controls.Advanced
 Both of these functions accept a configuration object as a first parameter specifying
 properties for the generated editor.
 
-The following example creates a control using `AdvancedHtmlEditor` with a default configuration.
-after clicking `Submit` button content of the control is saved to browser's log:
+The following example creates a control using `AdvancedHtmlEditor` with a custom configuration options.
 
-        [<JavaScript>]
-        let Editor : Formlet<string> =
-            let conf =
-                {AdvancedHtmlEditorConfiguration.Default with
-                    Width = Some 600
-                    Height = Some 400
-                    ToolbarLocation = Some ToolbarLocation.Top
-                    ToolbarAlign = Some ToolbarAlign.Left
-                }
-            Controls.AdvancedHtmlEditor conf "default"
-            |> Enhance.WithSubmitAndResetButtons
+    #fsharp
+    [<JavaScript>]
+    let Editor : Formlet<string> =
+        let conf =
+            {AdvancedHtmlEditorConfiguration.Default with
+                Width = Some 600
+                Height = Some 400
+                ToolbarLocation = Some ToolbarLocation.Top
+                ToolbarAlign = Some ToolbarAlign.Left
+            }
+        Controls.AdvancedHtmlEditor conf "default"
+        |> Enhance.WithSubmitAndResetButtons
 
 Result:
 

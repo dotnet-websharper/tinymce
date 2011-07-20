@@ -1,0 +1,30 @@
+% `tinyMCE` namespace
+
+Namespace `tinyMCE` contains many useful functions, for example:
+* `init(config:TinyMCEConfiguration)` - Creates new `TinyMCE` editor based on configuration options.
+* `get(id:strign)` - Returns an instance of `TinyMCE` with given `id`.
+
+
+Following example shows how to create new editor:
+
+	#fsharp
+	type SampleControl () =
+		inherit Web.Control()
+	
+		[<JavaScript>]
+		let Init () =
+	
+			TinyMCE.Init (
+				new TinyMCEConfiguration(
+					Theme = "simple",
+					Mode = Mode.Textareas
+				)
+			)
+	
+		[<JavaScript>]
+		override this.Body = 
+			TextArea [Id "test_area"] -< [Text "Default  text"]
+			|>! OnAfterRender (fun _ ->
+				Init()
+			)
+			:> _

@@ -200,11 +200,41 @@ type SampleControl () =
 
     [<JavaScript>]
     override this.Body = 
-        TextArea [Id "test_area"] -< [Text "Default  text"]
-        |>! OnAfterRender (fun _ ->
-            Init()
+        TextArea [Text "Default  text"]
+        |>! OnAfterRender (fun el ->
+            TinyMCE.Init (
+                new TinyMCEConfiguration(
+                    Theme = "simple",
+                    Mode = Mode.Textareas,
+                    Oninit = (fun () ->
+                        let editor = TinyMCE.Get(el.Id)
+                        editor.SetContent("New content") |> ignore
+                        editor.OnClick.Add (fun (ed:Editor) ->
+                            JavaScript.Alert(ed.GetContent())
+                        ) |> ignore
+                    )
+                )
+            )
         )
         :> _
+
+let Editor = 
+    TextArea [Text "Default  text"]
+    |>! OnAfterRender (fun el ->
+        TinyMCE.Init (
+            new TinyMCEConfiguration(
+                Theme = "simple",
+                Mode = Mode.Textareas,
+                Oninit = (fun () ->
+                    let editor = TinyMCE.Get(el.Id)
+                    editor.SetContent("New content") |> ignore
+                    editor.OnClick.Add (fun (ed:Editor) ->
+                        JavaScript.Alert(ed.GetContent())
+                    ) |> ignore
+                )
+            )
+        )
+    )
 
 type SampleControl () =
     inherit Web.Control()

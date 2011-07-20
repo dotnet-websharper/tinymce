@@ -84,7 +84,7 @@ module Test =
                 |>! OnAfterRender (fun el ->
                         Init(tId)
                     )
-                ]
+            ]
 
         [<JavaScript>]
         let CreatingTinyMceWithOninitCallback() =
@@ -109,7 +109,7 @@ module Test =
                 |>! OnAfterRender (fun el ->
                         Init(tId)
                     )
-                ]
+            ]
 
         [<JavaScript>]
         let CreatingTinyMceWithOnchangeCallback() =
@@ -130,8 +130,8 @@ module Test =
                 TextArea [Attr.Id tId; Text "default content"]
                 |>! OnAfterRender (fun el ->
                         Init(tId)
-                    )
-                ]
+                )
+            ]
 
         [<JavaScript>]
         let OnKeyupCallback() =
@@ -156,8 +156,8 @@ module Test =
                 TextArea [Attr.Id tId; Text "default content"]
                 |>! OnAfterRender (fun el ->
                         Init(tId)
-                    )
-                ]
+                )
+            ]
 
         [<JavaScript>]
         let OnClickCallback() =
@@ -182,8 +182,8 @@ module Test =
                 TextArea [Attr.Id tId; Text "default content"]
                 |>! OnAfterRender (fun el ->
                         Init(tId)
-                    )
-                ]
+                )
+            ]
 
 
         [<JavaScript>]
@@ -202,20 +202,20 @@ module Test =
                 TextArea [Attr.Id tId; Text "default content"]
                 |>! OnAfterRender (fun el ->
                         Init(tId)
-                    )
+                )
                 Button [Text "undo"]
                 |>! OnClick (fun el e ->
                         let undoManager = TinyMCE.Get(tId).UndoManager
                         undoManager.Undo()
                         |> ignore
-                    )
+                )
                 Button [Text "redo"]
                 |>! OnClick (fun el e ->
                         let undoManager = TinyMCE.Get(tId).UndoManager
                         undoManager.Redo()
                         |> ignore
-                    )
-                ]
+                )
+            ]
 
 
         [<JavaScript>]
@@ -234,18 +234,18 @@ module Test =
                 TextArea [Attr.Id tId; Text "default content"]
                 |>! OnAfterRender (fun el ->
                         Init(tId)
-                    )
+                )
                 Button [Text "get selection"]
                 |>! OnClick (fun el e ->
                         let selection = TinyMCE.Get(tId).Selection
                         JavaScript.Alert(selection.GetContent())
-                    )
+                )
                 Button [Text "replace selection with foo"]
                 |>! OnClick (fun el e ->
                         let selection = TinyMCE.Get(tId).Selection
                         selection.SetContent("foo")
-                    )
-                ]
+                )
+            ]
 
 
     module Plugin = 
@@ -295,13 +295,13 @@ module Test =
                                 |> ignore
 
                                 m.Add(new ControlConfiguration(Title = "Some item 1", Onclick = (fun () ->
-                                            TinyMCE.ActiveEditor.WindowManager.Alert("Some  item 1 was clicked")
+                                        TinyMCE.ActiveEditor.WindowManager.Alert("Some  item 1 was clicked")
                                         )
                                     )
                                 ) |> ignore
 
                                 m.Add(new ControlConfiguration(Title = "Some item 2", Onclick = (fun () ->
-                                            TinyMCE.ActiveEditor.WindowManager.Alert("Some  item 2 was clicked")
+                                        TinyMCE.ActiveEditor.WindowManager.Alert("Some  item 2 was clicked")
                                         )
                                     )
                                 ) |> ignore
@@ -452,7 +452,7 @@ module Test =
                                                                 )
                                                             )
                                    )
-                                )
+                        )
                                          
                     )
                 

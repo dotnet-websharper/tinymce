@@ -1,73 +1,34 @@
-﻿% Classes 
+% Classes 
 
 
-Most important bindings provided by `Web#` `TinyMCE` extension are:
+The `WebSharper` extension for `TinyMCE` provides many classes, for example:
 
-* `tinyMCE` - namespace which contains many useful functions 
-* `TinyMCEConfiguration` - class not defined in `TinyMCE`, represens configuration options
-* `Editor` - editor class
-* `UndoManager` - class providing support for undo/redo operations
-* `Selection` - class representing current selection 
-
-
-% namespace `tinyMCE`
-
-Basic functions:
-* `init(config:TinyMCEConfiguration)` - creates new `TinyMCE` editor based on configuration options.
-* `get(id:strign)` - returns instance of `TinyMCE` with given `id`.
+* `TinyMCEConfiguration` - Class not defined in `TinyMCE`, represents configuration options.
+* `Editor` - Editor class.
+* `UndoManager` - Class providing support for undo/redo operations.
+* `Selection` - Class representing current selection.
 
 
-Following example creates new `TinyMCE` instance, then in callback `oninit`( 
-which executes after the editor is initialized) we get instance of `TinyMCE` using `get` and 
-alert its content.
 
-
-Following example creates new editor:
-	#fsharp
-	type SampleControl () =
-		inherit Web.Control()
-	
-		[<JavaScript>]
-		let Init () =
-	
-			TinyMCE.Init (
-				new TinyMCEConfiguration(
-					Theme = "simple",
-					Mode = Mode.Textareas
-				)
-			)
-	
-		[<JavaScript>]
-		override this.Body = 
-			TextArea [Id "test_area"] -< [Text "Default  text"]
-			|>! OnAfterRender (fun _ ->
-				Init()
-			)
-			:> _
-
-Result:
-
-![FormletDefault](DirectBindings.png)\
-
-
-% `Editor` class
+# `Editor` class
 
 `Editor` class represents `TinyMCE` editor. Access to editor's content is provided by this class.
 
 Important members of this class:
 
-* `selection` - instance of `Selection` class of the editor
-* `undoManager` - instance of `UndoManager` class of the editor 
-* `execCommand(command:string)` - executes specified command, command is for example `italic`, `bold`
-* `show` - makes editor visible
-* `hide` - hides editor
-* `setContent(content:string)` - sets editor content
-* `getContent()` - returns editor content
-* `onClick()` - this event fires when editor's body is clicked
-* `onChange()` - this event fires when editor's content is changed 
+* `selection` - Instance of `Selection` class of the editor.
+* `undoManager` - Instance of `UndoManager` class of the editor. 
+* `execCommand(command:string)` - Executes specified command, commands are for example: `italic`, `bold`.
+* `show` - Makes an editor visible.
+* `hide` - Hides an editor.
+* `setContent(content:string)` - Sets an editor's content.
+* `getContent()` - Returns an editor's content.
+* `onClick()` - This event fires when an editor's body is clicked.
+* `onChange()` - This event fires when an editor's content is changed. 
 
 
-Following example creates new editor. When the editor's body is clicked it's content is showed inside alert dialog.
+Following example creates an new editor. When an editor's body is clicked, it's content is showed inside an alert dialog.
+
 	#fsharp
 	type SampleControl () =
 		inherit Web.Control()
@@ -105,76 +66,18 @@ Result:
 ![ClassesEditor](ClassesEditor.png)\
 
 
-% `UndoManager` class
-
-`UndoManager` class manages undo operations.
-
-
-Important members of this class:
-
-  * `undo()` - undoes the last changes.
-  * `redo()` - redoes the last changes.
-  * `onUndo(func)` - fires func when the user makes an undo.
-  * `onRedo(func)` - fires func when the user makes an redo.
-
-Following example creates new editor, adds handlers for `onUndo` and `onRedo` events  and 
-adds buttons to undo and redo changes:
-
-	#fsharp
-	type SampleControl () =
-		inherit Web.Control()
-	
-		[<JavaScript>]
-		let Init(tId) =
-			let config = 
-				new TinyMCEConfiguration (
-					Theme = "advanced",
-					Mode = Mode.Exact,
-					Elements = tId
-				)
-			TinyMCE.Init(config)
-	
-		[<JavaScript>]
-		override this.Body = 
-			let tId = NewId()
-			Div [
-				TextArea [Attr.Id tId; Text "default content"]
-				|>! OnAfterRender (fun el ->
-						Init(tId)
-					)
-				Button [Text "undo"] 
-				|>! OnClick (fun el e ->
-						let undoManager = TinyMCE.Get(tId).UndoManager
-						undoManager.Undo()
-						|> ignore
-					)
-				Button [Text "redo"]
-				|>! OnClick (fun el e ->
-						let undoManager = TinyMCE.Get(tId).UndoManager
-						undoManager.Redo()
-						|> ignore
-					)
-			]
-			:> _
-
-Result:
-
-![ClassesUndoManager](ClassesUndoManager.png)\
-
-
-
-% `Selection` class
+# `Selection` class
 
 `Selection` class manages selection. 
 
 
 Important members of this class:
 
-* `getContent()` - returns the selected content.
-* `setContent(newContent)` - replaces the selection with given content.
+* `getContent()` - Returns the selected content.
+* `setContent(newContent)` - Replaces the selection with a given content.
 
 
-Following example creates new editor and two buttons for getting selected content and changing it:
+Following example creates an new editor and two buttons for getting the selected content and changing it:
 
 	#fsharp
 	type SampleControl () =
@@ -218,113 +121,34 @@ Result:
 ![ClassesSelection](ClassesSelection.png)\
 
 
-% Plugins 
+
+# `UndoManager` class
+
+`UndoManager` class manages undo operations.
 
 
-`TinyMCE` bindings support plugin creation.
+Important members of this class:
 
+  * `undo()` - Undoes the last changes.
+  * `redo()` - Redoes the last changes.
+  * `onUndo(func)` - Fires given function when a user makes an undo.
+  * `onRedo(func)` - Fires given function when a user makes an redo.
 
-Following example is the direct translation of example available at [TinyMCE-plugin].
-New editor is created with two custom buttons: 
+Following example creates new editor and adds buttons to undo and redo changes:
 
 	#fsharp
 	type SampleControl () =
 		inherit Web.Control()
 	
-		[<Inline "eval($s)">]
-		let Raw s : 'T = failwith "raw" 
-	
 		[<JavaScript>]
 		let Init(tId) =
-			let listBoxConf =  
-				new ControlConfiguration(
-					Title = "My list box",
-					Onselect = (fun (v) ->
-						TinyMCE.ActiveEditor.WindowManager
-											.Alert("Value selected:" + v)
-					)
-				)
-	
-			let splitButtonConf =  
-				new ControlConfiguration(
-					Title = "My split button",
-					Image = "img/example.gif",
-					Onclick = (fun () ->
-						TinyMCE.ActiveEditor.WindowManager
-											.Alert("Button was clicked.")
-					)
-				)
-	
-	
-			let createMenu (name:string, cm:ControlManager) = 
-				match name with
-				| "mylistbox" -> 
-					let mlb = cm.CreateListBox("mylistbox",  listBoxConf)
-	
-					mlb.Add("Some item 1", "val1")
-					mlb.Add("Some item 2", "val2")
-					mlb.Add("Some item 3", "val3")
-	
-	
-					mlb :> TinyMce.Control
-	
-				| "mysplitbutton" -> 
-					let c = cm.CreateSplitButton("mysplitbutton", 
-													splitButtonConf )
-	
-					c.OnRenderMenu.Add (fun (c,m:DropMenu) ->
-							m.Add(new ControlConfiguration(Title = "Some title", 
-													Class = "mceMenuItemTitle"))
-							|> ignore
-	
-							m.Add(new ControlConfiguration(Title = "Some item 1",
-															Onclick = (fun () ->
-										TinyMCE.ActiveEditor.WindowManager
-												.Alert("Some  item 1 was clicked")
-									)
-								)
-							) |> ignore
-	
-							m.Add(new ControlConfiguration(Title = "Some item 2", 
-															Onclick = (fun () ->
-										TinyMCE.ActiveEditor.WindowManager
-												.Alert("Some  item 2 was clicked")
-									)
-								)
-							) |> ignore
-	
-					) |> ignore
-	
-	
-					c :> TinyMce.Control
-	
-				| _ -> null
-	
-	
-			let plugin = new Plugin ( CreateControl = createMenu )
-	
-			TinyMCE.Create("tinymce.plugins.CustomListBoxSplitButtonPlugin", 
-																	plugin)
-	
-			TinyMce.PluginManager.Add("exampleCustomListBoxSplitButton",
-						Raw "tinymce.plugins.CustomListBoxSplitButtonPlugin")
-	
-			let editorConfig = 
+			let config = 
 				new TinyMCEConfiguration (
 					Theme = "advanced",
 					Mode = Mode.Exact,
-					Elements = tId,
-					Theme_advanced_toolbar_location = ToolbarLocation.Top,
-					Plugins = "-exampleCustomListBoxSplitButton",
-					Theme_advanced_buttons1 = "mylistbox,mysplitbutton,bold",
-					Theme_advanced_buttons2 = "", 
-					Theme_advanced_buttons3 = "",
-					Theme_advanced_buttons4 = "" 
+					Elements = tId
 				)
-			
-	
-			TinyMCE.Init(editorConfig)
-	
+			TinyMCE.Init(config)
 	
 		[<JavaScript>]
 		override this.Body = 
@@ -333,15 +157,23 @@ New editor is created with two custom buttons:
 				TextArea [Attr.Id tId; Text "default content"]
 				|>! OnAfterRender (fun el ->
 						Init(tId)
-				)
+					)
+				Button [Text "undo"] 
+				|>! OnClick (fun el e ->
+						let undoManager = TinyMCE.Get(tId).UndoManager
+						undoManager.Undo()
+						|> ignore
+					)
+				Button [Text "redo"]
+				|>! OnClick (fun el e ->
+						let undoManager = TinyMCE.Get(tId).UndoManager
+						undoManager.Redo()
+						|> ignore
+					)
 			]
 			:> _
 
-
-
 Result:
 
-![Plugin](Plugin.png)\
+![ClassesUndoManager](ClassesUndoManager.png)\
 
-
-[TinyMCE-plugin]: http://tinymce.moxiecode.com/tryit/listbox_splitbutton.php

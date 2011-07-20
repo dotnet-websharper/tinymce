@@ -11,13 +11,16 @@
     <Content Include="IntelliFactory.WebSharper.TinyMce.xml" />
     <Content Include="Overview.txt" />
     <None Include="FormletDefault.png" />
-    <Content Include="Formlet.txt" />
     <Content Include="Direct.txt" />
     <Content Include="Classes.txt" />
+    <Content Include="Formlet.txt" />
     <None Include="ClassesEditor.png" />
     <None Include="DirectBindings.png" />
     <None Include="ClassesUndoManager.png" />
     <None Include="ClassesSelection.png" />
-    <None Include="Plugin.png" />
+    <None Include="Plugins.png" />
+    <None Include="NamespaceTinyMCE.png" />
+    <Content Include="NamespaceTinyMCE.txt" />
+    <Content Include="Plugins.txt" />
   </ItemGroup>
 </Project>

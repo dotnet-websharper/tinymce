@@ -7,5 +7,7 @@
   <xi:include href="Overview.docbook" />
   <xi:include href="Formlet.docbook" />
   <xi:include href="Direct.docbook" />
+  <xi:include href="NamespaceTinyMCE.docbook" />
   <xi:include href="Classes.docbook" />
+  <xi:include href="Plugins.docbook" />
 </book>

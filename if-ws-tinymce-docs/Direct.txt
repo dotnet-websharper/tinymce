@@ -1,7 +1,10 @@
-﻿% Direct 
+% Direct 
 
-`SimpleHtmlEditor` and `AdvancedHtmlEditor` formlets provide easy way to create `TinyMCE` editor.
-`TinyMCE` editor can be created in similar way to that in `JavaScript` by accessing direct bindings.
+`SimpleHtmlEditor` and `AdvancedHtmlEditor` formlets provide an easy way to create a `TinyMCE` editor.
+Using direct bindings a `TinyMCE` editor can be created in a few lines of code.
+
+The main advantage of creating an editor directly is ability to specify 
+more configuration options and access to direct bindings.
 
 Following example shows how to create `TinyMCE` editor using direct bindings:
 
@@ -32,8 +35,6 @@ Result:
 ![FormletDefault](DirectBindings.png)\
 
 
-The main advantage of creating editor directly is ability to specify 
-more configuration options and access to direct bindings.
 
 
 

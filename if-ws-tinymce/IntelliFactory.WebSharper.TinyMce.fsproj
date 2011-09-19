@@ -9,8 +9,8 @@
     <OutputType>Library</OutputType>
     <Name>IntelliFactory.WebSharper.TinyMce</Name>
     <RootNamespace>$(Name)</RootNamespace>
-    <AssemblyName>IntelliFactory.WebSharper.TinyMce</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <AssemblyName>$(Name)</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,7 +31,7 @@
     <WarningLevel>3</WarningLevel>
     <DocumentationFile>bin\Release\$(Name).XML</DocumentationFile>
   </PropertyGroup>
-  <Import Project="$(INTELLIFACTORY)/build/IntelliFactory.WebSharper.InterfaceGenerator-2.3.targets" />
+  <Import Project="..\.build\lib\IntelliFactory.WebSharper.InterfaceGenerator.targets" />
   <ItemGroup>
     <Compile Include="Definitions.fs" />
     <Compile Include="Main.fs" />
@@ -40,11 +40,10 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core" />
-    <Reference Include="FSharp.PowerPack" />
     <Reference Include="System" />
     <Reference Include="mscorlib" />
-    <Reference Include="IntelliFactory.Json" />
     <Reference Include="IntelliFactory.WebSharper" />
+    <Reference Include="IntelliFactory.WebSharper.Core" />
     <Reference Include="IntelliFactory.WebSharper.InterfaceGenerator" />
     <Reference Include="IntelliFactory.WebSharper.Dom" />
     <Reference Include="IntelliFactory.WebSharper.Ecma" />

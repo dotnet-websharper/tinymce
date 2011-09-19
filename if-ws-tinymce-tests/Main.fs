@@ -1,4 +1,4 @@
-﻿namespace IntelliFactory.WebSharper.TinyMce.Test
+﻿namespace IntelliFactory.WebSharper.TinyMce.Tests
 
 open IntelliFactory.WebSharper.TinyMce
 open IntelliFactory.WebSharper.Formlet.TinyMce
@@ -269,6 +269,7 @@ type SampleControl () =
         
 *)
 
+[<Sealed>]
 type SampleControl () =
     inherit Web.Control()
 

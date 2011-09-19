@@ -59,7 +59,7 @@ type ButtonType =
 type ButtonRow = list<ButtonType>
 
 type Theme =
-    | Simple 
+    | Simple
     | Advanced
     | Custom of string
 
@@ -134,16 +134,16 @@ type internal HtmlEditorConfiguration=
     }
     with
         [<JavaScript>]
-        static member Default = 
+        static member Default =
             {
                 Theme = Theme.Simple
                 Width = None
                 Height = None
                 Plugins = None
-                AdvancedToolbarLocation = None 
-                AdvancedToolbarAlign = None 
-                AdvancedStatusbarLocation = None 
-                AdvancedButtons = None 
+                AdvancedToolbarLocation = None
+                AdvancedToolbarAlign = None
+                AdvancedStatusbarLocation = None
+                AdvancedButtons = None
             }
 
 type SimpleHtmlEditorConfiguration =
@@ -151,7 +151,7 @@ type SimpleHtmlEditorConfiguration =
         Width : option<int>
         Height : option<int>
     }
-    with 
+    with
         [<JavaScript>]
         static member Default =
             {
@@ -169,7 +169,7 @@ type AdvancedHtmlEditorConfiguration =
         StatusbarLocation : option<StatusbarLocation>
         Buttons : option<list<ButtonRow>>
     }
-    with 
+    with
         [<JavaScript>]
         static member Default =
             {
@@ -181,7 +181,7 @@ type AdvancedHtmlEditorConfiguration =
                 StatusbarLocation  = None
                 Buttons = None
             }
-    
+
 
 
 module Controls =
@@ -215,7 +215,7 @@ module Controls =
                         Onchange_callback = (fun tMce ->
                             trigger <| tMce.GetContent ()
                         ),
-                        
+
                         Oninit = (fun () ->
                             let e = TinyMCE.Get(tId)
                             e.OnKeyUp.Add (fun (e: Editor) ->
@@ -223,55 +223,49 @@ module Controls =
                             )
                             |> ignore
                         )
-                )
+                    )
 
                 match conf.Height with
                 | Some h -> tConf.Height <- (string h) + "px"
-                | None   -> ()
+                | None -> ()
 
                 match conf.Width with
                 | Some w -> tConf.Width <- (string w) + "px"
-                | None   -> ()
+                | None -> ()
 
                 match conf.Plugins with
                 | Some s -> tConf.Plugins <- s
-                | None   -> ()
+                | None -> ()
 
                 match conf.AdvancedToolbarAlign with
-                | Some ta -> 
+                | Some ta ->
                     tConf.Theme_advanced_toolbar_align <- ta
-                | None ->
-                    ()
+                | None -> ()
 
                 match conf.AdvancedStatusbarLocation with
-                | Some l -> 
+                | Some l ->
                     tConf.Theme_advanced_statusbar_location <- l
-                | None ->
-                    ()
+                | None -> ()
 
                 match conf.AdvancedToolbarLocation with
-                | Some l -> 
+                | Some l ->
                     tConf.Theme_advanced_toolbar_location <- l
-                | None ->
-                    ()
+                | None -> ()
 
                 match conf.AdvancedButtons with
-                | Some bs -> 
+                | Some bs ->
                     bs
                     |> List.iteri (fun ix row ->
                         let prop = "theme_advanced_buttons" + (string <| ix + 1)
                         match row with
-                        | [] ->
-                            JavaScript.Set tConf prop ""
+                        | [] -> (?<-) tConf prop ""
                         | _  ->
                             row
                             |> Seq.map Utils.ShowButtonType
                             |> Seq.reduce (fun x y -> x + "," + y)
                             |> fun x ->
-                                JavaScript.Set tConf prop x
-                    )
-                | None   -> ()
-
+                                (?<-) tConf prop x)
+                | None -> ()
                 tConf
 
             let body =
@@ -282,7 +276,7 @@ module Controls =
 
                     trigger defContent
                 )
-            let reset () = 
+            let reset () =
                 let tinyMce = TinyMCE.Get(tId)
                 tinyMce.SetContent(defContent)
                 |> ignore
@@ -291,7 +285,7 @@ module Controls =
             body, reset, state.Publish
 
     [<JavaScript>]
-    let SimpleHtmlEditor (conf: SimpleHtmlEditorConfiguration)  = 
+    let SimpleHtmlEditor (conf: SimpleHtmlEditorConfiguration)  =
         { HtmlEditorConfiguration.Default with
             Theme = Theme.Simple
             Width = conf.Width
@@ -300,7 +294,7 @@ module Controls =
         |> HtmlEditor
 
     [<JavaScript>]
-    let AdvancedHtmlEditor (conf: AdvancedHtmlEditorConfiguration)  = 
+    let AdvancedHtmlEditor (conf: AdvancedHtmlEditorConfiguration)  =
         { HtmlEditorConfiguration.Default with
             Theme = Theme.Advanced
             Width = conf.Width

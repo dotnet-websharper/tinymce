@@ -1,4 +1,4 @@
-﻿namespace IntelliFactory.WebSharper.TinyMce.Test
+﻿namespace IntelliFactory.WebSharper.TinyMce.Tests
 
 open IntelliFactory.WebSharper.TinyMce
 open IntelliFactory.WebSharper.Formlet.TinyMce

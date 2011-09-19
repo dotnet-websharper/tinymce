@@ -15,5 +15,6 @@
     <dependency name="if-ws-collections-2.4" rev="latest.integration" branch="2.4" /> 
     <dependency name="if-ws-control-2.4" rev="latest.integration" branch="2.4" />
     <dependency name="if-ws-formlets-2.4" rev="latest.integration" branch="2.4" />
+    <dependency name="if-ws-ecma-2.4" rev="latest.integration" branch="2.4" />
   </dependencies>
 </ivy-module>

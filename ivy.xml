@@ -1,6 +1,5 @@
-<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:noNamespaceSchemaLocation="http://doiop.com/ivy-2.1.0.xsd">
-  <info organisation="IntelliFactory" module="if-ws-tinymce-2.4" revision="2.4" />
+<ivy-module version="2.0">
+  <info organisation="IntelliFactory" module="if-ws-tinymce" revision="2.4" />
   <publications>
     <artifact name="IntelliFactory.WebSharper.Formlet.TinyMce" ext="dll" type="bin" />
     <artifact name="IntelliFactory.WebSharper.Formlet.TinyMce" ext="pdb" type="debug" />
@@ -10,11 +9,11 @@
     <artifact name="if-ws-tinymce-docs" ext="zip" type="doc" />
   </publications>
   <dependencies>
-    <dependency name="if-formlet-2.4" rev="latest.integration" branch="2.4" />
-    <dependency name="if-ws-2.4" rev="latest.integration" branch="2.4" />
-    <dependency name="if-ws-collections-2.4" rev="latest.integration" branch="2.4" /> 
-    <dependency name="if-ws-control-2.4" rev="latest.integration" branch="2.4" />
-    <dependency name="if-ws-formlets-2.4" rev="latest.integration" branch="2.4" />
-    <dependency name="if-ws-ecma-2.4" rev="latest.integration" branch="2.4" />
+    <dependency name="if-formlet" rev="latest.integration" />
+    <dependency name="if-ws" rev="latest.integration"  />
+    <dependency name="if-ws-collections" rev="latest.integration" /> 
+    <dependency name="if-ws-control" rev="latest.integration" />
+    <dependency name="if-ws-formlets" rev="latest.integration" />
+    <dependency name="if-ws-ecma" rev="latest.integration" />
   </dependencies>
 </ivy-module>

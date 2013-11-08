@@ -1,10 +1,13 @@
 ﻿namespace IntelliFactory.WebSharper.TinyMceExtension
 
+open IntelliFactory.WebSharper.InterfaceGenerator
+
 module TinyMce =
-    open IntelliFactory.WebSharper.InterfaceGenerator
     open IntelliFactory.WebSharper.Dom;
     open IntelliFactory.WebSharper.EcmaScript;
-        
+
+    let Res = (Resource "TinyMce" "/js/tiny_mce/tiny_mce.js").AssemblyWide()
+
     let private ConstantStrings ty l =
         List.map (fun s -> (s =? ty |> WithGetterInline ("'" + s + "'")) :> CodeModel.IClassMember) l
 
@@ -1305,6 +1308,9 @@ module TinyMce =
 
     let Assembly =
         Assembly [
+            Namespace "IntelliFactory.WebSharper.TinyMce.Resources" [
+                Res
+            ]
             Namespace "IntelliFactory.WebSharper.TinyMce" [
                 TinyMCEConfigurationClass
                 TinyMCEClass
@@ -1341,3 +1347,12 @@ module TinyMce =
             ]
         ]
 
+
+
+[<Sealed>]
+type TinyMceExtension() =
+    interface IExtension with
+        member x.Assembly = TinyMce.Assembly
+
+[<assembly: Extension(typeof<TinyMceExtension>)>]
+do ()

@@ -7,6 +7,7 @@ let bt =
             [
                 r.Assembly "System.Web"
             ])
+    |> fun bt -> bt.WithFramework(bt.Framework.Net40)
 
 let main =
     bt.WebSharper.Extension("IntelliFactory.WebSharper.TinyMce")

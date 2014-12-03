@@ -2,7 +2,7 @@
 open IntelliFactory.Build
 
 let bt =
-    BuildTool().PackageId("WebSharper.TinyMce", "2.5")
+    BuildTool().PackageId("WebSharper.TinyMce", "3.0-alpha")
         .References(fun r ->
             [
                 r.Assembly "System.Web"

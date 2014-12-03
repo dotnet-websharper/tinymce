@@ -1,13 +1,5 @@
 <ivy-module version="2.0">
-  <info organisation="IntelliFactory" module="websharper.tinymce" revision="2.5" />
-  <publications>
-    <artifact name="IntelliFactory.WebSharper.Formlet.TinyMce" ext="dll" type="bin" />
-    <artifact name="IntelliFactory.WebSharper.Formlet.TinyMce" ext="pdb" type="debug" />
-    <artifact name="IntelliFactory.WebSharper.TinyMce" ext="dll" type="bin"  />
-    <artifact name="IntelliFactory.WebSharper.TinyMce" ext="pdb" type="debug" />
-    <artifact name="IntelliFactory.WebSharper.TinyMce" ext="xml" type="doc"  />
-    <artifact name="if-ws-tinymce-docs" ext="zip" type="doc" />
-  </publications>
+  <info organisation="IntelliFactory" module="websharper.tinymce" revision="3.0" />
   <dependencies>
     <dependency name="websharper" rev="latest.integration"  />
   </dependencies>

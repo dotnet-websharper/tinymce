@@ -1,10 +1,10 @@
 ﻿namespace IntelliFactory.WebSharper.TinyMceExtension
 
+open IntelliFactory.WebSharper
 open IntelliFactory.WebSharper.InterfaceGenerator
 
 module TinyMce =
-    open IntelliFactory.WebSharper.Dom;
-    open IntelliFactory.WebSharper.EcmaScript;
+    open IntelliFactory.WebSharper.JavaScript.Dom
 
     let Res = (Resource "TinyMce" "/js/tiny_mce/tiny_mce.js").AssemblyWide()
 
@@ -622,10 +622,10 @@ module TinyMce =
                 "renderNode" => T<unit> ^-> T<Element> 
                 |> WithComment "Renders the specified menu node to the dom."
 
-                "showMenu" => T<Number> * T<Number> ^-> T<unit> 
+                "showMenu" => T<int> * T<int> ^-> T<unit> 
                 |> WithComment "Displays the menu at the specified cordinate."
 
-                "showMenu" => T<Number> * T<Number> * T<Number> ^-> T<unit> 
+                "showMenu" => T<int> * T<int> * T<int> ^-> T<unit> 
                 |> WithComment "Displays the menu at the specified cordinate."
 
                 "update" => T<unit> ^-> T<unit> 
@@ -863,7 +863,7 @@ module TinyMce =
                 "destroy" => T<unit> ^-> T<unit> 
                 |> WithComment "Destroys the ListBox i.e. clear memory and events."
 
-                "getLength" => T<unit> ^-> T<Number> 
+                "getLength" => T<unit> ^-> T<int> 
                 |> WithComment "Returns the number of items inside the list box."
 
                 "hideMenu" => T<unit> ^-> T<unit> 
@@ -930,7 +930,7 @@ module TinyMce =
                 "add" => T<string> * T<string> * T<obj> ^-> T<unit> 
                 |> WithComment "Adds a option item to the list box."
 
-                "getLength" => T<unit> ^-> T<Number> 
+                "getLength" => T<unit> ^-> T<int> 
                 |> WithComment "Returns the number of items inside the list box."
 
                 "isDisabled" => T<unit> ^-> T<bool> 

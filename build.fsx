@@ -14,7 +14,7 @@ let main =
         .SourcesFromProject()
 
 let formlet =
-    bt.WebSharper.Library("IntelliFactory.WebSharper.Formlet.TinyMce")
+    bt.WebSharper.Library("IntelliFactory.WebSharper.Formlets.TinyMce")
         .SourcesFromProject()
         .References(fun r -> [r.Project main])
 

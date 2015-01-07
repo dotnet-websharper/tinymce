@@ -1,12 +1,13 @@
-﻿namespace IntelliFactory.WebSharper.Formlet.TinyMce
+﻿namespace IntelliFactory.WebSharper.Formlets.TinyMce
 
 
 
-open IntelliFactory.Formlet
-open IntelliFactory.WebSharper.Formlet
+open IntelliFactory.Formlets
+open IntelliFactory.WebSharper.Formlets
 open IntelliFactory.WebSharper
+open IntelliFactory.WebSharper.JavaScript
 open IntelliFactory.WebSharper.TinyMce
-open IntelliFactory.WebSharper.Html
+open IntelliFactory.WebSharper.Html.Client
 
 /// Represents available buttons.
 type ButtonType =

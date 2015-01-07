@@ -1,10 +1,10 @@
 ﻿namespace IntelliFactory.WebSharper.TinyMce.Tests
 
 open IntelliFactory.WebSharper.TinyMce
-open IntelliFactory.WebSharper.Formlet.TinyMce
+open IntelliFactory.WebSharper.Formlets.TinyMce
 open IntelliFactory.WebSharper
-open IntelliFactory.WebSharper.Html
-open IntelliFactory.WebSharper.Formlet
+open IntelliFactory.WebSharper.Html.Client
+open IntelliFactory.WebSharper.Formlets
 open IntelliFactory.WebSharper.Web
 
 (*
@@ -286,7 +286,7 @@ type Act = | Index
 
 module Site =
 
-    open IntelliFactory.Html
+    open IntelliFactory.WebSharper.Html.Server
 
     let HomePage =
         Sitelets.Content.PageContent <| fun ctx ->

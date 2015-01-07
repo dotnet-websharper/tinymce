@@ -1,20 +1,16 @@
 ﻿namespace IntelliFactory.WebSharper.TinyMce.Tests
 
-open IntelliFactory.WebSharper.TinyMce
-open IntelliFactory.WebSharper.Formlet.TinyMce
 open IntelliFactory.WebSharper
-open IntelliFactory.WebSharper.Html
-open IntelliFactory.WebSharper.Formlet
+open IntelliFactory.WebSharper.JavaScript
+open IntelliFactory.WebSharper.Formlets
 open IntelliFactory.WebSharper.Web
 open IntelliFactory.WebSharper.JQuery
+open IntelliFactory.WebSharper.TinyMce
+open IntelliFactory.WebSharper.Formlets.TinyMce
+open IntelliFactory.WebSharper.Html.Client
 
 module Test =
 
-    module U = 
-        [<Inline "console.log($x)">]
-        let Log x = ()
-        
-    
     module Formlet =
             
         [<JavaScript>]
@@ -120,7 +116,7 @@ module Test =
                         Mode = Mode.Exact,
                         Elements = tId,
                         Onchange_callback = (fun ed ->
-                            JavaScript.Alert(ed.GetContent()) 
+                            JS.Alert(ed.GetContent()) 
                         )
                     )
                 TinyMCE.Init(config)
@@ -144,7 +140,7 @@ module Test =
                         Oninit = (fun () ->
                             let editor = TinyMCE.Get(tId)
                             editor.OnKeyUp.Add( fun (ed:Editor) ->
-                                JavaScript.Alert(ed.GetContent()) 
+                                JS.Alert(ed.GetContent()) 
                             )
                             |> ignore
                         )
@@ -170,7 +166,7 @@ module Test =
                         Oninit = (fun () ->
                             let editor = TinyMCE.Get(tId)
                             editor.OnClick.Add( fun (ed:Editor) ->
-                                JavaScript.Alert(ed.GetContent()) 
+                                JS.Alert(ed.GetContent()) 
                             )
                             |> ignore
                         )
@@ -238,7 +234,7 @@ module Test =
                 Button [Text "get selection"]
                 |>! OnClick (fun el e ->
                         let selection = TinyMCE.Get(tId).Selection
-                        JavaScript.Alert(selection.GetContent())
+                        JS.Alert(selection.GetContent())
                 )
                 Button [Text "replace selection with foo"]
                 |>! OnClick (fun el e ->

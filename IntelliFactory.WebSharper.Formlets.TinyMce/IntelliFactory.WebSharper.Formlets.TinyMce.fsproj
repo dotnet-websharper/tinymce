@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{501ca443-9b83-45db-9693-f2f3677a44c4}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <Name>IntelliFactory.WebSharper.Formlet.TinyMce</Name>
+    <Name>IntelliFactory.WebSharper.Formlets.TinyMce</Name>
     <RootNamespace>$(Name)</RootNamespace>
     <AssemblyName>$(Name)</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -42,12 +42,12 @@
     <Reference Include="IntelliFactory.WebSharper.Dom" />
     <Reference Include="IntelliFactory.WebSharper.JQuery" />
     <Reference Include="IntelliFactory.WebSharper.Html" />
-    <Reference Include="IntelliFactory.Formlet" />
+    <Reference Include="IntelliFactory.Formlets" />
     <Reference Include="IntelliFactory.Reactive" />
     <Reference Include="IntelliFactory.WebSharper.Core" />
     <Reference Include="IntelliFactory.WebSharper.Control" />
     <Reference Include="IntelliFactory.WebSharper.Collections" />
-    <Reference Include="IntelliFactory.WebSharper.Formlet" />
+    <Reference Include="IntelliFactory.WebSharper.Formlets" />
     <Reference Include="IntelliFactory.WebSharper.Ecma" />
   </ItemGroup>
   <ItemGroup>

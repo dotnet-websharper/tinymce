@@ -10,6 +10,7 @@ module TinyMce =
 
     let private ConstantStrings ty l =
         List.map (fun s -> (s =? ty |> WithGetterInline ("'" + s + "'")) :> CodeModel.IClassMember) l
+        |> Static
 
 
     let DialogType = Type.New ()
@@ -246,7 +247,7 @@ module TinyMce =
     let UndoManagerClass = 
         Class "tinymce.UndoManager"
         |=> UndoManager
-        |+> Protocol
+        |+> Instance
             [
                 // methods
                 "add" => T<obj> ^-> T<obj>
@@ -283,10 +284,10 @@ module TinyMce =
     let Dispatcher = Type.New()
 
     let DispatcherClass = 
-        Generic / fun t1 t2 ->
+        Generic - fun t1 t2 ->
             Class "Dispatcher"
             |=> Dispatcher
-            |+> Protocol
+            |+> Instance
                 [
                     // methods
                     "add" => (t1 ^-> T<unit>) ^-> (t1 ^-> T<unit>)
@@ -315,7 +316,7 @@ module TinyMce =
     let DispatcherClass = 
         Class "tinymce.util.Dispatcher"
         |=> Dispatcher
-        |+> Protocol
+        |+> Instance
             [
                 // methods
                 "add" => (Editor ^-> T<unit>) ^-> (Editor ^-> T<unit>)
@@ -344,7 +345,7 @@ module TinyMce =
     let SelectionClass = 
         Class "tinymce.dom.Selection"
         |=> Selection
-        |+> Protocol
+        |+> Instance
             [
                 // methods
                 "getContent" => T<unit> ^-> T<string> 
@@ -371,7 +372,7 @@ module TinyMce =
                 ]
         }
         |=> ControlConfiguration
-        |+> Protocol [
+        |+> Instance [
                 "class" =% T<string>
                 |> WithSourceName "Class"
             ]
@@ -382,7 +383,7 @@ module TinyMce =
     let ControlClass = 
         Class "tinymce.ui.Control"
         |=> Control
-        |+> [
+        |+> Static [
                 // constructors
                 Constructor (T<string>)
                 |> WithComment "Constructs a new control instance."
@@ -390,7 +391,7 @@ module TinyMce =
                 Constructor (T<string> * T<obj>)
                 |> WithComment "Constructs a new control instance."
             ]
-        |+> Protocol
+        |+> Instance
             [
                 "setDisabled" => T<bool> ^-> T<unit> 
                 |> WithComment "Sets the disabled state for the control. This will add CSS classes to the element that contains the control. So that it can be disabled visually."
@@ -434,7 +435,7 @@ module TinyMce =
         Class "tinymce.ui.Separator"
         |=> Inherits ControlClass 
         |=> Separator
-        |+> [
+        |+> Static [
                 // constructors
                 Constructor (T<string>)
                 |> WithComment "Separator constructor."
@@ -442,7 +443,7 @@ module TinyMce =
                 Constructor (T<string> * T<obj>)
                 |> WithComment "Separator constructor."
             ]
-        |+> Protocol
+        |+> Instance
             [
                 "renderHTML" => T<unit> ^-> T<string> 
                 |> WithComment "Renders the separator as a HTML string. This method is much faster than using the DOM and when creating a whole toolbar with buttons it does make a lot of difference."
@@ -457,7 +458,7 @@ module TinyMce =
         Class "tinymce.ui.MenuButton"
         |=> Inherits ControlClass 
         |=> MenuButton
-        |+> [
+        |+> Static [
                 // constructors
                 Constructor (T<string>)
                 |> WithComment "Constructs a new split button control instance."
@@ -468,7 +469,7 @@ module TinyMce =
                 Constructor (T<string> * T<obj> * Editor)
                 |> WithComment "Constructs a new split button control instance."
             ]
-        |+> Protocol
+        |+> Instance
             [
 
                 // methods
@@ -499,7 +500,7 @@ module TinyMce =
         Class "tinymce.ui.MenuItem"
         |=> Inherits ControlClass 
         |=> MenuItem
-        |+> [
+        |+> Static [
                 // constructors
                 Constructor (T<string>)
                 |> WithComment "Constructs a new button control instance."
@@ -507,7 +508,7 @@ module TinyMce =
                 Constructor (T<string> * T<obj>)
                 |> WithComment "Constructs a new button control instance."
             ]
-        |+> Protocol
+        |+> Instance
             [
 
                 // methods
@@ -528,7 +529,7 @@ module TinyMce =
         Class "tinymce.ui.Menu"
         |=> Inherits MenuItem 
         |=> Menu
-        |+> [
+        |+> Static [
                 // constructors
                 Constructor (T<string>)
                 |> WithComment "Constructs a new button control instance."
@@ -536,7 +537,7 @@ module TinyMce =
                 Constructor (T<string> * T<obj>)
                 |> WithComment "Constructs a new button control instance."
             ]
-        |+> Protocol
+        |+> Instance
             [
 
                 // methods
@@ -583,7 +584,7 @@ module TinyMce =
         Class "tinymce.ui.DropMenu"
         |=> Inherits Menu
         |=> DropMenu
-        |+> [
+        |+> Static [
                 // constructors
                 Constructor (T<string>)
                 |> WithComment "Constructs a new drop menu control instance."
@@ -591,7 +592,7 @@ module TinyMce =
                 Constructor (T<string> * T<obj>)
                 |> WithComment "Constructs a new drop menu control instance."
             ]
-        |+> Protocol
+        |+> Instance
             [
 
                 // methods
@@ -643,7 +644,7 @@ module TinyMce =
         Class "tinymce.ui.Button"
         |=> Inherits ControlClass 
         |=> Button
-        |+> [
+        |+> Static [
                 // constructors
                 Constructor (T<string>)
                 |> WithComment "Constructs a new button control instance."
@@ -654,7 +655,7 @@ module TinyMce =
                 Constructor (T<string> * T<obj> * Editor)
                 |> WithComment "Constructs a new button control instance."
             ]
-        |+> Protocol
+        |+> Instance
             [
                 "postRender" => T<unit> ^-> T<unit> 
                 |> WithComment "Post render handler. This function will be called after the UI has been rendered so that events can be added."
@@ -670,7 +671,7 @@ module TinyMce =
         Class "tinymce.ui.SplitButton"
         |=> Inherits ButtonClass
         |=> SplitButton
-        |+> [
+        |+> Static [
                 // constructors
                 Constructor (T<string>)
                 |> WithComment "Constructs a new split button control instance."
@@ -681,7 +682,7 @@ module TinyMce =
                 Constructor (T<string> * T<obj> * Editor)
                 |> WithComment "Constructs a new split button control instance."
             ]
-        |+> Protocol
+        |+> Instance
             [
                 // methods
                 "postRender" => T<unit> ^-> T<unit> 
@@ -701,7 +702,7 @@ module TinyMce =
         Class "tinymce.ui.ColorSplitButton"
         |=> Inherits SplitButton
         |=> ColorSplitButton
-        |+> [
+        |+> Static [
                 // constructors
                 Constructor (T<string>)
                 |> WithComment "Constructs a new button control instance."
@@ -712,7 +713,7 @@ module TinyMce =
                 Constructor (T<string> * T<obj> * Editor)
                 |> WithComment "Constructs a new button control instance."
             ]
-        |+> Protocol
+        |+> Instance
             [
                 // properties
                 "settings" =? T<obj>
@@ -763,7 +764,7 @@ module TinyMce =
         Class "tinymce.ui.Container"
         |=> Inherits ControlClass 
         |=> Container
-        |+> [
+        |+> Static [
                 // constructors
                 Constructor (T<string>)
                 |> WithComment "Base contrustor a new container control instance."
@@ -772,7 +773,7 @@ module TinyMce =
                 |> WithComment "Base contrustor a new container control instance."
 
             ]
-        |+> Protocol
+        |+> Instance
             [
                 // properties
                 "controls" =? Type.ArrayOf Control
@@ -794,9 +795,9 @@ module TinyMce =
         Class "tinymce.ui.Toolbar"
         |=> Inherits ContainerClass 
         |=> Toolbar
-        |+> [
+        |+> Static [
             ]
-        |+> Protocol
+        |+> Instance
             [
                 // properties
                 "controls" =? Type.ArrayOf Control
@@ -814,9 +815,9 @@ module TinyMce =
         Class "tinymce.ui.ToolbarGroup"
         |=> Inherits ContainerClass 
         |=> ToolbarGroup
-        |+> [
+        |+> Static [
             ]
-        |+> Protocol
+        |+> Instance
             [
                 // properties
                 "controls" =? Type.ArrayOf Control
@@ -835,7 +836,7 @@ module TinyMce =
         Class "tinymce.ui.ListBox"
         |=> Inherits ControlClass 
         |=> ListBox
-        |+> [
+        |+> Static [
                 // constructors
                 Constructor (T<string>)
                 |> WithComment "Constructs a new listbox control instance."
@@ -846,7 +847,7 @@ module TinyMce =
                 Constructor (T<string> * T<obj> * Editor)
                 |> WithComment "Constructs a new listbox control instance."
             ]
-        |+> Protocol
+        |+> Instance
             [
                 // properties
                 "items" =? Type.ArrayOf Control
@@ -913,7 +914,7 @@ module TinyMce =
         Class "tinymce.ui.NativeListBox"
         |=> Inherits ListBoxClass 
         |=> NativeListBox
-        |+> [
+        |+> Static [
                 // constructors
                 Constructor (T<string>)
                 |> WithComment "Constructs a new button control instance."
@@ -921,7 +922,7 @@ module TinyMce =
                 Constructor (T<string> * T<obj>)
                 |> WithComment "Constructs a new button control instance."
             ]
-        |+> Protocol
+        |+> Instance
             [
                 // methods
                 "add" => T<string> * T<string> ^-> T<unit> 
@@ -961,12 +962,12 @@ module TinyMce =
     let PluginManagerClass = 
         Class "tinymce.PluginManager"
         |=> PluginManager
-        |+> [
+        |+> Static [
                 // methods
                 "add" => T<string> * T<obj> ^-> T<unit> 
                 |> WithComment "Register plugin with a short name."
             ]
-        |+> Protocol
+        |+> Instance
             [
             ]
 
@@ -976,12 +977,12 @@ module TinyMce =
     let WindowManagerClass = 
         Class "tinymce.WindowManager"
         |=> WindowManager
-        |+> [
+        |+> Static [
                 // constructors
                 Constructor (Editor)
                 |> WithComment "Constructs a new window manager instance."
             ]
-        |+> Protocol
+        |+> Instance
             [
                 // methods
                 "alert" => T<string> ^-> T<unit> 
@@ -1001,7 +1002,7 @@ module TinyMce =
     let ControlManagerClass = 
         Class "tinymce.ControlManager"
         |=> ControlManager
-        |+> [
+        |+> Static [
                 // constructors
                 Constructor (Editor)
                 |> WithComment "Constructs a new control manager instance."
@@ -1010,7 +1011,7 @@ module TinyMce =
                 |> WithComment "Constructs a new control manager instance."
 
             ]
-        |+> Protocol
+        |+> Instance
             [
                 // methods
                 "get" => T<string> ^-> Control 
@@ -1123,7 +1124,7 @@ module TinyMce =
     let EditorClass = 
         Class "tinymce.Editor"
         |=> Editor
-        |+> Protocol
+        |+> Instance
             [
                 // properties
                 "id" =? T<string>
@@ -1259,7 +1260,7 @@ module TinyMce =
     let TinyMCEClass =
         Class "tinyMCE"
         |=> TinyMCE
-        |+> [
+        |+> Static [
                 // properties
                 "editors" =? Type.ArrayOf Editor 
                 |> WithComment "The editor collection."
@@ -1320,7 +1321,7 @@ module TinyMce =
                 EntityEncodingClass
                 EditorClass
                 UndoManagerClass
-                Generic - fun t u -> DispatcherClass t u
+                DispatcherClass
                 SelectionClass
                 ToolbarLocationClass
                 ToolbarAlignClass

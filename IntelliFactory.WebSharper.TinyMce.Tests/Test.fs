@@ -310,7 +310,7 @@ module Test =
                     | _ -> null
 
 
-                let plugin = new Plugin ( CreateControl = createMenu )
+                let plugin = new Plugin ( CreateControl = FuncWithArgs createMenu )
 
                 TinyMCE.Create("tinymce.plugins.CustomListBoxSplitButtonPlugin", plugin)
 
@@ -393,7 +393,7 @@ module Test =
                     | _ -> null
 
 
-                let plugin = new Plugin ( CreateControl = createMenu )
+                let plugin = new Plugin ( CreateControl = FuncWithArgs(createMenu) )
 
                 TinyMCE.Create("tinymce.plugins.MenuButtonPlugin", plugin)
 

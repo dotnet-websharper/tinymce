@@ -10,18 +10,29 @@ let bt =
     |> fun bt -> bt.WithFramework(bt.Framework.Net40)
 
 let main =
-    bt.WebSharper.Extension("IntelliFactory.WebSharper.TinyMce")
+    bt.WebSharper.Extension("WebSharper.TinyMce")
         .SourcesFromProject()
 
 let formlet =
-    bt.WebSharper.Library("IntelliFactory.WebSharper.Formlets.TinyMce")
+    bt.WebSharper.Library("WebSharper.Formlets.TinyMce")
         .SourcesFromProject()
-        .References(fun r -> [r.Project main])
+        .References(fun r ->
+            [
+                r.NuGet("IntelliFactory.Reactive").Reference()
+                r.NuGet("WebSharper.Formlets").Reference()
+                r.Project main
+            ])
 
 let test =
-    bt.WebSharper.HtmlWebsite("IntelliFactory.WebSharper.TinyMce.Tests")
+    bt.WebSharper.HtmlWebsite("WebSharper.TinyMce.Tests")
         .SourcesFromProject()
-        .References(fun r -> [r.Project main; r.Project formlet])
+        .References(fun r ->
+            [
+                r.NuGet("IntelliFactory.Reactive").Reference()
+                r.NuGet("WebSharper.Formlets").Reference()
+                r.Project main
+                r.Project formlet
+            ])
 
 bt.Solution [
     main

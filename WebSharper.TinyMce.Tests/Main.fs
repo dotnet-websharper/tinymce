@@ -1,11 +1,11 @@
-﻿namespace IntelliFactory.WebSharper.TinyMce.Tests
+﻿namespace WebSharper.TinyMce.Tests
 
-open IntelliFactory.WebSharper.TinyMce
-open IntelliFactory.WebSharper.Formlets.TinyMce
-open IntelliFactory.WebSharper
-open IntelliFactory.WebSharper.Html.Client
-open IntelliFactory.WebSharper.Formlets
-open IntelliFactory.WebSharper.Web
+open WebSharper.TinyMce
+open WebSharper.Formlets.TinyMce
+open WebSharper
+open WebSharper.Html.Client
+open WebSharper.Formlets
+open WebSharper.Web
 
 (*
 type SampleControl () =
@@ -280,13 +280,13 @@ type SampleControl () =
 
 
 
-open IntelliFactory.WebSharper.Sitelets
+open WebSharper.Sitelets
 
 type Act = | Index
 
 module Site =
 
-    open IntelliFactory.WebSharper.Html.Server
+    open WebSharper.Html.Server
 
     let HomePage =
         Sitelets.Content.PageContent <| fun ctx ->

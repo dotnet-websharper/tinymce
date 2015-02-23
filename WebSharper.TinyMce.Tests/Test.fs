@@ -1,13 +1,13 @@
-﻿namespace IntelliFactory.WebSharper.TinyMce.Tests
+﻿namespace WebSharper.TinyMce.Tests
 
-open IntelliFactory.WebSharper
-open IntelliFactory.WebSharper.JavaScript
-open IntelliFactory.WebSharper.Formlets
-open IntelliFactory.WebSharper.Web
-open IntelliFactory.WebSharper.JQuery
-open IntelliFactory.WebSharper.TinyMce
-open IntelliFactory.WebSharper.Formlets.TinyMce
-open IntelliFactory.WebSharper.Html.Client
+open WebSharper
+open WebSharper.JavaScript
+open WebSharper.Formlets
+open WebSharper.Web
+open WebSharper.JQuery
+open WebSharper.TinyMce
+open WebSharper.Formlets.TinyMce
+open WebSharper.Html.Client
 
 module Test =
 

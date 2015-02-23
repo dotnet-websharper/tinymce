@@ -1,10 +1,10 @@
-﻿namespace IntelliFactory.WebSharper.TinyMceExtension
+﻿namespace WebSharper.TinyMceExtension
 
-open IntelliFactory.WebSharper
-open IntelliFactory.WebSharper.InterfaceGenerator
+open WebSharper
+open WebSharper.InterfaceGenerator
 
 module TinyMce =
-    open IntelliFactory.WebSharper.JavaScript.Dom
+    open WebSharper.JavaScript.Dom
 
     let Res = (Resource "TinyMce" "/js/tiny_mce/tiny_mce.js").AssemblyWide()
 
@@ -373,7 +373,7 @@ module TinyMce =
         }
         |=> ControlConfiguration
         |+> Instance [
-                "class" =% T<string>
+                "class" =@ T<string>
                 |> WithSourceName "Class"
             ]
 
@@ -1309,10 +1309,10 @@ module TinyMce =
 
     let Assembly =
         Assembly [
-            Namespace "IntelliFactory.WebSharper.TinyMce.Resources" [
+            Namespace "WebSharper.TinyMce.Resources" [
                 Res
             ]
-            Namespace "IntelliFactory.WebSharper.TinyMce" [
+            Namespace "WebSharper.TinyMce" [
                 TinyMCEConfigurationClass
                 TinyMCEClass
                 DialogTypeClass

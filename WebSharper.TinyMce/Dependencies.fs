@@ -9,10 +9,10 @@
 //-----------------------------------------------------------------
 // $end{copyright}
 
-namespace IntelliFactory.WebSharper.Bing.Dependencies
+namespace WebSharper.Bing.Dependencies
 
-open IntelliFactory.WebSharper
-module R = IntelliFactory.WebSharper.Resources
+open WebSharper
+module R = WebSharper.Resources
 
 /// Requires the Bing Maps API.
 type MapsAPI() =

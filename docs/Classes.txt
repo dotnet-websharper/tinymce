@@ -1,0 +1,179 @@
+% Classes 
+
+
+The `WebSharper` extension for `TinyMCE` provides many classes, for example:
+
+* `TinyMCEConfiguration` - Class not defined in `TinyMCE`, represents configuration options.
+* `Editor` - Editor class.
+* `UndoManager` - Class providing support for undo/redo operations.
+* `Selection` - Class representing current selection.
+
+
+
+# `Editor` class
+
+`Editor` class represents `TinyMCE` editor. Access to editor's content is provided by this class.
+
+Important members of this class:
+
+* `selection` - Instance of `Selection` class of the editor.
+* `undoManager` - Instance of `UndoManager` class of the editor. 
+* `execCommand(command:string)` - Executes specified command, commands are for example: `italic`, `bold`.
+* `show` - Makes an editor visible.
+* `hide` - Hides an editor.
+* `setContent(content:string)` - Sets an editor's content.
+* `getContent()` - Returns an editor's content.
+* `onClick()` - This event fires when an editor's body is clicked.
+* `onChange()` - This event fires when an editor's content is changed. 
+
+
+Following example creates an new editor. When an editor's body is clicked, it's content is showed inside an alert dialog.
+
+	#fsharp
+	type SampleControl () =
+		inherit Web.Control()
+	
+		[<JavaScript>]
+		let Init () =
+	
+			TinyMCE.Init (
+				new TinyMCEConfiguration(
+					Theme = "simple",
+					Mode = Mode.Textareas,
+					Oninit = (fun () ->
+						let editor = TinyMCE.Get("test_area")
+						editor.SetContent("New content") |> ignore
+						editor.OnClick.Add (fun (ed:Editor) ->
+									JavaScript.Alert(ed.GetContent())
+						) |> ignore
+					)
+						
+	
+				)
+			)
+	
+	
+		[<JavaScript>]
+		override this.Body = 
+			TextArea [Id "test_area"] -< [Text "Default  text"]
+			|>! OnAfterRender (fun _ ->
+				Init()
+			)
+			:> _
+
+Result:
+
+![ClassesEditor](ClassesEditor.png)\
+
+
+# `Selection` class
+
+`Selection` class manages selection. 
+
+
+Important members of this class:
+
+* `getContent()` - Returns the selected content.
+* `setContent(newContent)` - Replaces the selection with a given content.
+
+
+Following example creates an new editor and two buttons for getting the selected content and changing it:
+
+	#fsharp
+	type SampleControl () =
+		inherit Web.Control()
+	
+		[<JavaScript>]
+		let Init(tId) =
+			let config = 
+				new TinyMCEConfiguration (
+					Theme = "advanced",
+					Mode = Mode.Exact,
+					Elements = tId
+				)
+			TinyMCE.Init(config)
+	
+		[<JavaScript>]
+		override this.Body = 
+			let tId = NewId()
+			Div [
+				TextArea [Attr.Id tId; Text "default content"]
+				|>! OnAfterRender (fun el ->
+						Init(tId)
+					)
+				Button [Text "get selection"]
+				|>! OnClick (fun el e ->
+						let selection = TinyMCE.Get(tId).Selection
+						JavaScript.Alert(selection.GetContent())
+					)
+				Button [Text "replace selection with foo"]
+				|>! OnClick (fun el e ->
+						let selection = TinyMCE.Get(tId).Selection
+						selection.SetContent("foo")
+					)
+			]
+			:> _ 
+
+
+
+Result:
+
+![ClassesSelection](ClassesSelection.png)\
+
+
+
+# `UndoManager` class
+
+`UndoManager` class manages undo operations.
+
+
+Important members of this class:
+
+  * `undo()` - Undoes the last changes.
+  * `redo()` - Redoes the last changes.
+  * `onUndo(func)` - Fires given function when a user makes an undo.
+  * `onRedo(func)` - Fires given function when a user makes an redo.
+
+Following example creates new editor and adds buttons to undo and redo changes:
+
+	#fsharp
+	type SampleControl () =
+		inherit Web.Control()
+	
+		[<JavaScript>]
+		let Init(tId) =
+			let config = 
+				new TinyMCEConfiguration (
+					Theme = "advanced",
+					Mode = Mode.Exact,
+					Elements = tId
+				)
+			TinyMCE.Init(config)
+	
+		[<JavaScript>]
+		override this.Body = 
+			let tId = NewId()
+			Div [
+				TextArea [Attr.Id tId; Text "default content"]
+				|>! OnAfterRender (fun el ->
+						Init(tId)
+					)
+				Button [Text "undo"] 
+				|>! OnClick (fun el e ->
+						let undoManager = TinyMCE.Get(tId).UndoManager
+						undoManager.Undo()
+						|> ignore
+					)
+				Button [Text "redo"]
+				|>! OnClick (fun el e ->
+						let undoManager = TinyMCE.Get(tId).UndoManager
+						undoManager.Redo()
+						|> ignore
+					)
+			]
+			:> _
+
+Result:
+
+![ClassesUndoManager](ClassesUndoManager.png)\
+

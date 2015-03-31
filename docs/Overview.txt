@@ -1,0 +1,15 @@
+% Overview
+
+This WebSharper™ Extension provides a set of classes almost identical
+to the ones documented in the [TinyMCE Documentation][TinyMCE-documentation]. When used in
+WebSharper™ projects, these stub classes delegate the work to the
+actual classes implemented in TinyMCE.
+
+The extension was tested with TinyMCE 3.3.9.4. It provides formlet controls for the TinyMCE editor and 
+the bindings for the TinyMCE API.
+
+After adding the references to the project all the classes can be found
+under the `IntelliFactory.WebSharper.TinyMce` and `IntelliFactory.WebSharper.Formlet.TinyMce` modules.
+It is necessary to copy `TinyMCE`'s folder `tiny_mce` to `js` folder inside web project.
+
+[TinyMCE-documentation]: http://tinymce.moxiecode.com/wiki.php/TinyMCE 

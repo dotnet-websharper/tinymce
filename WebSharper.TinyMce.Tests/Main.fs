@@ -288,11 +288,11 @@ module Site =
 
     open WebSharper.Html.Server
 
-    let HomePage =
-        Sitelets.Content.PageContent <| fun ctx ->
-            { Page.Default with
-                Title = Some "WebSharper TinyMce Tests"
-                Body = [Div [new SampleControl()]] }
+    let HomePage ctx =
+        Content.Page(
+            Title = "WebSharper TinyMce Tests",
+            Body = [Div [new SampleControl()]]
+        )
 
     let Main = Sitelet.Content "/" Index HomePage
 

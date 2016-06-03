@@ -310,7 +310,11 @@ module Test =
                     | _ -> null
 
 
+#if ZAFIR
                 let plugin = new Plugin ( CreateControl = fun name cm -> createMenu(name, cm) )
+#else
+                let plugin = new Plugin ( CreateControl = createMenu )
+#endif
 
                 TinyMCE.Create("tinymce.plugins.CustomListBoxSplitButtonPlugin", plugin)
 
@@ -393,7 +397,11 @@ module Test =
                     | _ -> null
 
 
+#if ZAFIR
                 let plugin = new Plugin ( CreateControl = fun name cm -> createMenu(name, cm) )
+#else
+                let plugin = new Plugin ( CreateControl = createMenu )
+#endif
 
                 TinyMCE.Create("tinymce.plugins.MenuButtonPlugin", plugin)
 

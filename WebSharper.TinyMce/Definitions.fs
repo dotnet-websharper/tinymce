@@ -284,7 +284,11 @@ module TinyMce =
     let Dispatcher = Type.New()
 
     let DispatcherClass = 
+#if ZAFIR
+        Generic -- fun t1 t2 ->
+#else
         Generic - fun t1 t2 ->
+#endif
             Class "Dispatcher"
             |=> Dispatcher
             |+> Instance

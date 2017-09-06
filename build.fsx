@@ -3,7 +3,7 @@ open IntelliFactory.Build
 
 let bt =
     BuildTool().PackageId("WebSharper.TinyMce")
-        .VersionFrom("WebSharper")
+        .VersionFrom("WebSharper", versionSpec = "(,4.0)")
         .WithFSharpVersion(FSharpVersion.FSharp30)
         .WithFramework(fun fw -> fw.Net40)
 
@@ -17,8 +17,8 @@ let formlet =
         .References(fun r ->
             [
                 r.NuGet("IntelliFactory.Reactive").ForceFoundVersion().Reference()
-                r.NuGet("WebSharper.Formlets").ForceFoundVersion().Reference()
-                r.NuGet("WebSharper.Html").ForceFoundVersion().Reference()
+                r.NuGet("WebSharper.Formlets").Version("(,4.0)").ForceFoundVersion().Reference()
+                r.NuGet("WebSharper.Html").Version("(,4.0)").ForceFoundVersion().Reference()
                 r.Project main
             ])
 
@@ -28,8 +28,8 @@ let test =
         .References(fun r ->
             [
                 r.NuGet("IntelliFactory.Reactive").Reference()
-                r.NuGet("WebSharper.Formlets").Reference()
-                r.NuGet("WebSharper.Html").Reference()
+                r.NuGet("WebSharper.Formlets").Version("(,4.0)").Reference()
+                r.NuGet("WebSharper.Html").Version("(,4.0)").Reference()
                 r.Project main
                 r.Project formlet
             ])

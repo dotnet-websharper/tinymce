@@ -196,7 +196,7 @@ module Controls =
             let trigger v =
                 let t () =
                     oldValue := Some v
-                    Result.Success v
+                    Result<_>.Success v
                     |> state.Trigger
                 match oldValue.Value with
                 | Some ov ->

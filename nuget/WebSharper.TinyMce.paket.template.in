@@ -1,0 +1,22 @@
+type file
+id WebSharper.TinyMce
+authors
+    IntelliFactory
+owners
+    IntelliFactory
+licenseUrl http://websharper.com/licensing
+
+description
+    WebSharper Extensions and Formlets for TinyMce
+tags
+    Web JavaScript F# C#
+files
+    ../WebSharper.TinyMce/bin/Release/netstandard2.0/WebSharper.TinyMce.dll ==> lib/netstandard2.0
+    ../WebSharper.TinyMce/bin/Release/netstandard2.0/WebSharper.TinyMce.xml ==> lib/netstandard2.0
+    ../WebSharper.Formlets.TinyMce/bin/Release/netstandard2.0/WebSharper.Formlets.TinyMce.dll ==> lib/netstandard2.0
+    ../WebSharper.Formlets.TinyMce/bin/Release/netstandard2.0/WebSharper.Formlets.TinyMce.xml ==> lib/netstandard2.0
+dependencies
+        WebSharper ~> LOCKEDVERSION/3
+        WebSharper.Reactive ~> LOCKEDVERSION/3
+        WebSharper.Formlets ~> LOCKEDVERSION/3
+        WebSharper.Html ~> LOCKEDVERSION/3

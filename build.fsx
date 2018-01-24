@@ -1,53 +1,17 @@
-#load "tools/includes.fsx"
-open IntelliFactory.Build
+#load "paket-files/build/intellifactory/websharper/tools/WebSharper.Fake.fsx"
+open Fake
+open WebSharper.Fake
 
-let bt =
-    BuildTool().PackageId("WebSharper.TinyMce")
-        .VersionFrom("WebSharper", versionSpec = "(,4.0)")
-        .WithFSharpVersion(FSharpVersion.FSharp30)
-        .WithFramework(fun fw -> fw.Net40)
+let targets =
+    GetSemVerOf "WebSharper"
+    |> ComputeVersion
+    |> WSTargets.Default
+    |> MakeTargets
 
-let main =
-    bt.WebSharper.Extension("WebSharper.TinyMce")
-        .SourcesFromProject()
+Target "Build" DoNothing
+targets.BuildDebug ==> "Build"
 
-let formlet =
-    bt.WebSharper.Library("WebSharper.Formlets.TinyMce")
-        .SourcesFromProject()
-        .References(fun r ->
-            [
-                r.NuGet("IntelliFactory.Reactive").ForceFoundVersion().Reference()
-                r.NuGet("WebSharper.Formlets").Version("(,4.0)").ForceFoundVersion().Reference()
-                r.NuGet("WebSharper.Html").Version("(,4.0)").ForceFoundVersion().Reference()
-                r.Project main
-            ])
+Target "CI-Release" DoNothing
+targets.CommitPublish ==> "CI-Release"
 
-let test =
-    bt.WebSharper.HtmlWebsite("WebSharper.TinyMce.Tests")
-        .SourcesFromProject()
-        .References(fun r ->
-            [
-                r.NuGet("IntelliFactory.Reactive").Reference()
-                r.NuGet("WebSharper.Formlets").Version("(,4.0)").Reference()
-                r.NuGet("WebSharper.Html").Version("(,4.0)").Reference()
-                r.Project main
-                r.Project formlet
-            ])
-
-bt.Solution [
-    main
-    formlet
-    test
-
-    bt.NuGet.CreatePackage()
-        .Configure(fun c ->
-            { c with
-                Title = Some "WebSharper.TinyMce"
-                LicenseUrl = Some "http://websharper.com/licensing"
-                Description = "WebSharper Extensions and Formlets for TinyMce"
-                RequiresLicenseAcceptance = true })
-        .Add(main)
-        .Add(formlet)
-
-]
-|> bt.Dispatch
+RunTargetOrDefault "Build"

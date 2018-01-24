@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
@@ -10,11 +10,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "WebSharper.TinyMce", "WebSharper.TinyMce\WebSharper.TinyMce.fsproj", "{730AE40A-001C-4137-972D-898DC7C2BF0A}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "WebSharper.TinyMce.Formlets", "WebSharper.TinyMce.Formlets\WebSharper.TinyMce.Formlets.fsproj", "{501CA443-9B83-45DB-9693-F2F3677A44C4}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "WebSharper.Formlets.TinyMce", "WebSharper.Formlets.TinyMce\WebSharper.Formlets.TinyMce.fsproj", "{501CA443-9B83-45DB-9693-F2F3677A44C4}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "WebSharper.TinyMce.Tests", "WebSharper.TinyMce.Tests\WebSharper.TinyMce.Tests.fsproj", "{35514715-41DF-4C17-A9EC-D80ABCD9E353}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website", "web\Website.csproj", "{C96C4489-BE06-496A-8FC1-4251947EFBA3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,10 +32,6 @@ Global
 		{35514715-41DF-4C17-A9EC-D80ABCD9E353}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35514715-41DF-4C17-A9EC-D80ABCD9E353}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35514715-41DF-4C17-A9EC-D80ABCD9E353}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C96C4489-BE06-496A-8FC1-4251947EFBA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C96C4489-BE06-496A-8FC1-4251947EFBA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C96C4489-BE06-496A-8FC1-4251947EFBA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C96C4489-BE06-496A-8FC1-4251947EFBA3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

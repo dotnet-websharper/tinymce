@@ -1,8 +1,12 @@
-(bin|obj)/(Debug|Release)
-^[.]?build/
-.(suo|user)$
-Sample
-web/bin
-web/Scripts
-^packages/
-^tools/packages/
+syntax: glob
+
+bin/
+obj/
+build/
+*.suo
+packages/
+.fake/
+paket-files/
+.vs/
+.vscode/
+nuget/*.paket.template

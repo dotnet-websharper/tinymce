@@ -310,11 +310,7 @@ module Test =
                     | _ -> null
 
 
-#if ZAFIR
                 let plugin = new Plugin ( CreateControl = fun name cm -> createMenu(name, cm) )
-#else
-                let plugin = new Plugin ( CreateControl = createMenu )
-#endif
 
                 TinyMCE.Create("tinymce.plugins.CustomListBoxSplitButtonPlugin", plugin)
 
@@ -397,11 +393,7 @@ module Test =
                     | _ -> null
 
 
-#if ZAFIR
                 let plugin = new Plugin ( CreateControl = fun name cm -> createMenu(name, cm) )
-#else
-                let plugin = new Plugin ( CreateControl = createMenu )
-#endif
 
                 TinyMCE.Create("tinymce.plugins.MenuButtonPlugin", plugin)
 
@@ -552,3 +544,7 @@ module Test =
             TestDirectBindings "Plugin: Custom toolbar button" "Toolbar should have custom Button" <|
                 Plugin.CustomToolbarButton()
         ]
+
+    [<SPAEntryPoint; JavaScript>]
+    let Main() =
+        (Run() :> IControlBody).ReplaceInDom(JS.Document.QuerySelector "#main")

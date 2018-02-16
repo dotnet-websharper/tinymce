@@ -11,10 +11,10 @@ description
 tags
     Web JavaScript F# C#
 files
-    ../WebSharper.TinyMce/bin/Release/netstandard2.0/WebSharper.TinyMce.dll ==> lib/net461
-    ../WebSharper.TinyMce/bin/Release/netstandard2.0/WebSharper.TinyMce.xml ==> lib/net461
-    ../WebSharper.Formlets.TinyMce/bin/Release/netstandard2.0/WebSharper.Formlets.TinyMce.dll ==> lib/net461
-    ../WebSharper.Formlets.TinyMce/bin/Release/netstandard2.0/WebSharper.Formlets.TinyMce.xml ==> lib/net461
+    ../WebSharper.TinyMce/bin/Release/net461/WebSharper.TinyMce.dll ==> lib/net461
+    ../WebSharper.TinyMce/bin/Release/net461/WebSharper.TinyMce.xml ==> lib/net461
+    ../WebSharper.Formlets.TinyMce/bin/Release/net461/WebSharper.Formlets.TinyMce.dll ==> lib/net461
+    ../WebSharper.Formlets.TinyMce/bin/Release/net461/WebSharper.Formlets.TinyMce.xml ==> lib/net461
     ../WebSharper.TinyMce/bin/Release/netstandard2.0/WebSharper.TinyMce.dll ==> lib/netstandard2.0
     ../WebSharper.TinyMce/bin/Release/netstandard2.0/WebSharper.TinyMce.xml ==> lib/netstandard2.0
     ../WebSharper.Formlets.TinyMce/bin/Release/netstandard2.0/WebSharper.Formlets.TinyMce.dll ==> lib/netstandard2.0

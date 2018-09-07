@@ -6,7 +6,7 @@ open WebSharper.InterfaceGenerator
 module TinyMce =
     open WebSharper.JavaScript.Dom
 
-    let Res = (Resource "TinyMce" "/js/tiny_mce/tiny_mce.js").AssemblyWide()
+    let Res = (Resource "TinyMce" "https://cdnjs.cloudflare.com/ajax/libs/tinymce/3.5.8/tiny_mce.js").AssemblyWide()
 
     let private ConstantStrings ty l =
         List.map (fun s -> (s =? ty |> WithGetterInline ("'" + s + "'")) :> CodeModel.IClassMember) l

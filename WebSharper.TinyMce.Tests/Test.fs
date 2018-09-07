@@ -544,7 +544,3 @@ module Test =
             TestDirectBindings "Plugin: Custom toolbar button" "Toolbar should have custom Button" <|
                 Plugin.CustomToolbarButton()
         ]
-
-    [<SPAEntryPoint; JavaScript>]
-    let Main() =
-        (Run() :> IControlBody).ReplaceInDom(JS.Document.QuerySelector "#main")

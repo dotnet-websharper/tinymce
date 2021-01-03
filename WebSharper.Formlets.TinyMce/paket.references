@@ -2,5 +2,6 @@ WebSharper
 WebSharper.FSharp
 WebSharper.Reactive
 WebSharper.Formlets
-WebSharper.Html
+WebSharper.UI
+WebSharper.AspNetCore
 FSharp.Core

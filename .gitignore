@@ -1,9 +1,13 @@
 bin/
 obj/
 build/
+dist/
 *.suo
 packages/
 .fake/
 paket-files/
 .vs/
 .vscode/
+node_modules/
+package-lock.json
+websharper.log

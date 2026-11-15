@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <WebSharperSourceMap>false</WebSharperSourceMap>
+    <NoWarn>$(NoWarn);FS3886</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="../Sample/Client.fs" Link="Client.fs" />
+    <None Include="package.json" />
+    <None Include="wsconfig.json" />
+    <None Include="../Sample/esbuild.config.mjs" Link="esbuild.config.mjs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WebSharper.TinyMce\WebSharper.TinyMce.fsproj" />
+  </ItemGroup>
+
+  <Target Name="ESBuildBundle" AfterTargets="WebSharperCompile">
+    <Exec Command="npm install" />
+    <Exec Command="node ../Sample/esbuild.config.mjs"
+          EnvironmentVariables="WS_NAME=$(AssemblyName);WS_DIST=$(MSBuildProjectDirectory)/../dist" />
+  </Target>
+
+  <Import Project="..\paket-files\wsbuild\github.com\dotnet-websharper\build-script\WebSharper.Fake.targets" Condition="Exists('..\paket-files\wsbuild\github.com\dotnet-websharper\build-script\WebSharper.Fake.targets')" />
+  <Import Project="..\.paket\Paket.Restore.targets" />
+</Project>

@@ -4,23 +4,18 @@ authors
     IntelliFactory
 owners
     IntelliFactory
-licenseUrl http://websharper.com/licensing
-
+projectUrl https://github.com/dotnet-websharper/tinymce/
+repositoryType git
+repositoryUrl https://github.com/dotnet-websharper/tinymce/
+licenseUrl https://github.com/dotnet-websharper/tinymce/blob/main/LICENSE.md
+iconUrl https://github.com/dotnet-websharper/core/raw/websharper50/tools/WebSharper.png
 description
-    WebSharper Extensions and Formlets for TinyMce
+    WebSharper bindings for TinyMCE 8.x (GPL-2.0-or-later or a commercial Tiny Technologies license).
 tags
-    Web JavaScript F# C#
+    Web JavaScript F# C# TinyMCE WYSIWYG
 files
-    ../WebSharper.TinyMce/bin/Release/net461/WebSharper.TinyMce.dll ==> lib/net461
-    ../WebSharper.TinyMce/bin/Release/net461/WebSharper.TinyMce.xml ==> lib/net461
-    ../WebSharper.Formlets.TinyMce/bin/Release/net461/WebSharper.Formlets.TinyMce.dll ==> lib/net461
-    ../WebSharper.Formlets.TinyMce/bin/Release/net461/WebSharper.Formlets.TinyMce.xml ==> lib/net461
     ../WebSharper.TinyMce/bin/Release/netstandard2.0/WebSharper.TinyMce.dll ==> lib/netstandard2.0
     ../WebSharper.TinyMce/bin/Release/netstandard2.0/WebSharper.TinyMce.xml ==> lib/netstandard2.0
-    ../WebSharper.Formlets.TinyMce/bin/Release/netstandard2.0/WebSharper.Formlets.TinyMce.dll ==> lib/netstandard2.0
-    ../WebSharper.Formlets.TinyMce/bin/Release/netstandard2.0/WebSharper.Formlets.TinyMce.xml ==> lib/netstandard2.0
+    ../WebSharper.TinyMce/bin/Release/netstandard2.0/WebSharper.TinyMce.websharper ==> lib/netstandard2.0
 dependencies
         WebSharper ~> LOCKEDVERSION:[3]
-        WebSharper.Reactive ~> LOCKEDVERSION:[3]
-        WebSharper.Formlets ~> LOCKEDVERSION:[3]
-        WebSharper.Html ~> LOCKEDVERSION:[3]

@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <WebSharperProject>binding</WebSharperProject>
+    <WebSharperSourceMap>false</WebSharperSourceMap>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Product>WebSharper.TinyMce6 6.x</Product>
+    <Title>https://github.com/dotnet-websharper/tinymce/</Title>
+    <Company>IntelliFactory</Company>
+    <Copyright>(c) 2008-2026 IntelliFactory</Copyright>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NpmDependencies>
+      <NpmPackage Name="tinymce" Version="&gt;= 6.8.6 &lt; 7.0.0" ResolutionStrategy="Max" />
+    </NpmDependencies>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Main.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../TinyMceCommon/TinyMceCommon.fsproj" />
+  </ItemGroup>
+  <Import Project="..\paket-files\wsbuild\github.com\dotnet-websharper\build-script\WebSharper.Fake.targets" Condition="Exists('..\paket-files\wsbuild\github.com\dotnet-websharper\build-script\WebSharper.Fake.targets')" />
+  <Import Project="..\.paket\Paket.Restore.targets" />
+</Project>

@@ -1,3 +1,0 @@
-2026-11-15 20:07:08.5618|DEBUG|Program|location of wsfscservice is: /Users/granicz/.nuget/packages/websharper.fsharp/11.0.0.695-preview.1/tools/net11.0/osx-arm64 (server side)
-2026-11-15 20:07:08.5618|DEBUG|Program|pipename is: /var/folders/s9/18nv01kn3mjfmcn_vrdqndww0000gn/T/e58d659a4b891af085749d0afc101f12 (server side)
-2026-11-15 20:07:08.5618|DEBUG|Program|Compiling /Users/granicz/dotnet-websharper/tinymce/WebSharper.TinyMce6.Sample/WebSharper.TinyMce6.Sample.fsproj

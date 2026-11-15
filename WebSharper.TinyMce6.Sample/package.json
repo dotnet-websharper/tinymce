@@ -1,0 +1,11 @@
+{
+  "name": "websharper.tinymce6.sample",
+  "version": "1.0.0",
+  "private": true,
+  "devDependencies": {
+    "esbuild": "^0.28.1"
+  },
+  "dependencies": {
+    "tinymce": "6.8.6"
+  }
+}
